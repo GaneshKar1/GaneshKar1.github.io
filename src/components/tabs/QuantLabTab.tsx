@@ -6,7 +6,7 @@ export default function QuantLabTab() {
         <div className="flex flex-col h-full animate-in fade-in duration-500 gap-6">
 
             {/* Shepard Ventures - Primary Focus */}
-            <div className="glass-card rounded-2xl p-6 md:p-8 flex flex-col lg:flex-row gap-8 items-center">
+            <div className="glass-card rounded-2xl p-6 md:p-8 flex flex-col lg:flex-row gap-8 items-center border-[#007AFF]/20">
                 <div className="flex-1 space-y-4">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass border border-[#007AFF]/30 text-[#007AFF] text-xs font-mono">
                         Feb 2026 - Present
@@ -16,36 +16,9 @@ export default function QuantLabTab() {
                         Shepard Ventures
                     </h3>
                     <p className="font-mono text-sm text-zinc-400">Quant Research Intern</p>
-                    <p className="text-zinc-300 leading-relaxed text-sm">
+                    <p className="text-zinc-300 leading-relaxed text-sm max-w-2xl">
                         Spearheading quantitative research focused on Black Swan market events. Developing and implementing Mean-Variance Optimization (MVO) portfolio estimating strategies designed to mitigate risk and optimize performance during extreme market crashes.
                     </p>
-                </div>
-
-                {/* Visual Mock-up of MVO Graph (CSS/SVG based) */}
-                <div className="w-full lg:w-[400px] h-[200px] glass rounded-xl border border-zinc-800 relative overflow-hidden flex items-end p-4 gap-2">
-                    {/* Decorative Grid Lines */}
-                    <div className="absolute inset-0 flex flex-col justify-between p-4 pointer-events-none opacity-20">
-                        {[1, 2, 3, 4].map(i => <div key={i} className="w-full h-px bg-zinc-500" />)}
-                    </div>
-
-                    {/* Simulated Efficient Frontier Curve (SVG) */}
-                    <svg className="absolute inset-0 w-full h-full p-4 overflow-visible" preserveAspectRatio="none">
-                        <path
-                            d="M 20,160 Q 150,150 250,80 T 380,20"
-                            fill="none"
-                            stroke="#007AFF"
-                            strokeWidth="3"
-                            strokeDasharray="6 6"
-                            className="animate-pulse"
-                        />
-                        {/* Optimal Portfolio Point */}
-                        <circle cx="250" cy="80" r="6" fill="#10B981" />
-                        <text x="260" y="75" fill="#10B981" fontSize="12" fontFamily="monospace">Optimal</text>
-                    </svg>
-
-                    <div className="absolute top-4 right-4 text-xs font-mono text-zinc-500">
-                        Efficient Frontier (MVO)
-                    </div>
                 </div>
             </div>
 

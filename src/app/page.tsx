@@ -12,10 +12,10 @@ import ForgeTab from "@/components/tabs/ForgeTab";
 import InterestsTab from "@/components/tabs/InterestsTab";
 
 const tabs = [
-  { id: "terminal", label: "Terminal", icon: <TerminalSquare size={18} /> },
-  { id: "lab", label: "The Quant Lab", icon: <FlaskConical size={18} /> },
-  { id: "ledger", label: "Ledger", icon: <BookOpen size={18} /> },
-  { id: "forge", label: "Forge", icon: <Hammer size={18} /> },
+  { id: "terminal", label: "About Me", icon: <TerminalSquare size={18} /> },
+  { id: "lab", label: "Work Experience", icon: <FlaskConical size={18} /> },
+  { id: "ledger", label: "Coursework", icon: <BookOpen size={18} /> },
+  { id: "forge", label: "Projects", icon: <Hammer size={18} /> },
   { id: "interests", label: "Interests", icon: <Heart size={18} /> },
 ];
 
@@ -38,8 +38,8 @@ export default function Home() {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg font-mono text-sm transition-all duration-200 text-left ${activeTab === tab.id
-                  ? "bg-[#007AFF]/10 text-[#007AFF] border border-[#007AFF]/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
-                  : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50 border border-transparent"
+                ? "bg-[#007AFF]/10 text-[#007AFF] border border-[#007AFF]/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
+                : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50 border border-transparent"
                 }`}
             >
               <span className={activeTab === tab.id ? "text-[#007AFF]" : "text-zinc-500"}>
@@ -94,8 +94,8 @@ export default function Home() {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`flex flex-col items-center justify-center p-3 rounded-xl transition-colors ${activeTab === tab.id
-                  ? "text-[#007AFF]"
-                  : "text-zinc-500 hover:text-zinc-300"
+                ? "text-[#007AFF]"
+                : "text-zinc-500 hover:text-zinc-300"
                 }`}
             >
               {tab.icon}
