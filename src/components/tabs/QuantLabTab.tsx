@@ -80,40 +80,13 @@ const experiences: Exp[] = [
   },
 ];
 
-const activities = [
-  {
-    org: "Open Project @ Berkeley",
-    role: "Vice President of Projects",
-    date: "Aug 2025 – Present",
-    bullets: [
-      "Overseeing 15+ simultaneous client projects and 40+ Project Managers across the full product lifecycle — from cold outreach through scoping, build, and delivery.",
-      "Shipped 5 client projects per semester across a 300+ member organization.",
-      "Interviewed and selected 50+ PM candidates, evaluating leadership, communication, and technical fit.",
-    ],
-  },
-  {
-    org: "Formula Electric @ Berkeley",
-    role: "Simulations Team",
-    date: "Aug 2024 – May 2025",
-    bullets: [
-      "Developed track discretization algorithms to parse map geometry, calculating turn radii and lateral traction limits for theoretical cornering speeds.",
-      "Integrated empirical battery discharge data into a physics engine to model track-specific energy consumption for an electric vehicle.",
-    ],
-  },
-];
-
 function Arrow() {
   return <span style={{ color: BLUE }}>›</span>;
-}
-
-function GrayArrow() {
-  return <span className="text-[#555]">›</span>;
 }
 
 export default function WorkTab() {
   return (
     <div className="flex flex-col gap-5 max-w-3xl">
-
       {experiences.map(exp => (
         <div
           key={exp.company}
@@ -154,33 +127,6 @@ export default function WorkTab() {
               ))}
             </div>
           )}
-        </div>
-      ))}
-
-      {/* Activities divider */}
-      <div className="flex items-center gap-4 pt-2">
-        <div className="flex-1 h-px bg-[#222]" />
-        <div className="text-[#444] text-[10px] uppercase tracking-widest">Activities</div>
-        <div className="flex-1 h-px bg-[#222]" />
-      </div>
-
-      {activities.map(act => (
-        <div key={act.org} className="border border-[#222] p-6">
-          <div className="flex justify-between items-start mb-4 gap-4">
-            <div>
-              <div className="text-white font-bold text-base leading-tight">{act.org}</div>
-              <div className="text-[#888] text-sm mt-0.5">{act.role}</div>
-            </div>
-            <div className="text-[#555] text-xs shrink-0">{act.date}</div>
-          </div>
-          <ul className="space-y-2">
-            {act.bullets.map((b, i) => (
-              <li key={i} className="flex gap-2 text-[#888] text-sm leading-relaxed">
-                <GrayArrow />
-                <span>{b}</span>
-              </li>
-            ))}
-          </ul>
         </div>
       ))}
     </div>

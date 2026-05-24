@@ -5,12 +5,14 @@ import BioTab from "@/components/tabs/TerminalTab";
 import WorkTab from "@/components/tabs/QuantLabTab";
 import ProjectsTab from "@/components/tabs/ForgeTab";
 import CourseworkTab from "@/components/tabs/LedgerTab";
+import ActivitiesTab from "@/components/tabs/ActivitiesTab";
 
 const tabs = [
   { id: "bio",        label: "Bio",        color: "#666666" },
   { id: "work",       label: "Work",       color: "#5599ff" },
   { id: "projects",   label: "Projects",   color: "#aa44ee" },
   { id: "coursework", label: "Coursework", color: "#22bb22" },
+  { id: "activities", label: "Activities", color: "#888888" },
 ];
 
 export default function Home() {
@@ -114,6 +116,7 @@ export default function Home() {
             {activeTab === "work"       && <WorkTab />}
             {activeTab === "projects"   && <ProjectsTab />}
             {activeTab === "coursework" && <CourseworkTab />}
+            {activeTab === "activities" && <ActivitiesTab />}
           </div>
 
           {/* Status bar */}
