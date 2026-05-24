@@ -1,79 +1,188 @@
-import { motion } from "framer-motion";
-import { TrendingUp, Database, Server, ChevronRight } from "lucide-react";
+const BLUE = "#5599ff";
 
-export default function QuantLabTab() {
-    return (
-        <div className="flex flex-col h-full animate-in fade-in duration-500 gap-6">
+type Exp = {
+  company: string;
+  role: string;
+  location: string;
+  date: string;
+  current?: boolean;
+  featured?: boolean;
+  bullets: string[];
+  tags?: string[];
+};
 
-            {/* Shepard Ventures - Primary Focus */}
-            <div className="glass-card rounded-2xl p-6 md:p-8 flex flex-col lg:flex-row gap-8 items-center border-[#007AFF]/20">
-                <div className="flex-1 space-y-4">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass border border-[#007AFF]/30 text-[#007AFF] text-xs font-mono">
-                        Feb 2026 - Present
-                    </div>
-                    <h3 className="text-2xl font-bold text-white flex items-center gap-3">
-                        <TrendingUp className="text-[#007AFF]" />
-                        Shepard Ventures
-                    </h3>
-                    <p className="font-mono text-sm text-zinc-400">Quant Research Intern</p>
-                    <p className="text-zinc-300 leading-relaxed text-sm max-w-2xl">
-                        Spearheading quantitative research focused on Black Swan market events. Developing and implementing Mean-Variance Optimization (MVO) portfolio estimating strategies designed to mitigate risk and optimize performance during extreme market crashes.
-                    </p>
+const experiences: Exp[] = [
+  {
+    company: "Shepard Ventures",
+    role: "Senior Quantitative Analyst",
+    location: "San Diego, CA",
+    date: "Jan 2026 – Present",
+    current: true,
+    featured: true,
+    bullets: [
+      "Engineered a Black Swan stress-testing pipeline: inject historical drawdown vectors into pre-crash price histories, apply K-Means to preselect resilient equities, then run MVO on the filtered set.",
+      "Used Holt Estimators to forecast time-variant beta for the next crash window; GARCH for volatility modeling to construct the covariance matrix fed into MVO.",
+      "Backtested portfolio against historical crash events — achieved an estimated 54% downside capture ratio relative to the S&P 100.",
+      "Co-leads the internal AI research team, conducting weekly meetings.",
+    ],
+    tags: ["Python", "K-Means", "MVO", "Holt Smoothing", "GARCH", "Davies-Bouldin Index"],
+  },
+  {
+    company: "IPick.AI",
+    role: "AI Engineer",
+    location: "Cupertino, CA",
+    date: "Jan 2026 – May 2026",
+    featured: true,
+    bullets: [
+      "Led a team of 14 to ship a live equity intelligence platform covering 4,000+ public companies, visualizing supplier, competitor, and subsidiary relationships as an interactive knowledge graph.",
+      "Engineered an NLP extraction pipeline processing 8,000+ SEC EDGAR filings — classifying corporate relationships via FinBERT, Claude API, and Llama 3.2.",
+      "Directed architecture decisions across the full stack (Python/Flask, PostgreSQL, Docker, AWS EC2, D3.js) and managed delivery across multiple workstreams.",
+      "Scraped 20+ financial news sources (Bloomberg, Reuters), filtering articles against ticker-linked keywords and generating AI stock analyses via Claude.",
+    ],
+    tags: ["Python", "Flask", "PostgreSQL", "Docker", "AWS", "FinBERT", "Claude API", "Llama 3.2", "D3.js"],
+  },
+  {
+    company: "UC Berkeley EECS — CS 61B",
+    role: "Course Staff / Academic Intern",
+    location: "Berkeley, CA",
+    date: "Jan 2026 – May 2026",
+    bullets: [
+      "Led portions of weekly discussion sections for a 1,100-student course, delivering mini-lectures and debugging help on data structures, algorithms, and Java.",
+      "Independently facilitated ~50% of student support during section, operating alongside TAs in a co-teaching capacity.",
+      "Held shared office hours providing targeted one-on-one mentorship.",
+    ],
+    tags: ["Java", "Data Structures", "Algorithms", "Teaching"],
+  },
+  {
+    company: "DealPrint",
+    role: "Data Science Research Intern",
+    location: "Berkeley, CA",
+    date: "Aug 2025 – Jan 2026",
+    bullets: [
+      "Built a Chrome extension to automate extraction from a legacy web platform, scraping 50,000 M&A transactions spanning 40 years via async UI state handling.",
+      "Engineered a tiered KNN comparables engine with adjustable similarity weights across NAICS codes (2/4/6-digit), geography, and deal type.",
+      "Combined comps engine with a regression model on revenue, SDE/EBITDA margin, state, and industry features — achieved MAPE of 0.25 on held-out transactions.",
+      "Delivered as an interactive Streamlit dashboard with real-time parameter tuning and Plotly visualizations.",
+    ],
+    tags: ["Python", "pandas", "scikit-learn", "KNN", "JavaScript", "Streamlit", "Plotly"],
+  },
+  {
+    company: "Goldman School of Public Policy",
+    role: "IT Assistant",
+    location: "Berkeley, CA",
+    date: "Aug 2024 – Present",
+    current: true,
+    bullets: [
+      "Restructured 300+ course documents across 2 classes to meet ALLY accessibility score requirements (90%+ threshold).",
+      "Provided technical support across 20+ classrooms, assisting faculty with in-class tech issues and AV setup.",
+    ],
+    tags: ["ALLY Platform", "Accessibility", "IT Support"],
+  },
+];
+
+const activities = [
+  {
+    org: "Open Project @ Berkeley",
+    role: "Vice President of Projects",
+    date: "Aug 2025 – Present",
+    bullets: [
+      "Overseeing 15+ simultaneous client projects and 40+ Project Managers across the full product lifecycle — from cold outreach through scoping, build, and delivery.",
+      "Shipped 5 client projects per semester across a 300+ member organization.",
+      "Interviewed and selected 50+ PM candidates, evaluating leadership, communication, and technical fit.",
+    ],
+  },
+  {
+    org: "Formula Electric @ Berkeley",
+    role: "Simulations Team",
+    date: "Aug 2024 – May 2025",
+    bullets: [
+      "Developed track discretization algorithms to parse map geometry, calculating turn radii and lateral traction limits for theoretical cornering speeds.",
+      "Integrated empirical battery discharge data into a physics engine to model track-specific energy consumption for an electric vehicle.",
+    ],
+  },
+];
+
+function Arrow() {
+  return <span style={{ color: BLUE }}>›</span>;
+}
+
+function GrayArrow() {
+  return <span className="text-[#555]">›</span>;
+}
+
+export default function WorkTab() {
+  return (
+    <div className="flex flex-col gap-5 max-w-3xl">
+
+      {experiences.map(exp => (
+        <div
+          key={exp.company}
+          className="border p-6"
+          style={{ borderColor: exp.featured ? BLUE + "55" : "#2a2a2a" }}
+        >
+          <div className="flex justify-between items-start mb-4 gap-4">
+            <div>
+              {exp.current && (
+                <div className="text-[10px] uppercase tracking-widest mb-1" style={{ color: BLUE }}>
+                  Current
                 </div>
+              )}
+              <div className="text-white font-bold text-lg leading-tight">{exp.company}</div>
+              <div className="text-[#888] text-sm mt-0.5">{exp.role}</div>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-                {/* DealPrint */}
-                <div className="md:col-span-2 glass-card rounded-2xl p-6 md:p-8 flex flex-col justify-between group hover:border-[#007AFF]/30 transition-colors">
-                    <div>
-                        <div className="flex justify-between items-start mb-4">
-                            <div className="p-3 bg-zinc-800/50 rounded-lg text-zinc-300">
-                                <Database size={20} />
-                            </div>
-                            <span className="text-xs font-mono text-zinc-500">Aug 2025 - Jan 2026</span>
-                        </div>
-                        <h3 className="text-xl font-bold text-white mb-1">DealPrint</h3>
-                        <p className="text-sm font-mono text-zinc-400 mb-4">ML Valuation Architect</p>
-                        <p className="text-sm text-zinc-400 leading-relaxed max-w-lg mb-6">
-                            Engineered a k-Nearest Neighbors (k-NN) machine learning valuation model. Leveraged multi-dimensional company characteristics (revenue, SDE, NAICS code) to predict accurate, data-driven estimations for SMB acquisitions.
-                        </p>
-                    </div>
-
-                    <div className="mt-auto p-4 rounded-xl bg-gradient-to-r from-[#007AFF]/10 to-transparent border-l-2 border-[#007AFF]">
-                        <p className="text-sm text-zinc-400 font-mono uppercase tracking-wider mb-1">Dataset Processed</p>
-                        <p className="text-3xl font-bold text-white">50,000+ <span className="text-[#007AFF] text-lg">M&A Deals</span></p>
-                    </div>
-                </div>
-
-                {/* IT Assistant */}
-                <div className="glass-card rounded-2xl p-6 md:p-8 flex flex-col group hover:border-zinc-600 transition-colors">
-                    <div className="flex justify-between items-start mb-4">
-                        <div className="p-3 bg-zinc-800/50 rounded-lg text-zinc-300">
-                            <Server size={20} />
-                        </div>
-                        <span className="text-xs font-mono text-zinc-500">Sep 2024 - Present</span>
-                    </div>
-                    <h3 className="text-lg font-bold text-white mb-1">IT Assistant</h3>
-                    <p className="text-xs font-mono text-zinc-400 mb-4">Goldman School (GSPP)</p>
-
-                    <ul className="space-y-3 text-sm text-zinc-400 flex-1">
-                        <li className="flex gap-2 items-start">
-                            <ChevronRight size={16} className="text-[#007AFF] shrink-0 mt-0.5" />
-                            <span>Remediated instructional materials for accessibility (alt-text, color contrast).</span>
-                        </li>
-                        <li className="flex gap-2 items-start">
-                            <ChevronRight size={16} className="text-[#007AFF] shrink-0 mt-0.5" />
-                            <span>Provided rapid technical/AV support during live faculty lectures.</span>
-                        </li>
-                        <li className="flex gap-2 items-start">
-                            <ChevronRight size={16} className="text-[#007AFF] shrink-0 mt-0.5" />
-                            <span>Assisted in deploying building security anti-theft systems.</span>
-                        </li>
-                    </ul>
-                </div>
-
+            <div className="text-right shrink-0">
+              <div className="text-[#555] text-xs">{exp.date}</div>
+              <div className="text-[#444] text-[10px] mt-0.5">{exp.location}</div>
             </div>
+          </div>
+
+          <ul className="space-y-2 mb-4">
+            {exp.bullets.map((b, i) => (
+              <li key={i} className="flex gap-2 text-[#aaa] text-sm leading-relaxed">
+                <Arrow />
+                <span>{b}</span>
+              </li>
+            ))}
+          </ul>
+
+          {exp.tags && (
+            <div className="flex flex-wrap gap-2">
+              {exp.tags.map(t => (
+                <span key={t} className="border border-[#2a2a2a] text-[#666] text-[10px] px-2 py-1">
+                  {t}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
-    );
+      ))}
+
+      {/* Activities divider */}
+      <div className="flex items-center gap-4 pt-2">
+        <div className="flex-1 h-px bg-[#222]" />
+        <div className="text-[#444] text-[10px] uppercase tracking-widest">Activities</div>
+        <div className="flex-1 h-px bg-[#222]" />
+      </div>
+
+      {activities.map(act => (
+        <div key={act.org} className="border border-[#222] p-6">
+          <div className="flex justify-between items-start mb-4 gap-4">
+            <div>
+              <div className="text-white font-bold text-base leading-tight">{act.org}</div>
+              <div className="text-[#888] text-sm mt-0.5">{act.role}</div>
+            </div>
+            <div className="text-[#555] text-xs shrink-0">{act.date}</div>
+          </div>
+          <ul className="space-y-2">
+            {act.bullets.map((b, i) => (
+              <li key={i} className="flex gap-2 text-[#888] text-sm leading-relaxed">
+                <GrayArrow />
+                <span>{b}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
 }

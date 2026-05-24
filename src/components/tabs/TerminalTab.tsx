@@ -1,80 +1,92 @@
-import { motion } from "framer-motion";
-import { Mail, Linkedin, Instagram, Calendar, MapPin, ExternalLink } from "lucide-react";
+const links = [
+  { label: "Email",       href: "mailto:ganeshkarayi@berkeley.edu",                 color: "#666666" },
+  { label: "LinkedIn",    href: "https://www.linkedin.com/in/ganesh-karayi/",        color: "#5599ff" },
+  { label: "Instagram",   href: "https://instagram.com/ganeshkarayi",               color: "#aa44ee" },
+  { label: "Book a Chat", href: "https://calendly.com/ganeshkarayi-berkeley/30min", color: "#22bb22" },
+];
 
-export default function TerminalTab() {
-    return (
-        <div className="flex flex-col h-full animate-in fade-in duration-500">
-            <div className="flex flex-col md:flex-row gap-6 h-full">
+const hobbies = [
+  { label: "Poker",              color: "#666666" },
+  { label: "Prediction Markets", color: "#5599ff" },
+  { label: "Rock Climbing",      color: "#22bb22" },
+];
 
-                {/* Main Identity Bento */}
-                <div className="flex-2 glass-card rounded-2xl p-8 md:p-12 relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-[#007AFF] opacity-[0.03] rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+export default function BioTab() {
+  return (
+    <div className="flex flex-col gap-6 max-w-3xl">
 
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass border border-[#10B981]/30 text-[#10B981] text-xs font-mono mb-8 relative z-10 w-fit">
-                        <span className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10B981] opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#10B981]"></span>
-                        </span>
-                        📍 Currently: Interning @ Shepard Ventures
-                    </div>
-
-                    <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-white mb-6">
-                        Hi, I'm Ganesh.
-                    </h2>
-
-                    <div className="space-y-6 text-zinc-400 leading-relaxed max-w-2xl relative z-10">
-                        <p className="text-lg">
-                            I'm an undergraduate at <span className="text-zinc-200">UC Berkeley</span> studying Applied Math and Data Science, graduating in May 2028. I am deeply interested in the intersection of finance, AI, and machine learning, specifically exploring how they combine to solve complex forecasting challenges.
-                        </p>
-                        <p>
-                            Currently, I'm conducting Quantitative Research at Shepard Ventures, focusing on analyzing Black Swan market events using sophisticated estimation strategies. On campus, I support the community as an Academic Intern for CS 61B (Data Structures) and an IT Assistant at the Goldman School of Public Policy.
-                        </p>
-                        <p>
-                            When I'm not in a terminal or analyzing risk models, I'm an avid fan of rock climbing and always open to discussing industry trends, side projects, or casual interests!
-                        </p>
-                    </div>
-                </div>
-
-                {/* Action Column */}
-                <div className="flex-1 flex flex-col gap-6">
-
-                    {/* Calendly CTA */}
-                    <a
-                        href="https://calendly.com/ganeshkarayi-berkeley/30min"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="glass-card flex-1 min-h-[160px] rounded-2xl p-8 flex flex-col justify-between hover:bg-[#007AFF]/10 hover:border-[#007AFF]/30 transition-all group"
-                    >
-                        <div className="flex justify-between items-start">
-                            <div className="p-3 bg-[#007AFF]/20 text-[#007AFF] rounded-xl">
-                                <Calendar size={24} />
-                            </div>
-                            <ExternalLink size={18} className="text-zinc-500 group-hover:text-[#007AFF] transition-colors" />
-                        </div>
-                        <div>
-                            <h3 className="text-xl font-bold text-white mb-2">Book a Chat</h3>
-                            <p className="text-sm text-zinc-400 font-mono">30 Min // Coffee or Tech</p>
-                        </div>
-                    </a>
-
-                    {/* Social Links Bento */}
-                    <div className="glass-card flex-1 min-h-[160px] rounded-2xl p-6 grid grid-cols-2 gap-4">
-                        <a href="mailto:ganeshkarayi@berkeley.edu" className="flex flex-col items-center justify-center gap-3 p-4 rounded-xl hover:bg-zinc-800/50 transition-colors group">
-                            <Mail className="text-zinc-400 group-hover:text-white transition-colors" size={24} />
-                            <span className="text-xs font-mono text-zinc-500 group-hover:text-zinc-300">Email</span>
-                        </a>
-                        <a href="https://www.linkedin.com/in/ganesh-karayi/" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center justify-center gap-3 p-4 rounded-xl hover:bg-zinc-800/50 transition-colors group">
-                            <Linkedin className="text-zinc-400 group-hover:text-[#007AFF] transition-colors" size={24} />
-                            <span className="text-xs font-mono text-zinc-500 group-hover:text-[#007AFF]">LinkedIn</span>
-                        </a>
-                        <a href="https://instagram.com/ganeshkarayi" target="_blank" rel="noopener noreferrer" className="col-span-2 flex flex-col items-center justify-center gap-3 p-4 rounded-xl hover:bg-zinc-800/50 transition-colors group">
-                            <Instagram className="text-zinc-400 group-hover:text-pink-500 transition-colors" size={24} />
-                            <span className="text-xs font-mono text-zinc-500 group-hover:text-pink-500">Instagram</span>
-                        </a>
-                    </div>
-
-                </div>
-            </div>
+      {/* Identity */}
+      <div className="border border-[#666666]/40 p-6">
+        <div className="flex items-start gap-5 mb-6">
+          <img
+            src="/images/meprofessional.png"
+            alt="Ganesh Karayi"
+            className="w-20 h-20 object-cover border border-[#333] shrink-0"
+          />
+          <div>
+            <div className="text-white text-2xl font-bold mb-1">Ganesh Karayi</div>
+            <div className="text-[#666666] text-sm">Applied Mathematics &amp; Data Science</div>
+            <div className="text-[#555] text-xs mt-0.5">UC Berkeley · GPA 3.8 · Class of 2028</div>
+          </div>
         </div>
-    );
+
+        <div className="space-y-3 text-sm text-[#aaa] leading-relaxed">
+          <p>
+            I&apos;m studying Applied Mathematics and Data Science at{" "}
+            <span className="text-white">UC Berkeley</span> (concentrations: Statistics &amp; Economics),
+            graduating May 2028. I build quantitative systems at the intersection of finance, AI, and ML —
+            from crash-resilient portfolios to NLP pipelines to agent-based simulations.
+          </p>
+          <p>
+            Currently Senior Quant Analyst at{" "}
+            <span className="text-white">Shepard Ventures</span>, where I&apos;m engineering a Black Swan
+            stress-testing framework using K-Means, MVO, and GARCH. Also VP of Projects at{" "}
+            <span className="text-white">Open Project</span>, Berkeley&apos;s largest tech org (300+ members),
+            overseeing 15+ concurrent client projects and 40+ PMs.
+          </p>
+          <p>
+            Previously: AI Engineer at <span className="text-white">IPick.AI</span> (led team of 14
+            to ship an equity intelligence platform for 4,000+ companies), and Data Science intern
+            at <span className="text-white">DealPrint</span> (scraped &amp; modeled 50K M&amp;A transactions).
+          </p>
+        </div>
+      </div>
+
+      {/* Hobbies */}
+      <div className="border border-[#222] p-5">
+        <div className="text-[#555] text-[10px] uppercase tracking-widest mb-3">Current Hobbies</div>
+        <div className="flex gap-3 flex-wrap">
+          {hobbies.map(h => (
+            <div
+              key={h.label}
+              className="border px-3 py-1.5 text-sm"
+              style={{ borderColor: h.color + "44", color: h.color }}
+            >
+              {h.label}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Links */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {links.map(link => (
+          <a
+            key={link.label}
+            href={link.href}
+            target={link.href.startsWith("http") ? "_blank" : undefined}
+            rel="noopener noreferrer"
+            className="border px-4 py-3 text-sm text-center transition-opacity hover:opacity-70"
+            style={{
+              borderColor:     link.color + "55",
+              color:           link.color,
+              backgroundColor: link.color + "0d",
+            }}
+          >
+            {link.label}
+          </a>
+        ))}
+      </div>
+    </div>
+  );
 }

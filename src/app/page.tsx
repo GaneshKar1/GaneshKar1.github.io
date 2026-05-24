@@ -1,110 +1,131 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { TerminalSquare, FlaskConical, BookOpen, Hammer, Heart } from "lucide-react";
-
-// Placeholder components - we will build these next
-import TerminalTab from "@/components/tabs/TerminalTab";
-import QuantLabTab from "@/components/tabs/QuantLabTab";
-import LedgerTab from "@/components/tabs/LedgerTab";
-import ForgeTab from "@/components/tabs/ForgeTab";
-import InterestsTab from "@/components/tabs/InterestsTab";
+import BioTab from "@/components/tabs/TerminalTab";
+import WorkTab from "@/components/tabs/QuantLabTab";
+import ProjectsTab from "@/components/tabs/ForgeTab";
+import CourseworkTab from "@/components/tabs/LedgerTab";
 
 const tabs = [
-  { id: "terminal", label: "About Me", icon: <TerminalSquare size={18} /> },
-  { id: "lab", label: "Work Experience", icon: <FlaskConical size={18} /> },
-  { id: "ledger", label: "Coursework", icon: <BookOpen size={18} /> },
-  { id: "forge", label: "Projects", icon: <Hammer size={18} /> },
-  { id: "interests", label: "Interests", icon: <Heart size={18} /> },
+  { id: "bio",        label: "Bio",        color: "#666666" },
+  { id: "work",       label: "Work",       color: "#5599ff" },
+  { id: "projects",   label: "Projects",   color: "#aa44ee" },
+  { id: "coursework", label: "Coursework", color: "#22bb22" },
 ];
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState("terminal");
+  const [activeTab, setActiveTab] = useState("bio");
 
   return (
-    <main className="min-h-screen bg-[#121212] text-zinc-100 selection:bg-[#007AFF] selection:text-white flex flex-col md:flex-row">
+    <div className="h-screen bg-[#111111] text-[#dddddd] font-mono flex flex-col overflow-hidden">
 
-      {/* Desktop Sidebar */}
-      <nav className="hidden md:flex flex-col w-64 h-screen fixed left-0 top-0 glass border-r border-zinc-800/50 p-6 z-50">
-        <div className="mb-12 font-mono">
-          <h1 className="text-xl font-bold tracking-tighter electric-glow text-[#fafafa] mb-1">Ganesh Karayi</h1>
-          <p className="text-xs text-zinc-500 uppercase tracking-widest">Workspace // 2026</p>
-        </div>
-
-        <div className="flex flex-col gap-2">
-          {tabs.map((tab) => (
+      {/* ── Mobile top bar ── */}
+      <div className="md:hidden bg-[#0d0d0d] border-b-2 border-[#666666] px-4 py-3 flex items-center justify-between shrink-0">
+        <span className="text-[#666666] font-bold text-sm">Ganesh Karayi</span>
+        <div className="flex gap-1">
+          {tabs.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg font-mono text-sm transition-all duration-200 text-left ${activeTab === tab.id
-                ? "bg-[#007AFF]/10 text-[#007AFF] border border-[#007AFF]/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
-                : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50 border border-transparent"
-                }`}
+              className="px-2 py-1 text-xs border transition-all"
+              style={{
+                borderColor:     activeTab === tab.id ? tab.color : "#333",
+                color:           activeTab === tab.id ? tab.color : "#666",
+                backgroundColor: activeTab === tab.id ? tab.color + "18" : "transparent",
+              }}
             >
-              <span className={activeTab === tab.id ? "text-[#007AFF]" : "text-zinc-500"}>
-                {tab.icon}
-              </span>
               {tab.label}
             </button>
           ))}
         </div>
-
-        <div className="mt-auto pt-6 border-t border-zinc-800/50 font-mono text-[10px] text-zinc-600">
-          <p>SYSTEM STATUS: ONLINE</p>
-          <p>LATENCY: 12ms</p>
-        </div>
-      </nav>
-
-      {/* Mobile Top Bar (Hidden on desktop) */}
-      <header className="md:hidden glass sticky top-0 z-50 p-4 flex justify-between items-center border-b border-zinc-800/50">
-        <div className="font-mono">
-          <h1 className="font-bold text-zinc-100">Ganesh Karayi</h1>
-        </div>
-        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-      </header>
-
-      {/* Main Content Area */}
-      <div className="flex-1 md:ml-64 p-4 md:p-8 lg:p-12 pb-24 md:pb-12 min-h-screen">
-        <div className="max-w-6xl mx-auto h-full relative">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeTab}
-              initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              exit={{ opacity: 0, y: -10, filter: "blur(4px)" }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-              className="h-full"
-            >
-              {activeTab === "terminal" && <TerminalTab />}
-              {activeTab === "lab" && <QuantLabTab />}
-              {activeTab === "ledger" && <LedgerTab />}
-              {activeTab === "forge" && <ForgeTab />}
-              {activeTab === "interests" && <InterestsTab />}
-            </motion.div>
-          </AnimatePresence>
-        </div>
       </div>
 
-      {/* Mobile Bottom Nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 w-full glass border-t border-zinc-800/50 z-50 pb-safe">
-        <div className="flex justify-around items-center p-2">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex flex-col items-center justify-center p-3 rounded-xl transition-colors ${activeTab === tab.id
-                ? "text-[#007AFF]"
-                : "text-zinc-500 hover:text-zinc-300"
-                }`}
-            >
-              {tab.icon}
-              <span className="text-[10px] mt-1 font-mono tracking-tighter">{tab.label.split(' ')[0]}</span>
-            </button>
-          ))}
-        </div>
-      </nav>
+      {/* ── Desktop layout ── */}
+      <div className="flex flex-1 overflow-hidden">
 
-    </main>
+        {/* Sidebar */}
+        <nav className="hidden md:flex w-36 shrink-0 flex-col bg-[#0d0d0d] border-r-2 border-[#666666]">
+          <div className="px-4 py-5 border-b border-[#666666]/40">
+            <div className="text-[#666666] font-bold text-sm leading-snug">Ganesh</div>
+            <div className="text-[#666666] font-bold text-sm leading-snug">Karayi</div>
+          </div>
+
+          <div className="flex flex-col py-2">
+            {tabs.map(tab => {
+              const active = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className="text-left px-4 py-3 text-sm transition-colors border-b border-[#1a1a1a]"
+                  style={{
+                    color:           active ? tab.color : "#666",
+                    borderLeft:      `3px solid ${active ? tab.color : "transparent"}`,
+                    backgroundColor: active ? tab.color + "12" : "transparent",
+                  }}
+                >
+                  {tab.label}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="mt-auto px-4 py-4 border-t border-[#666666]/20 text-[10px] text-[#444] leading-5">
+            <div>UC Berkeley</div>
+            <div>GPA: 3.8</div>
+            <div>Cls of 2028</div>
+            <div className="mt-2 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#22bb22] inline-block" />
+              <span className="text-[#22bb22]">online</span>
+            </div>
+          </div>
+        </nav>
+
+        {/* Main content */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+
+          {/* Stats header */}
+          <div className="bg-[#0d0d0d] px-6 md:px-10 py-4 shrink-0">
+            <div className="text-sm text-[#aaa]">
+              You have{" "}
+              <span className="text-[#666666] font-bold text-base">5</span>
+              {" "}work experiences. You are currently at{" "}
+              <span className="text-white font-bold">Shepard Ventures</span>
+              {" "}(Senior Quant Analyst).
+            </div>
+            <div className="text-sm text-[#666] mt-0.5">
+              Applied Mathematics &amp; Data Science at{" "}
+              <span className="text-[#999]">UC Berkeley</span>.
+              {" "}GPA: <span className="text-[#999]">3.8</span>.
+              {" "}Graduating <span className="text-[#999]">May 2028</span>.
+              {" "}Units: <span className="text-[#999]">93</span>.
+            </div>
+            <div className="text-xs text-[#3d3d3d] mt-0.5">
+              Experiences produce ×2.1 more opportunities per skill upgrade. Total prestige layers: 5 semesters.
+            </div>
+          </div>
+
+          {/* Green separator */}
+          <div className="h-[2px] bg-[#22bb22] shrink-0" />
+
+          {/* Tab content */}
+          <div className="flex-1 overflow-y-auto px-6 md:px-10 py-8">
+            {activeTab === "bio"        && <BioTab />}
+            {activeTab === "work"       && <WorkTab />}
+            {activeTab === "projects"   && <ProjectsTab />}
+            {activeTab === "coursework" && <CourseworkTab />}
+          </div>
+
+          {/* Status bar */}
+          <div className="bg-[#0d0d0d] border-t border-[#666666]/40 px-6 py-1 shrink-0 flex gap-4 text-[10px] text-[#444]">
+            <span>Updated: May 2026</span>
+            <span>|</span>
+            <span>Status: Open to internships &amp; research</span>
+            <span>|</span>
+            <span>ganeshkarayi@berkeley.edu</span>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
