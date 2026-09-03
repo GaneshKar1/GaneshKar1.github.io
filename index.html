@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ganesh Karayi</title>
+<meta name="description" content="Ganesh Karayi — junior at UC Berkeley studying applied math and data science, working in quantitative finance.">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com"></link>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"></link>
+  <style>
+    :root { --bg:#1a1c1f; --fg:#e3e5e8; --muted:#8d949c; --line:#2b2e33; --card:#212429; }
+    body { margin: 0; background: var(--bg); }
+    a { color: inherit; text-decoration: none; }
+    a:hover { color: var(--accent, #93b6cf); }
+  </style>
+  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet"></link>
+  <script src="https://assets.calendly.com/assets/external/widget.js" async="async"></script>
+</helmet>
+
+<div style="{{ themeVars }}" data-theme-root="1">
+<div style="min-height:100vh; background:var(--bg); color:var(--fg); font-family:'Work Sans',sans-serif; transition:background 0.25s, color 0.25s;">
+
+  <nav style="position:sticky; top:0; z-index:10; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; padding:18px 40px; background:var(--bg); border-bottom:1px solid var(--line);">
+    <div onClick="{{ goHome }}" style="font-family:'Montserrat',sans-serif; font-size:18px; font-weight:600; cursor:pointer; padding:2px 8px; margin:0 -8px; transition:background 0.25s ease;" style-hover="background:color-mix(in oklch, var(--accent) 14%, transparent); color:var(--fg);">Ganesh Karayi</div>
+    <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
+      <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="5">
+        <div onClick="{{ item.go }}" style="{{ item.style }}" style-hover="background:color-mix(in oklch, var(--accent) 14%, transparent); color:var(--fg);">{{ item.label }}</div>
+      </sc-for>
+      <a href="outdoors.html" style="font-size:14px; padding:6px 12px; color:var(--muted); border-bottom:1px solid transparent; transition:background 0.25s ease, color 0.25s ease;" style-hover="background:color-mix(in oklch, var(--accent) 14%, transparent); color:var(--fg);">Outdoors</a>
+      <div onClick="{{ toggleTheme }}" title="Toggle theme" style="cursor:pointer; margin-left:8px; width:30px; height:30px; display:flex; align-items:center; justify-content:center; border:1px solid var(--line); border-radius:50%; font-size:13px; color:var(--muted); transition:background 0.25s ease, color 0.25s ease;" style-hover="background:color-mix(in oklch, var(--accent) 14%, transparent); color:var(--fg);">{{ themeIcon }}</div>
+    </div>
+  </nav>
+
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+    <main style="max-width:940px; margin:0 auto; padding:44px 40px 40px;">
+      <div style="display:flex; gap:34px; flex-wrap:wrap; align-items:flex-start;">
+        <div style="width:148px; flex-shrink:0;">
+          <div style="width:148px; height:186px; overflow:hidden; background:var(--card);">
+            <img src="assets/portrait.jpg" alt="Ganesh Karayi" style="width:100%; height:100%; object-fit:cover; object-position:50% 30%; display:block;"></img>
+          </div>
+          <a href="assets/Ganesh_Karayi_Resume.pdf" target="_blank" rel="noopener" style="display:block; text-align:center; font-size:13px; padding:7px 0; margin-top:12px; border:1px solid var(--line); color:var(--fg); transition:background 0.25s ease;" style-hover="background:color-mix(in oklch, var(--accent) 14%, transparent);">Resume</a>
+          <div style="display:flex; gap:13px; align-items:center; justify-content:center; margin-top:12px;">
+            <a href="https://www.linkedin.com/in/ganesh-karayi/" title="LinkedIn" aria-label="LinkedIn" style="display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px;">
+              <span style="width:19px; height:19px; background-color:var(--muted); mask-image:url('https://unpkg.com/lucide-static@0.436.0/icons/linkedin.svg'); mask-repeat:no-repeat; mask-size:contain; mask-position:center; -webkit-mask-image:url('https://unpkg.com/lucide-static@0.436.0/icons/linkedin.svg'); -webkit-mask-repeat:no-repeat; -webkit-mask-size:contain; -webkit-mask-position:center; transition:background-color 0.25s ease;" style-hover="background-color:var(--fg);"></span>
+            </a>
+            <a href="https://github.com/GaneshKar1" title="GitHub" aria-label="GitHub" style="display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px;">
+              <span style="width:19px; height:19px; background-color:var(--muted); mask-image:url('https://unpkg.com/lucide-static@0.436.0/icons/github.svg'); mask-repeat:no-repeat; mask-size:contain; mask-position:center; -webkit-mask-image:url('https://unpkg.com/lucide-static@0.436.0/icons/github.svg'); -webkit-mask-repeat:no-repeat; -webkit-mask-size:contain; -webkit-mask-position:center; transition:background-color 0.25s ease;" style-hover="background-color:var(--fg);"></span>
+            </a>
+            <a href="https://instagram.com/ganeshkarayi" title="Instagram" aria-label="Instagram" style="display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px;">
+              <span style="width:19px; height:19px; background-color:var(--muted); mask-image:url('https://unpkg.com/lucide-static@0.436.0/icons/instagram.svg'); mask-repeat:no-repeat; mask-size:contain; mask-position:center; -webkit-mask-image:url('https://unpkg.com/lucide-static@0.436.0/icons/instagram.svg'); -webkit-mask-repeat:no-repeat; -webkit-mask-size:contain; -webkit-mask-position:center; transition:background-color 0.25s ease;" style-hover="background-color:var(--fg);"></span>
+            </a>
+            <a href="mailto:ganeshkarayi@berkeley.edu" title="Email" aria-label="Email" style="display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px;">
+              <span style="width:19px; height:19px; background-color:var(--muted); mask-image:url('https://unpkg.com/lucide-static@0.436.0/icons/mail.svg'); mask-repeat:no-repeat; mask-size:contain; mask-position:center; -webkit-mask-image:url('https://unpkg.com/lucide-static@0.436.0/icons/mail.svg'); -webkit-mask-repeat:no-repeat; -webkit-mask-size:contain; -webkit-mask-position:center; transition:background-color 0.25s ease;" style-hover="background-color:var(--fg);"></span>
+            </a>
+          </div>
+        </div>
+        <div style="flex:1; min-width:300px;">
+          <h1 style="font-family:'Montserrat',sans-serif; font-weight:600; letter-spacing:-0.015em; font-size:38px; line-height:1.05; margin:0 0 12px;">Ganesh Karayi</h1>
+          <p style="font-size:15.5px; line-height:1.6; font-weight:300; color:var(--fg); max-width:560px; margin:0 0 10px;">i'm a junior at <span style="font-weight:500; color:var(--fg);">uc berkeley</span> studying <span style="font-weight:500; color:var(--fg);">applied math and data science</span>. my interests are in <span style="font-weight:500; color:var(--fg);">quantitative finance</span>, particularly portfolio models that hold up during a crash, and the data pipelines that support them. i'm also into teaching, running, and hiking.</p>
+          <p style="font-size:15.5px; line-height:1.6; font-weight:300; color:var(--fg); max-width:560px; margin:0 0 10px;">right now i'm a <span style="font-weight:500; color:var(--fg);">senior quantitative analyst at shepherd ventures</span>, researching crash-resilient portfolio construction, and an <span style="font-weight:500; color:var(--fg);">ai engineer at ipick.ai</span> leading a team of over 20 members. before that, i was <span style="font-weight:500; color:var(--fg);">course staff for cs 61b</span> and did data research on m&amp;a deals at <span style="font-weight:500; color:var(--fg);">dealprint</span>.</p>
+          <p style="font-size:15.5px; line-height:1.6; font-weight:300; color:var(--muted); max-width:560px; margin:0 0 16px;"><a href="outdoors.html" style="color:var(--fg); background:color-mix(in oklch, var(--accent) 26%, transparent); padding:1px 4px; margin:0 -2px; transition:background 0.25s ease;" style-hover="background:color-mix(in oklch, var(--accent) 48%, transparent);">check out my adventures in the outdoors tab if you wanna see something cool :D</a></p>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:40px; margin-top:38px; padding-top:22px; border-top:1px solid var(--line);">
+        <sc-if value="{{ showCurrently }}" hint-placeholder-val="{{ true }}">
+          <div>
+            <div style="font-family:'Montserrat',sans-serif; font-weight:600; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); margin-bottom:12px;">Currently</div>
+            <div style="display:flex; flex-direction:column;">
+              <sc-for list="{{ currently }}" as="c" hint-placeholder-count="3">
+                <div onClick="{{ c.go }}" style="padding:11px 10px; margin:0 -10px; border-bottom:1px solid var(--line); cursor:pointer; transition:background 0.35s ease;" style-hover="background:color-mix(in oklch, var(--accent) 12%, transparent);">
+                  <div style="display:flex; justify-content:space-between; gap:12px; align-items:baseline;">
+                    <div style="font-family:'Montserrat',sans-serif; font-size:16px; font-weight:600;">{{ c.role }}</div>
+                    <div style="font-size:11.5px; color:var(--accent); white-space:nowrap;">{{ c.since }}</div>
+                  </div>
+                  <div style="font-size:13.5px; color:var(--muted); line-height:1.45; margin-top:2px;">{{ c.org }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <div>
+          <div style="font-family:'Montserrat',sans-serif; font-weight:600; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); margin-bottom:12px;">Get in touch</div>
+          <p style="font-size:15px; line-height:1.6; font-weight:300; color:var(--fg); margin:0 0 14px;">if you ever want to talk about anything, whether that be asking me for advice, or just to yap, feel free to message me, or schedule a meeting!</p>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <div onClick="{{ openCalendly }}" style="font-size:13.5px; padding:7px 14px; border:1px solid var(--accent); color:var(--accent); cursor:pointer; transition:background 0.25s ease;" style-hover="background:color-mix(in oklch, var(--accent) 16%, transparent);">Schedule 30 min</div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ isExperience }}" hint-placeholder-val="{{ false }}">
+    <main style="max-width:820px; margin:0 auto; padding:64px 40px 100px;">
+      <h1 style="font-family:'Montserrat',sans-serif; font-weight:600; letter-spacing:-0.015em; font-size:34px; margin:0 0 44px;">Experience</h1>
+      <sc-for list="{{ experiences }}" as="job" hint-placeholder-count="4">
+        <div id="{{ job.slug }}" style="padding:30px 18px; margin:0 -18px; border-top:1px solid var(--line); transition:background 0.6s ease, box-shadow 0.6s ease; background:{{ job.glow }}; box-shadow:{{ job.ring }};">
+          <div style="font-family:'Work Sans',sans-serif; font-size:21px; font-weight:600;">{{ job.company }} — {{ job.title }}</div>
+          <div style="font-size:13px; color:var(--accent); margin:5px 0 14px;">{{ job.dates }} · {{ job.location }}</div>
+          <p style="font-size:15px; line-height:1.6; color:var(--fg); margin:0 0 14px;">{{ job.context }}</p>
+          <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px;">
+            <sc-for list="{{ job.bullets }}" as="b" hint-placeholder-count="4">
+              <div style="display:flex; gap:10px; font-size:15px; line-height:1.55; color:var(--muted);">
+                <span style="color:var(--accent);">—</span><span>{{ b }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="font-size:13px; color:var(--muted); opacity:0.8;">{{ job.tech }}</div>
+        </div>
+      </sc-for>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ isProjects }}" hint-placeholder-val="{{ false }}">
+    <main style="max-width:900px; margin:0 auto; padding:64px 40px 100px;">
+      <h1 style="font-family:'Montserrat',sans-serif; font-weight:600; letter-spacing:-0.015em; font-size:34px; margin:0 0 44px;">Projects</h1>
+      <sc-for list="{{ projects }}" as="p" hint-placeholder-count="5">
+        <div style="padding:28px 0; border-top:1px solid var(--line);">
+          <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; align-items:baseline; margin-bottom:6px;">
+            <div style="font-family:'Work Sans',sans-serif; font-size:20px; font-weight:600;">{{ p.name }}</div>
+            <div style="font-size:13px; color:var(--muted);">{{ p.meta }}</div>
+          </div>
+          <p style="font-size:15px; line-height:1.6; color:var(--muted); margin:0 0 14px; max-width:680px;">{{ p.desc }}</p>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <sc-for list="{{ p.tags }}" as="tag" hint-placeholder-count="4">
+              <div style="font-size:12px; padding:4px 10px; border:1px solid var(--line); color:var(--muted);">{{ tag }}</div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ isCoursework }}" hint-placeholder-val="{{ false }}">
+    <main style="max-width:820px; margin:0 auto; padding:64px 40px 100px;">
+      <h1 style="font-family:'Montserrat',sans-serif; font-weight:600; letter-spacing:-0.015em; font-size:34px; margin:0 0 8px;">Coursework</h1>
+      <p style="font-size:15px; color:var(--muted); margin:0 0 44px;">UC Berkeley, BA Applied Math &amp; Data Science — Expected May 2028</p>
+      <sc-for list="{{ courseGroups }}" as="g" hint-placeholder-count="4">
+        <div style="padding:26px 0; border-top:1px solid var(--line);">
+          <div style="font-family:'Work Sans',sans-serif; font-size:18px; font-weight:600; margin-bottom:10px;">{{ g.subject }}</div>
+          <p style="font-size:15px; line-height:1.7; color:var(--fg); margin:0;">{{ g.courses }}</p>
+          <sc-if value="{{ g.inProgress }}" hint-placeholder-val="{{ false }}">
+            <p style="font-size:14px; line-height:1.7; color:var(--accent); margin:8px 0 0;">In progress: {{ g.inProgress }}</p>
+          </sc-if>
+        </div>
+      </sc-for>
+    </main>
+  </sc-if>
+
+
+  <footer style="text-align:center; padding:30px; font-size:12px; color:var(--muted); border-top:1px solid var(--line);">© 2026 Ganesh Karayi</footer>
+</div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accentColor&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: null, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;oklch(74% 0.06 235)&quot;, &quot;oklch(48% 0.06 245)&quot;, &quot;oklch(78% 0.055 145)&quot;, &quot;oklch(84% 0.012 245)&quot;], &quot;section&quot;: &quot;Theme&quot;}, &quot;showCurrently&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Home&quot;}}">
+class Component extends DCLogic {
+  state = { page: 'home', dark: true, focus: null };
+
+  componentDidMount() {
+    try {
+      const saved = localStorage.getItem('gk-theme');
+      if (saved === 'light') this.setState({ dark: false });
+    } catch (e) {}
+    // Allow the outdoors page to link back into a specific section.
+    var hash = (location.hash || '').replace('#', '');
+    if (['home','experience','projects','coursework'].indexOf(hash) >= 0) this.setState({ page: hash });
+    this.syncBody();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    this.syncBody();
+  }
+
+  calendlyUrl() {
+    var dark = this.state.dark;
+    var acc = dark ? '93b6cf' : '46647d';
+    return 'https://calendly.com/ganeshkarayi-berkeley/30min?hide_gdpr_banner=1' +
+      '&background_color=' + (dark ? '1a1c1f' : 'f9f4e9') +
+      '&text_color=' + (dark ? 'e3e5e8' : '2b3a47') +
+      '&primary_color=' + acc;
+  }
+
+  openCalendly() {
+    if (window.Calendly) window.Calendly.initPopupWidget({ url: this.calendlyUrl() });
+    else window.open('https://calendly.com/ganeshkarayi-berkeley/30min', '_blank');
+  }
+
+  syncBody() {
+    const el = this.state.dark ? null : document.documentElement;
+    if (el) {
+      el.style.setProperty('--bg', 'oklch(96.5% 0.016 85)');
+      el.style.setProperty('--fg', 'oklch(29% 0.03 245)');
+    } else {
+      document.documentElement.style.removeProperty('--bg');
+      document.documentElement.style.removeProperty('--fg');
+    }
+  }
+
+  setPage(p) { this.setState({ page: p }); }
+
+  toggle() {
+    const dark = !this.state.dark;
+    this.setState({ dark });
+    try { localStorage.setItem('gk-theme', dark ? 'dark' : 'light'); } catch (e) {}
+  }
+
+  expData() {
+    return [
+        { company: 'Open Project', title: 'Vice President of Projects', dates: 'Aug 2025 – Present', location: 'Berkeley, CA',
+          context: "Leadership at Berkeley's largest tech club (300+ members); VP of Projects since May 2026.",
+          bullets: [
+            'Overseeing 19 projects and 50+ project managers',
+            'Ships 5 client projects per semester across the organization',
+          ],
+          tech: 'project management · client delivery · team leadership' },
+        { company: 'Shepherd Ventures', title: 'Senior Quantitative Analyst', dates: 'Jan 2026 – Present', location: 'San Diego, CA',
+          context: 'Primary researcher on crash-resilient portfolio construction; co-leads the internal AI team.',
+          bullets: [
+            'Built a Black Swan stress-testing pipeline (K-Means resilient-equity selection → MVO optimization), backtested to a 54% downside capture ratio vs. the S&P 100',
+            'Built a fear-regime detection system with Claude combining moving-average slope decay and shock triggers — 100% recall across 8 labeled crash events in a 20-year backtest',
+            'Tripled 20-year precision (0.21 → 0.57) and lifted F1 (0.34 → 0.73) by introducing a false-positive classification metric',
+            'Designed a three-state Market Condition model (Robust / Unsettled / Fragile) with hysteresis rules to prevent state whipsaws',
+          ],
+          tech: 'Python · K-Means · MVO · GARCH · Holt Exponential Smoothing · backtesting' },
+        { company: 'IPick.AI', title: 'AI Engineer', dates: 'Jan 2026 – Present', location: 'Cupertino, CA',
+          context: 'Leads a team of over 20 to ship a live equity intelligence platform (ipick.ai/nexus) covering 4,000+ public companies.',
+          bullets: [
+            'Engineered an NLP extraction pipeline over 8,000+ SEC EDGAR filings, classifying corporate relationships via FinBERT, Claude API, and Llama 3.2',
+            'Directed full-stack architecture: Python/Flask, PostgreSQL, Docker, AWS EC2, D3.js',
+            'Built a real-time news-to-analysis pipeline scraping 20+ financial sources into per-ticker AI-generated analysis',
+          ],
+          tech: 'Python · Flask · PostgreSQL · Docker · AWS · FinBERT · NLP · team leadership' },
+        { company: 'UC Berkeley EECS', title: 'CS 61B Course Staff', dates: 'Jan 2026 – May 2026', location: 'Berkeley, CA',
+          context: 'Supported discussion and lab sections for a 1,100-student data structures course.',
+          bullets: [
+            'Independently facilitated ~50% of student support during section, operating alongside TAs',
+            'Ran daily CS61BL lab sections for 20 students through the full DSA curriculum',
+            'Delivered a midterm review session to ~100 students',
+          ],
+          tech: 'Java · data structures · algorithms · teaching · debugging' },
+        { company: 'DealPrint', title: 'Data Science Research Intern', dates: 'Aug 2025 – Jan 2026', location: 'Berkeley, CA',
+          context: 'Self-directed research building an end-to-end M&A valuation tool.',
+          bullets: [
+            'Built a Chrome extension to scrape 50,000 M&A transactions spanning 40 years from a legacy platform',
+            'Built a tiered KNN comparables engine (NAICS hierarchy, geography, deal type) combined with a regression model — 0.25 MAPE on held-out transactions',
+            'Delivered as an interactive Streamlit dashboard with real-time parameter tuning',
+          ],
+          tech: 'Python · pandas · scikit-learn · Streamlit · Plotly · KNN · regression' },
+      ];
+  }
+
+  focusRole(slug) {
+    this.setState({ page: 'experience', focus: slug });
+    requestAnimationFrame(() => {
+      const el = document.getElementById(slug);
+      if (!el) return;
+      const y = el.getBoundingClientRect().top + window.pageYOffset - 90;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    });
+    clearTimeout(this._ft);
+    this._ft = setTimeout(() => this.setState({ focus: null }), 2200);
+  }
+
+  renderVals() {
+    const accent = this.props.accentColor || null;
+    const dark = this.state.dark;
+    const t = dark
+      ? { bg: '#1a1c1f', fg: '#e3e5e8', muted: '#8d949c', line: '#2b2e33', card: '#212429' }
+      : { bg: 'oklch(96.5% 0.016 85)', fg: 'oklch(29% 0.03 245)', muted: 'oklch(48% 0.028 245)', line: 'oklch(88% 0.014 85)', card: 'oklch(93% 0.015 85)' };
+    // Each mode has its own accent; a tweaked value is reused, darkened for the light ground.
+    const m = accent && /oklch\(\s*([\d.]+)%?\s+([\d.]+)\s+([\d.]+)/.exec(accent);
+    const acc = accent
+      ? (dark ? accent : (m ? 'oklch(48% ' + m[2] + ' ' + m[3] + ')' : accent))
+      : (dark ? 'oklch(74% 0.06 235)' : 'oklch(48% 0.06 245)');
+
+    const page = this.state.page;
+    const pages = [['home','Home'],['experience','Experience'],['projects','Projects'],['coursework','Coursework']];
+
+    return {
+      themeVars: {
+        '--bg': t.bg, '--fg': t.fg, '--muted': t.muted, '--line': t.line,
+        '--card': t.card, '--accent': acc,
+      },
+      themeIcon: dark ? '☀' : '☾',
+      toggleTheme: () => this.toggle(),
+      showCurrently: this.props.showCurrently ?? true,
+      goHome: () => this.setPage('home'),
+      openCalendly: () => this.openCalendly(),
+      navItems: pages.map(([id, label]) => ({
+        label,
+        go: () => this.setPage(id),
+        style: {
+          cursor: 'pointer', fontSize: '14px', padding: '6px 12px',
+          color: page === id ? acc : t.muted,
+          borderBottom: page === id ? '1px solid ' + acc : '1px solid transparent',
+        }
+      })),
+      isHome: page === 'home',
+      isExperience: page === 'experience',
+      isProjects: page === 'projects',
+      isCoursework: page === 'coursework',
+      currently: [
+        { role: 'Senior Quantitative Analyst', org: 'Shepherd Ventures — crash-resilient portfolio research', since: 'since Jan 2026', go: () => this.focusRole('role-shepherd-ventures') },
+        { role: 'AI Engineer', org: 'IPick.AI — leading a 20+ person team on equity intelligence', since: 'since Jan 2026', go: () => this.focusRole('role-ipick-ai') },
+        { role: 'VP of Projects', org: "Open Project — Berkeley's largest tech club", since: 'since May 2026', go: () => this.focusRole('role-open-project') },
+      ],
+      experiences: this.expData().map((j) => ({
+        ...j,
+        slug: 'role-' + j.company.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+        glow: this.state.focus === 'role-' + j.company.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+          ? 'color-mix(in oklch, var(--accent) 12%, transparent)' : 'transparent',
+        ring: this.state.focus === 'role-' + j.company.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+          ? 'inset 3px 0 0 var(--accent)' : 'inset 0 0 0 var(--accent)',
+      })),
+      projects: [
+        { name: 'Solar Panel Market Quantile Analysis', meta: 'Class project, 2026',
+          desc: 'Self-sourced and cleaned a 332,000-row California solar interconnection dataset. Implemented a Minimum Distance Estimator for quantile regression from scratch, cross-validated against statsmodels.QuantReg. Found nonlinear cost dynamics across unit tiers and an extreme price premium at the 90th percentile.',
+          tags: ['Python', 'pandas', 'statsmodels', 'quantile regression'] },
+        { name: 'Quantitative Trading Strategy & Backtesting Engine', meta: 'DeCal project, 2025',
+          desc: 'Built a statistical pairs trading engine (WMT/TGT) using rolling 60-day OLS regression for dynamic hedge ratios, with z-score mean-reversion signals and modeled transaction costs.',
+          tags: ['Python', 'pandas', 'statsmodels', 'yfinance'] },
+        { name: 'Eco Sim', meta: 'Team project, 2025',
+          desc: 'Full-stack agent-based simulation of 100K+ autonomous agents (households, firms, government) with emergent pricing, production, and labor behavior. Real-time React dashboard with live GDP graphs and policy sliders.',
+          tags: ['Python', 'FastAPI', 'React', 'Tailwind', 'SQLite'] },
+        { name: 'Build Your Own World', meta: 'CS 61B Final Project, 2025',
+          desc: 'Procedurally generated 2D dungeon game with seeded randomization. Implemented BFS-based dynamic lighting optimized to recalculate only on state change, and a save/load system via deterministic keystroke replay.',
+          tags: ['Java', 'BFS', 'procedural generation'] },
+        { name: 'Spam Email Classifier', meta: 'Data 100 project, 2026',
+          desc: 'Logistic regression spam classifier reaching 99.4% accuracy on a held-out test set, with a custom set-based feature selection method.',
+          tags: ['Python', 'scikit-learn', 'logistic regression'] },
+      ],
+      courseGroups: [
+        { subject: 'Math', courses: 'Multivariable Calculus (MATH 53) · Linear Algebra & Differential Equations (MATH 54) · Discrete Math (MATH 55) · Real Analysis (MATH 104) · Probability & Random Processes (EECS 126)', inProgress: 'Abstract Algebra (MATH 113) · Optimization Models in Engineering (EECS 127)' },
+        { subject: 'Computer Science', courses: 'Structure and Interpretation of Computer Programs (CS 61A) · Data Structures & Algorithms (CS 61B) · Intro to AI (CS 188)', inProgress: 'Intro to Machine Learning (CS 189)' },
+        { subject: 'Data Science', courses: 'Foundations of Data Science (DATA 8) · Principles & Techniques of Data Science (DATA 100)', inProgress: null },
+        { subject: 'Economics & Finance', courses: 'Intro to Economics (ECON 2) · Econometrics (ECON 141) · Econometrics: Advanced Methods (ECON 143) · Intro to Quant Finance (IEOR 198)', inProgress: null },
+      ],
+    };
+  }
+}
+
+</script>
+</body>
+</html>
