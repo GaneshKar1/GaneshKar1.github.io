@@ -17,6 +17,16 @@
     body { margin: 0; background: var(--bg); }
     a { color: inherit; text-decoration: none; }
     a:hover { color: var(--accent, #93b6cf); }
+    html.gk-custom-cursor, html.gk-custom-cursor * { cursor: none !important; }
+    #gkCursor {
+      position: fixed; top: 0; left: 0; width: 22px; height: 22px; border-radius: 50%;
+      border: 1.5px solid var(--accent); box-sizing: border-box;
+      pointer-events: none; z-index: 9999; opacity: 0;
+      transform: translate(-50%, -50%);
+      transition: width 0.18s ease, height 0.18s ease, background-color 0.18s ease, border-color 0.18s ease, opacity 0.2s ease;
+    }
+    #gkCursor.gk-active { opacity: 1; }
+    #gkCursor.gk-hover { width: 36px; height: 36px; background: var(--accent); border-color: transparent; }
   </style>
   <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet"></link>
   <script src="https://assets.calendly.com/assets/external/widget.js" async="async"></script>
@@ -169,6 +179,56 @@
 
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;accentColor&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: null, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;oklch(74% 0.06 235)&quot;, &quot;oklch(48% 0.06 245)&quot;, &quot;oklch(78% 0.055 145)&quot;, &quot;oklch(84% 0.012 245)&quot;], &quot;section&quot;: &quot;Theme&quot;}, &quot;showCurrently&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Home&quot;}}">
+// A thin ring that trails the pointer and fills solid in the accent color
+// over anything clickable. Only on devices with a real mouse (touch/coarse
+// pointers keep the native cursor), and only once JS actually initializes it
+// so a script failure can't leave visitors with no visible cursor at all.
+function initCustomCursor() {
+  if (document.getElementById('gkCursor')) return;
+  try {
+    if (window.matchMedia && !window.matchMedia('(pointer: fine)').matches) return;
+  } catch (e) { return; }
+
+  var host = document.querySelector('[data-theme-root]') || document.body;
+  var ring = document.createElement('div');
+  ring.id = 'gkCursor';
+  host.appendChild(ring);
+  document.documentElement.classList.add('gk-custom-cursor');
+
+  var mx = window.innerWidth / 2, my = window.innerHeight / 2;
+  var rx = mx, ry = my;
+  var hovering = false;
+
+  function isInteractive(el) {
+    // Walk inline styles directly, not getComputedStyle — the global
+    // `cursor: none !important` rule that hides the native cursor would
+    // otherwise mask every element's real (pre-override) cursor value.
+    while (el && el.nodeType === 1) {
+      if (el.tagName === 'A' && el.hasAttribute('href')) return true;
+      if (el.style && el.style.cursor === 'pointer') return true;
+      el = el.parentElement;
+    }
+    return false;
+  }
+
+  document.addEventListener('mousemove', function (e) {
+    mx = e.clientX; my = e.clientY;
+    ring.classList.add('gk-active');
+    var h = isInteractive(e.target);
+    if (h !== hovering) { hovering = h; ring.classList.toggle('gk-hover', h); }
+  }, { passive: true });
+
+  document.documentElement.addEventListener('mouseleave', function () { ring.classList.remove('gk-active'); });
+  document.documentElement.addEventListener('mouseenter', function () { ring.classList.add('gk-active'); });
+
+  (function raf() {
+    rx += (mx - rx) * 0.2;
+    ry += (my - ry) * 0.2;
+    ring.style.transform = 'translate(' + rx + 'px, ' + ry + 'px) translate(-50%, -50%)';
+    requestAnimationFrame(raf);
+  })();
+}
+
 function initialDarkMode() {
   try {
     const saved = localStorage.getItem('gk-theme');
@@ -582,6 +642,7 @@ class Component extends DCLogic {
   }
 
   componentDidMount() {
+    initCustomCursor();
     // Allow the outdoors page to link back into a specific section.
     var hash = (location.hash || '').replace('#', '');
     var targetPage = ['home','experience','projects','coursework'].indexOf(hash) >= 0 ? hash : this.state.page;
