@@ -204,6 +204,10 @@ function initCustomCursor() {
     // `cursor: none !important` rule that hides the native cursor would
     // otherwise mask every element's real (pre-override) cursor value.
     while (el && el.nodeType === 1) {
+      // The idle-game canvas is one big cursor:pointer target, but the fill
+      // blob is too coarse for aiming at small triangles — keep the ring
+      // thin there instead of treating the whole box as "clickable".
+      if (el.id === 'idleGameCanvas') return false;
       if (el.tagName === 'A' && el.hasAttribute('href')) return true;
       if (el.style && el.style.cursor === 'pointer') return true;
       el = el.parentElement;
