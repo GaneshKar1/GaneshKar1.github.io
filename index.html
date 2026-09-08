@@ -425,15 +425,15 @@ function mountIdleGame(root) {
   }
 
   function spawnShards(t) {
-    var count = 4;
+    var count = 5;
     for (var i = 0; i < count; i++) {
       var ang = rand(0, Math.PI * 2);
-      var spd = rand(35, 85);
+      var spd = rand(55, 120);
       shards.push({
-        x: t.x, y: t.y, r: t.r * rand(0.3, 0.5),
+        x: t.x, y: t.y, r: Math.max(2.5, t.r * rand(0.5, 0.75)),
         vx: Math.cos(ang) * spd + t.vx * 0.25, vy: Math.sin(ang) * spd + t.vy * 0.25,
         rot: rand(0, Math.PI * 2), vrot: rand(-5, 5),
-        life: 0.4, maxLife: 0.4,
+        life: 0.55, maxLife: 0.55,
       });
     }
   }
