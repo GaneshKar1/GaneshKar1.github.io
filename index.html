@@ -226,8 +226,8 @@ function initCustomCursor() {
   document.documentElement.addEventListener('mouseenter', function () { ring.classList.add('gk-active'); });
 
   (function raf() {
-    rx += (mx - rx) * 0.2;
-    ry += (my - ry) * 0.2;
+    rx += (mx - rx) * 0.45;
+    ry += (my - ry) * 0.45;
     ring.style.transform = 'translate(' + rx + 'px, ' + ry + 'px) translate(-50%, -50%)';
     requestAnimationFrame(raf);
   })();
