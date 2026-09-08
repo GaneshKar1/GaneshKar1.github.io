@@ -195,8 +195,6 @@ function initCustomCursor() {
   host.appendChild(ring);
   document.documentElement.classList.add('gk-custom-cursor');
 
-  var mx = window.innerWidth / 2, my = window.innerHeight / 2;
-  var rx = mx, ry = my;
   var hovering = false;
 
   function isInteractive(el) {
@@ -216,7 +214,7 @@ function initCustomCursor() {
   }
 
   document.addEventListener('mousemove', function (e) {
-    mx = e.clientX; my = e.clientY;
+    ring.style.transform = 'translate(' + e.clientX + 'px, ' + e.clientY + 'px) translate(-50%, -50%)';
     ring.classList.add('gk-active');
     var h = isInteractive(e.target);
     if (h !== hovering) { hovering = h; ring.classList.toggle('gk-hover', h); }
@@ -224,13 +222,6 @@ function initCustomCursor() {
 
   document.documentElement.addEventListener('mouseleave', function () { ring.classList.remove('gk-active'); });
   document.documentElement.addEventListener('mouseenter', function () { ring.classList.add('gk-active'); });
-
-  (function raf() {
-    rx += (mx - rx) * 0.45;
-    ry += (my - ry) * 0.45;
-    ring.style.transform = 'translate(' + rx + 'px, ' + ry + 'px) translate(-50%, -50%)';
-    requestAnimationFrame(raf);
-  })();
 }
 
 function initialDarkMode() {
