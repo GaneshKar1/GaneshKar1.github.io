@@ -119,18 +119,24 @@
     <main style="max-width:820px; margin:0 auto; padding:64px 40px 100px;">
       <h1 style="font-family:'Montserrat',sans-serif; font-weight:600; letter-spacing:-0.015em; font-size:34px; margin:0 0 44px;">Experience</h1>
       <sc-for list="{{ experiences }}" as="job" hint-placeholder-count="4">
-        <div id="{{ job.slug }}" style="padding:30px 18px; margin:0 -18px; border-top:1px solid var(--line); transition:background 0.6s ease, box-shadow 0.6s ease; background:{{ job.glow }}; box-shadow:{{ job.ring }};">
-          <div style="font-family:'Work Sans',sans-serif; font-size:21px; font-weight:600;">{{ job.company }} — {{ job.title }}</div>
-          <div style="font-size:13px; color:var(--accent); margin:5px 0 14px;">{{ job.dates }} · {{ job.location }}</div>
-          <p style="font-size:15px; line-height:1.6; color:var(--fg); margin:0 0 14px;">{{ job.context }}</p>
-          <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px;">
-            <sc-for list="{{ job.bullets }}" as="b" hint-placeholder-count="4">
-              <div style="display:flex; gap:10px; font-size:15px; line-height:1.55; color:var(--muted);">
-                <span style="color:var(--accent);">—</span><span>{{ b }}</span>
-              </div>
-            </sc-for>
+        <div id="{{ job.slug }}" style="display:flex; gap:20px; padding:28px 0; transition:background 0.6s ease; background:{{ job.glow }};">
+          <div style="width:14px; flex-shrink:0; position:relative;">
+            <div style="position:absolute; left:6px; top:0; bottom:-28px; width:1px; background:var(--line);"></div>
+            <div style="position:absolute; left:2px; top:7px; width:9px; height:9px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 4px var(--bg); transition:box-shadow 0.3s ease;"></div>
           </div>
-          <div style="font-size:13px; color:var(--muted); opacity:0.8;">{{ job.tech }}</div>
+          <div style="flex:1; min-width:0;">
+            <div style="font-family:'Work Sans',sans-serif; font-size:21px; font-weight:600;">{{ job.company }} — {{ job.title }}</div>
+            <div style="font-size:13px; color:var(--accent); margin:5px 0 14px;">{{ job.dates }} · {{ job.location }}</div>
+            <p style="font-size:15px; line-height:1.6; color:var(--fg); margin:0 0 14px;">{{ job.context }}</p>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px;">
+              <sc-for list="{{ job.bullets }}" as="b" hint-placeholder-count="4">
+                <div style="display:flex; gap:10px; font-size:15px; line-height:1.55; color:var(--muted);">
+                  <span style="color:var(--accent);">—</span><span>{{ b }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="font-size:13px; color:var(--muted); opacity:0.8;">{{ job.tech }}</div>
+          </div>
         </div>
       </sc-for>
     </main>
@@ -832,8 +838,6 @@ class Component extends DCLogic {
         slug: 'role-' + j.company.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
         glow: this.state.focus === 'role-' + j.company.toLowerCase().replace(/[^a-z0-9]+/g, '-')
           ? 'color-mix(in oklch, var(--accent) 12%, transparent)' : 'transparent',
-        ring: this.state.focus === 'role-' + j.company.toLowerCase().replace(/[^a-z0-9]+/g, '-')
-          ? 'inset 3px 0 0 var(--accent)' : 'inset 0 0 0 var(--accent)',
       })),
       projects: [
         { name: 'Solar Panel Market Quantile Analysis', meta: 'Class project, 2026',
