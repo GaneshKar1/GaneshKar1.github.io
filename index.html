@@ -438,6 +438,10 @@ function mountIdleGame(root) {
     ctx.rotate(tu.angle + Math.PI / 2);
     ctx.fillStyle = c.fg;
     ctx.fillRect(-2.5, -14, 5, 14);
+    ctx.beginPath();
+    ctx.arc(0, 0, 3, 0, Math.PI * 2);
+    ctx.fillStyle = c.line;
+    ctx.fill();
     ctx.restore();
   }
 
