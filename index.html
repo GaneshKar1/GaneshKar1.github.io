@@ -160,14 +160,22 @@
 
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;accentColor&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: null, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;oklch(74% 0.06 235)&quot;, &quot;oklch(48% 0.06 245)&quot;, &quot;oklch(78% 0.055 145)&quot;, &quot;oklch(84% 0.012 245)&quot;], &quot;section&quot;: &quot;Theme&quot;}, &quot;showCurrently&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Home&quot;}}">
+function initialDarkMode() {
+  try {
+    const saved = localStorage.getItem('gk-theme');
+    if (saved === 'light') return false;
+    if (saved === 'dark') return true;
+  } catch (e) {}
+  try {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) return true;
+  } catch (e) {}
+  return false;
+}
+
 class Component extends DCLogic {
-  state = { page: 'home', dark: true, focus: null };
+  state = { page: 'home', dark: initialDarkMode(), focus: null };
 
   componentDidMount() {
-    try {
-      const saved = localStorage.getItem('gk-theme');
-      if (saved === 'light') this.setState({ dark: false });
-    } catch (e) {}
     // Allow the outdoors page to link back into a specific section.
     var hash = (location.hash || '').replace('#', '');
     if (['home','experience','projects','coursework'].indexOf(hash) >= 0) this.setState({ page: hash });

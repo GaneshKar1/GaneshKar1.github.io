@@ -99,8 +99,13 @@
     var b = document.getElementById('themeBtn');
     if (b) b.textContent = dark ? '☀' : '☾';
   }
-  var dark = true;
-  try { dark = localStorage.getItem('gk-theme') !== 'light'; } catch (e) {}
+  var dark = false;
+  try {
+    var saved = localStorage.getItem('gk-theme');
+    if (saved === 'dark') dark = true;
+    else if (saved === 'light') dark = false;
+    else dark = !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  } catch (e) {}
   apply(dark);
   document.addEventListener('DOMContentLoaded', function () {
     apply(dark);
