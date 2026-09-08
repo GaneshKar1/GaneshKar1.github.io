@@ -182,7 +182,7 @@ function initialDarkMode() {
 }
 
 function loadIdleGameState() {
-  var def = { unlocked: false, points: 0, pointsLevel: 0, turretCount: 0, speedLevel: 0 };
+  var def = { points: 0, pointsLevel: 0, turretCount: 0, speedLevel: 0 };
   try {
     var raw = localStorage.getItem('gk-idle-game');
     if (raw) return Object.assign({}, def, JSON.parse(raw));
@@ -193,7 +193,7 @@ function loadIdleGameState() {
 function saveIdleGameState(s) {
   try {
     localStorage.setItem('gk-idle-game', JSON.stringify({
-      unlocked: s.unlocked, points: s.points, pointsLevel: s.pointsLevel,
+      points: s.points, pointsLevel: s.pointsLevel,
       turretCount: s.turretCount, speedLevel: s.speedLevel,
     }));
   } catch (e) {}
@@ -232,6 +232,9 @@ function mountIdleGame(root) {
   var raf = null;
   var last = null;
   var destroyed = false;
+  // Every fresh mount starts paused, even if there's saved progress —
+  // only a click on a triangle resumes turrets/scoring for this session.
+  var running = false;
 
   function rand(a, b) { return a + Math.random() * (b - a); }
 
@@ -356,14 +359,13 @@ function mountIdleGame(root) {
     });
   }
 
-  function unlock() {
-    if (gs.unlocked) return;
-    gs.unlocked = true;
+  function resume() {
+    if (running) return;
+    running = true;
     hintEl.style.opacity = '0';
     scoreEl.style.opacity = '1';
     shopEl.style.opacity = '1';
     shopEl.style.pointerEvents = 'auto';
-    saveIdleGameState(gs);
   }
 
   function killTriangle(idx) {
@@ -383,7 +385,7 @@ function mountIdleGame(root) {
       var t = triangles[i];
       var dx = px - t.x, dy = py - t.y;
       if (dx * dx + dy * dy <= (t.r + 6) * (t.r + 6)) {
-        if (!gs.unlocked) unlock();
+        if (!running) resume();
         killTriangle(i);
         return;
       }
@@ -391,12 +393,6 @@ function mountIdleGame(root) {
   }
   canvas.addEventListener('click', onClick);
 
-  if (gs.unlocked) {
-    hintEl.style.opacity = '0';
-    scoreEl.style.opacity = '1';
-    shopEl.style.opacity = '1';
-    shopEl.style.pointerEvents = 'auto';
-  }
   updateScoreEl();
   renderShop();
 
@@ -504,7 +500,7 @@ function mountIdleGame(root) {
     }
 
     var fInterval = fireInterval();
-    for (var ti = 0; ti < turrets.length; ti++) {
+    for (var ti = 0; running && ti < turrets.length; ti++) {
       var tu = turrets[ti];
       var target = nearestTriangle(tu.x, tu.y);
       var desired = tu.angle;
