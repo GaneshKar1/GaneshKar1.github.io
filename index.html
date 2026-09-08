@@ -284,6 +284,7 @@ function mountIdleGame(root) {
   var triangles = [];
   var turrets = [];
   var projectiles = [];
+  var shards = [];
   var raf = null;
   var last = null;
   var destroyed = false;
@@ -423,7 +424,22 @@ function mountIdleGame(root) {
     shopEl.style.pointerEvents = 'auto';
   }
 
+  function spawnShards(t) {
+    var count = 4;
+    for (var i = 0; i < count; i++) {
+      var ang = rand(0, Math.PI * 2);
+      var spd = rand(35, 85);
+      shards.push({
+        x: t.x, y: t.y, r: t.r * rand(0.3, 0.5),
+        vx: Math.cos(ang) * spd + t.vx * 0.25, vy: Math.sin(ang) * spd + t.vy * 0.25,
+        rot: rand(0, Math.PI * 2), vrot: rand(-5, 5),
+        life: 0.4, maxLife: 0.4,
+      });
+    }
+  }
+
   function killTriangle(idx) {
+    spawnShards(triangles[idx]);
     triangles.splice(idx, 1);
     gs.points += pointsPerKill();
     ensureTriangles();
@@ -505,6 +521,12 @@ function mountIdleGame(root) {
     ctx.fillStyle = c.muted;
     ctx.globalAlpha = 0.85;
     for (var i = 0; i < triangles.length; i++) drawTriangleShape(triangles[i]);
+
+    for (var s = 0; s < shards.length; s++) {
+      var sh = shards[s];
+      ctx.globalAlpha = 0.85 * (sh.life / sh.maxLife);
+      drawTriangleShape(sh);
+    }
     ctx.globalAlpha = 1;
 
     for (var j = 0; j < turrets.length; j++) drawTurret(turrets[j], c);
@@ -532,6 +554,14 @@ function mountIdleGame(root) {
       if (t.x + t.r > W) { t.x = W - t.r; t.vx = -Math.abs(t.vx); }
       if (t.y - t.r < 0) { t.y = t.r; t.vy = Math.abs(t.vy); }
       if (t.y + t.r > H) { t.y = H - t.r; t.vy = -Math.abs(t.vy); }
+    }
+
+    for (var sh = shards.length - 1; sh >= 0; sh--) {
+      var s = shards[sh];
+      s.x += s.vx * dt; s.y += s.vy * dt; s.rot += s.vrot * dt;
+      s.vx *= 0.9; s.vy *= 0.9;
+      s.life -= dt;
+      if (s.life <= 0) shards.splice(sh, 1);
     }
     for (var a = 0; a < triangles.length; a++) {
       for (var b = a + 1; b < triangles.length; b++) {
