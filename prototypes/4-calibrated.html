@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ganesh Karayi</title>
+<meta name="description" content="Ganesh Karayi: applied math and data science at UC Berkeley. Quant research, ML systems, and steep trails.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a live topographic field as the hero, then one editorial column that widens
+   for the leak story, the markets grid and the photo. Dark-first: Tahoe before sunrise. */
+:root{
+  --bg:#0F2A33;          /* lake blue, pre-dawn */
+  --bg-2:#0B222A;        /* deeper water for inset panels */
+  --fg:#ECE6D9;          /* granite in first light */
+  --muted:#93A9AE;       /* lichen grey-blue */
+  --line:rgba(236,230,217,.14);
+  --contour:rgba(147,169,174,.34);
+  --amber:#F2A541;       /* sunrise */
+  --amber-ink:#F2A541;   /* amber used as text */
+  --yes:#7CC8A4;
+  --no:#E98A6E;
+  --display:"Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
+  --body:"Newsreader", Georgia, "Times New Roman", serif;
+  --mono:"DM Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --gutter:clamp(16px, 4vw, 48px);
+  --col:1120px;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#EEF0EC; --bg-2:#E3E7E2; --fg:#10262E; --muted:#56696E;
+    --line:rgba(16,38,46,.14); --contour:rgba(16,38,46,.22);
+    --amber:#F2A541; --amber-ink:#A35F06; --yes:#23855C; --no:#BF4B2C;
+    color-scheme:light;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#EEF0EC; --bg-2:#E3E7E2; --fg:#10262E; --muted:#56696E;
+  --line:rgba(16,38,46,.14); --contour:rgba(16,38,46,.22);
+  --amber:#F2A541; --amber-ink:#A35F06; --yes:#23855C; --no:#BF4B2C;
+  color-scheme:light;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:19px;line-height:1.55;
+  font-optical-sizing:auto;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+::selection{background:var(--amber);color:#0F2A33}
+:focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:2px}
+.wrap{max-width:var(--col);margin:0 auto;padding-inline:var(--gutter)}
+.mono{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.tnum{font-variant-numeric:tabular-nums}
+h1,h2,h3{font-family:var(--display);font-weight:700;letter-spacing:-.02em;line-height:1;margin:0;text-wrap:balance}
+h2{font-size:clamp(2rem,5.2vw,3.6rem);font-weight:650}
+p{margin:0}
+.lede{font-style:italic;font-size:clamp(1.15rem,2.1vw,1.4rem);line-height:1.45;max-width:36ch;color:var(--fg)}
+section{padding-block:clamp(72px,11vw,140px) 0}
+.sec-head{display:flex;flex-direction:column;gap:14px;margin-bottom:clamp(28px,4vw,48px)}
+
+/* ---------- top bar ---------- */
+.top{position:absolute;inset:0 0 auto 0;z-index:3;padding-top:env(safe-area-inset-top,0px)}
+.top .wrap{display:flex;justify-content:space-between;align-items:center;padding-block:22px;gap:16px}
+.top nav{display:flex;gap:clamp(12px,2.4vw,28px);flex-wrap:wrap;justify-content:flex-end}
+.top nav a{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:var(--muted)}
+.top nav a:hover{color:var(--amber-ink)}
+.mark{font-family:var(--display);font-weight:800;font-size:1.05rem;text-decoration:none;letter-spacing:-.02em}
+.mark span{color:var(--amber-ink)}
+
+/* ---------- hero ---------- */
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y}
+.hero-inner{position:relative;z-index:2;padding-block:clamp(120px,16vw,190px) clamp(40px,6vw,64px);pointer-events:none}
+.hero-inner a,.hero-inner button{pointer-events:auto}
+.coords{margin-bottom:22px}
+.name{font-size:clamp(3.6rem,14.5vw,11.5rem);font-weight:800;letter-spacing:-.055em;line-height:.84;
+  font-variation-settings:"opsz" 96}
+.name .dot{color:var(--amber)}
+.hero .lede{margin-top:clamp(22px,3vw,34px);max-width:30ch}
+.hero .lede em{font-style:normal;font-family:var(--display);font-weight:600;color:var(--amber-ink);letter-spacing:-.01em}
+.hud{position:absolute;z-index:2;pointer-events:none;font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;
+  color:var(--amber-ink);transform:translate(14px,-26px);white-space:nowrap;opacity:0;transition:opacity .25s}
+.hint{margin-top:26px}
+
+/* open positions */
+.positions{position:relative;z-index:2;margin-top:clamp(40px,6vw,64px);border-top:1px solid var(--line);pointer-events:auto}
+.positions .row{display:grid;grid-template-columns:14px minmax(0,1.1fr) minmax(0,1.6fr) auto;gap:14px;align-items:baseline;
+  padding:12px 0;border-bottom:1px solid var(--line);text-decoration:none}
+.positions .row:hover .role{color:var(--amber-ink)}
+.positions .head{padding:10px 0}
+.live{width:7px;height:7px;border-radius:50%;background:var(--yes);align-self:center;box-shadow:0 0 0 0 var(--yes);animation:ping 2.4s infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--yes) 60%,transparent)}70%{box-shadow:0 0 0 7px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.role{font-family:var(--display);font-weight:600;font-size:1.08rem;letter-spacing:-.01em}
+.org{color:var(--muted);font-size:1rem}
+.since{font-family:var(--mono);font-size:.72rem;color:var(--muted);text-align:right}
+
+/* ---------- leak story ---------- */
+.leak{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,6vw,80px);align-items:start}
+.leak .story{display:flex;flex-direction:column;gap:18px;max-width:58ch}
+.leak .story p{color:var(--fg)}
+.leak .story .quiet{color:var(--muted)}
+.panel{background:var(--bg-2);border:1px solid var(--line);border-radius:6px;padding:clamp(20px,3vw,32px);display:flex;flex-direction:column;gap:26px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 24px)}
+.switch{display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:var(--mono);font-size:.78rem;letter-spacing:.04em;color:var(--fg);cursor:pointer;user-select:none}
+.switch input{position:absolute;opacity:0;pointer-events:none}
+.track{flex:none;width:52px;height:28px;border-radius:14px;background:var(--line);position:relative;transition:background .25s}
+.track::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:var(--fg);transition:transform .3s cubic-bezier(.5,1.6,.5,1)}
+.switch input:checked + .track{background:var(--no)}
+.switch input:checked + .track::after{transform:translateX(24px)}
+.switch input:focus-visible + .track{outline:2px solid var(--amber);outline-offset:3px}
+.big{font-family:var(--display);font-weight:800;font-size:clamp(4rem,9vw,6.6rem);letter-spacing:-.05em;line-height:.9;font-variant-numeric:tabular-nums}
+.big small{font-size:.42em;letter-spacing:-.02em;font-weight:600;color:var(--muted)}
+.verdict{font-style:italic;color:var(--muted);min-height:1.6em}
+.bars{display:flex;flex-direction:column;gap:12px}
+.bar{display:grid;grid-template-columns:minmax(0,1fr) 3.2em;gap:12px;align-items:center}
+.bar .lab{font-size:.92rem;grid-column:1/-1;color:var(--muted)}
+.bar .rail{height:10px;background:var(--line);border-radius:5px;overflow:hidden}
+.bar .fill{height:100%;border-radius:5px;background:var(--fg);transition:width .6s cubic-bezier(.3,.8,.3,1),background .3s}
+.bar .val{font-family:var(--mono);font-size:.8rem;text-align:right}
+.bar.leaky .fill{background:var(--no)}
+.bar.leaky.gone{opacity:.35}
+.bar.leaky.gone .fill{width:0!important}
+.receipts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-top:clamp(36px,5vw,56px)}
+.receipt{background:var(--bg);padding:20px;display:flex;flex-direction:column;gap:8px}
+.receipt b{font-family:var(--display);font-size:clamp(1.6rem,3.4vw,2.3rem);font-weight:700;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.receipt span{font-size:.95rem;color:var(--muted);line-height:1.4}
+
+/* ---------- work ledger ---------- */
+.ledger{border-top:1px solid var(--fg)}
+.job{border-bottom:1px solid var(--line)}
+.job summary{list-style:none;display:grid;grid-template-columns:7.5em minmax(0,1fr) minmax(0,1.2fr) 1.5em;gap:20px;align-items:baseline;padding:20px 0;cursor:pointer}
+.job summary::-webkit-details-marker{display:none}
+.job .when{font-family:var(--mono);font-size:.74rem;color:var(--muted)}
+.job .co{font-family:var(--display);font-size:clamp(1.25rem,2.4vw,1.6rem);font-weight:650;letter-spacing:-.02em;line-height:1.1}
+.job .co small{display:block;font-family:var(--body);font-weight:400;font-size:.62em;letter-spacing:0;color:var(--muted);margin-top:6px;font-style:italic}
+.job .one{font-size:1rem;color:var(--muted);line-height:1.45}
+.job .plus{font-family:var(--mono);color:var(--amber-ink);transition:transform .25s;justify-self:end}
+.job[open] .plus{transform:rotate(45deg)}
+.job summary:hover .co{color:var(--amber-ink)}
+.job .detail{display:grid;grid-template-columns:7.5em minmax(0,1fr);gap:20px;padding:0 0 26px}
+.job .detail > div{grid-column:2;display:flex;flex-direction:column;gap:16px;max-width:66ch}
+.job h4{margin:0;font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;font-weight:500;color:var(--amber-ink)}
+.job ul{margin:6px 0 0;padding-left:1.1em;display:flex;flex-direction:column;gap:6px;font-size:1rem}
+.job .tech{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+
+/* ---------- markets ---------- */
+.markets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.mkt{border:1px solid var(--line);border-radius:6px;padding:20px;display:flex;flex-direction:column;gap:14px;background:var(--bg)}
+.mkt .q{font-family:var(--display);font-weight:600;font-size:1.22rem;letter-spacing:-.015em;line-height:1.15}
+.mkt .note{font-size:.98rem;color:var(--muted);line-height:1.45;flex:1}
+.mkt .foot{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-top:12px;border-top:1px dashed var(--line)}
+.chip{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;padding:4px 8px;border-radius:3px;border:1px solid currentColor}
+.chip.yes{color:var(--yes)} .chip.no{color:var(--no)} .chip.open{color:var(--amber-ink)}
+.price{font-family:var(--mono);font-size:.8rem;color:var(--fg)}
+.mkt.open-m{border-color:color-mix(in srgb,var(--amber) 55%,transparent)}
+.mkt .odds{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.mkt .odds i{display:block;height:100%;background:var(--amber)}
+.mkt .vote{display:flex;gap:8px}
+.mkt .vote button{flex:1;font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;background:transparent;color:var(--fg);border:1px solid var(--line);border-radius:4px;padding:8px;cursor:pointer}
+.mkt .vote button:hover{border-color:var(--amber)}
+.mkt .vote button[aria-pressed="true"]{background:var(--amber);color:#0F2A33;border-color:var(--amber)}
+
+/* ---------- outside ---------- */
+.outside{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:clamp(24px,4vw,48px);align-items:end}
+.photo{position:relative;margin:0;border-radius:6px;overflow:hidden;aspect-ratio:4/3;max-width:100%}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.photo figcaption{position:absolute;left:0;right:0;bottom:0;padding:16px 18px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:#F4EFE4;
+  background:linear-gradient(transparent,rgba(8,24,30,.78))}
+.quote{font-style:italic;font-size:clamp(1.3rem,2.6vw,1.75rem);line-height:1.35;text-wrap:balance}
+.quote::before{content:"“";color:var(--amber-ink)} .quote::after{content:"”";color:var(--amber-ink)}
+.hikes{display:flex;flex-direction:column;border-top:1px solid var(--line);margin-top:28px}
+.hike{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:16px;padding:12px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.hike b{font-family:var(--display);font-weight:600;font-size:1.02rem;letter-spacing:-.01em}
+.hike span{font-family:var(--mono);font-size:.74rem;color:var(--muted);text-align:right}
+.hike span.gain{color:var(--amber-ink)}
+.small-photo{margin-top:20px;aspect-ratio:16/10}
+
+/* ---------- calibration ---------- */
+.cal{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(28px,5vw,72px);align-items:start}
+.qs{display:flex;flex-direction:column;gap:14px}
+.qcard{border:1px solid var(--line);border-radius:6px;padding:18px 20px;display:flex;flex-direction:column;gap:12px;background:var(--bg-2)}
+.qcard .qq{font-family:var(--display);font-weight:600;font-size:1.08rem;letter-spacing:-.01em;line-height:1.2}
+.range{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.range label{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.range input{width:8.5em;font-family:var(--mono);font-size:.92rem;padding:8px 10px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:4px;font-variant-numeric:tabular-nums}
+.range input:focus{border-color:var(--amber);outline:none}
+.res{font-family:var(--mono);font-size:.78rem;min-height:1.3em}
+.res.hit{color:var(--yes)} .res.miss{color:var(--no)}
+.btn{font-family:var(--mono);font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;padding:13px 18px;border-radius:4px;border:1px solid var(--amber);background:var(--amber);color:#0F2A33;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:10px}
+.btn.ghost{background:transparent;color:var(--fg);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--amber)}
+.score{font-size:1.02rem;color:var(--muted);min-height:3em}
+.score b{color:var(--fg);font-weight:600}
+
+/* ---------- projects ---------- */
+.projects{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 clamp(24px,4vw,56px)}
+.proj{padding:20px 0;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+.proj h3{font-size:1.3rem;font-weight:650;letter-spacing:-.02em}
+.proj p{font-size:1rem;color:var(--muted);line-height:1.5}
+.proj .mono{font-size:.68rem}
+
+/* ---------- contact ---------- */
+.contact{padding-block:clamp(80px,12vw,150px) clamp(48px,7vw,80px)}
+.yap{font-size:clamp(3rem,10vw,7.5rem);font-weight:800;letter-spacing:-.05em;line-height:.9}
+.yap span{color:var(--amber)}
+.contact .lede{margin-top:24px;max-width:40ch}
+.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px;align-items:center}
+.email{font-family:var(--mono);font-size:.9rem;user-select:all;padding:12px 14px;border:1px dashed var(--line);border-radius:4px}
+.links{display:flex;gap:22px;flex-wrap:wrap;margin-top:40px}
+.links a{font-family:var(--mono);font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:3px}
+.links a:hover{color:var(--amber-ink);border-color:var(--amber)}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-block:26px;border-top:1px solid var(--line)}
+
+/* ---------- responsive ---------- */
+@media (max-width:860px){
+  .leak,.outside,.cal{grid-template-columns:minmax(0,1fr)}
+  .panel{position:static}
+  .markets{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .projects{grid-template-columns:minmax(0,1fr)}
+  .job summary{grid-template-columns:minmax(0,1fr) 1.5em;grid-template-areas:"w w" "c p" "o o";gap:6px 14px}
+  .job .when{grid-area:w} .job .co{grid-area:c} .job .one{grid-area:o} .job .plus{grid-area:p}
+  .job .detail{grid-template-columns:minmax(0,1fr)}
+  .job .detail > div{grid-column:1}
+}
+@media (max-width:560px){
+  body{font-size:17.5px}
+  .markets{grid-template-columns:minmax(0,1fr)}
+  .positions .row{grid-template-columns:12px minmax(0,1fr) auto;gap:4px 10px}
+  .positions .org{grid-column:2/-1;grid-row:2}
+  .receipts{grid-template-columns:minmax(0,1fr)}
+  .top nav a.opt{display:none}
+}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  .live{animation:none}
+  *{transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="mark" href="#top">gk<span>.</span></a>
+    <nav aria-label="Sections">
+      <a href="#leak">the leak</a>
+      <a href="#work">work</a>
+      <a href="#markets" class="opt">markets</a>
+      <a href="#outside" class="opt">outside</a>
+      <a href="../assets/Ganesh_Karayi_Resume.pdf">resume</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero" style="padding:0" aria-label="Intro">
+    <canvas id="topo" aria-hidden="true"></canvas>
+    <div class="hud" id="hud">elev 0 ft</div>
+    <div class="wrap hero-inner">
+      <p class="mono coords tnum">37.8719° N · 122.2585° W · berkeley, ca</p>
+      <h1 class="name">ganesh<br>karayi<span class="dot">.</span></h1>
+      <p class="lede">i like hard things. steep trails, messy data, and problems where being wrong is <em>expensive</em>. junior at berkeley, applied math + data science.</p>
+      <p class="mono hint">move your cursor over the map to raise a peak</p>
+
+      <div class="positions" role="list" aria-label="Current roles">
+        <div class="row head mono"><span></span><span>open positions</span><span>where</span><span class="since">held since</span></div>
+        <a class="row" role="listitem" href="#work" data-open="shepherd"><i class="live"></i><span class="role">Research Fellow</span><span class="org">Shepherd Ventures, crash-resilient portfolios</span><span class="since tnum">oct 2026</span></a>
+        <a class="row" role="listitem" href="#work" data-open="ipick"><i class="live"></i><span class="role">AI Engineer</span><span class="org">IPick.AI, three ML workstreams</span><span class="since tnum">jan 2026</span></a>
+        <a class="row" role="listitem" href="#work" data-open="lgnova"><i class="live"></i><span class="role">Software Engineer</span><span class="org">LG NOVA, the Atlas platform</span><span class="since tnum">aug 2026</span></a>
+        <a class="row" role="listitem" href="#work" data-open="rrid"><i class="live"></i><span class="role">Data Science Researcher</span><span class="org">Rapid Reviews\Infectious Diseases</span><span class="since tnum">aug 2026</span></a>
+        <a class="row" role="listitem" href="#work" data-open="op"><i class="live"></i><span class="role">VP of Projects</span><span class="org">Open Project, Berkeley's largest tech club</span><span class="since tnum">may 2026</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE LEAK -->
+  <section id="leak">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="mono">field note 01 · shepherd ventures, 2026</p>
+        <h2>the best result i ever had was wrong.</h2>
+      </div>
+      <div class="leak">
+        <div class="story">
+          <p class="lede" style="max-width:none">At Shepherd I research portfolios that are built to hold up when the market crashes. One configuration looked incredible: in its worst crash it still avoided almost half of the market's drop.</p>
+          <p>It bothered me. So I checked every input against the crashes themselves, and one of them was too good. A forward-looking data field correlated <b class="tnum">0.77</b> with the crash returns. The strongest honest signal we had, momentum, sat at <b class="tnum">0.41</b>. The data was quietly leaking the future into the backtest.</p>
+          <p>Taking it out cut the worst-case number in half. Nobody enjoys deleting their best result. I'd still rather know.</p>
+          <p class="quiet">Flip the switch to see what the model looked like before and after.</p>
+        </div>
+
+        <div class="panel" aria-live="polite">
+          <label class="switch" for="leakToggle">
+            <span id="leakLabel">leaked field: included</span>
+            <input type="checkbox" id="leakToggle" checked>
+            <span class="track" aria-hidden="true"></span>
+          </label>
+          <div>
+            <p class="mono" style="margin-bottom:10px">worst-case crash: share of the market's drop avoided</p>
+            <div class="big" id="bigNum">44.6<small>%</small></div>
+            <p class="verdict" id="verdict">looks amazing. too amazing.</p>
+          </div>
+          <div class="bars">
+            <p class="mono">correlation with crash returns</p>
+            <div class="bar leaky" id="barLeak"><span class="lab">forward-looking field (the leak)</span><div class="rail"><div class="fill" style="width:77%"></div></div><span class="val tnum">0.77</span></div>
+            <div class="bar"><span class="lab">momentum (strongest real signal)</span><div class="rail"><div class="fill" style="width:41%"></div></div><span class="val tnum">0.41</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="receipts">
+        <div class="receipt"><b class="tnum">15</b><span>significant digits: how closely my parity check reproduced the original research code, on every crash</span></div>
+        <div class="receipt"><b class="tnum">21,504</b><span>crash backtests run by the sweep engine I built, with cached data so a full sweep takes minutes</span></div>
+        <div class="receipt"><b class="tnum">4,130 / 4,130</b><span>solved runs matching the published sweep report exactly</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section id="work">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="mono">the ledger</p>
+        <h2>where the hours go.</h2>
+      </div>
+      <div class="ledger" id="ledger"></div>
+    </div>
+  </section>
+
+  <!-- MARKETS -->
+  <section id="markets">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="mono">i trade on kalshi and play poker, so</p>
+        <h2>markets on me.</h2>
+        <p class="lede" style="max-width:46ch">A few contracts on my own life, resolved honestly. Not all of them went my way.</p>
+      </div>
+      <div class="markets" id="mkts"></div>
+    </div>
+  </section>
+
+  <!-- OUTSIDE -->
+  <section id="outside">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="mono">off the clock</p>
+        <h2>i go uphill on purpose.</h2>
+      </div>
+      <div class="outside">
+        <figure class="photo">
+          <img src="../assets/tahoe-sunrise-s.jpg" alt="Ganesh sitting on a granite summit at sunrise above Lake Tahoe" loading="lazy">
+          <figcaption class="tnum"><span>rubicon peak · el dorado county</span><span>aug 24, 2026 · sunrise</span></figcaption>
+        </figure>
+        <div>
+          <p class="quote">My resume shows the academics. What it doesn't capture is my love for trying out hard things.</p>
+          <p class="mono" style="margin-top:14px">me, in a cover letter draft</p>
+          <div class="hikes" aria-label="Recent hikes">
+            <div class="hike"><b>Rubicon Peak Trail</b><span class="tnum">4.62 mi</span><span class="tnum gain">+2,941 ft</span></div>
+            <div class="hike"><b>Mount Tam East Peak Loop</b><span class="tnum">10.41 mi</span><span class="tnum gain">+2,860 ft</span></div>
+            <div class="hike"><b>Saratoga Gap and Ridge Loop</b><span class="tnum">5.53 mi</span><span class="tnum gain">+1,734 ft</span></div>
+            <div class="hike"><b>Mount Whitney</b><span class="tnum">summit</span><span class="tnum gain">14,505 ft</span></div>
+          </div>
+          <figure class="photo small-photo">
+            <img src="../assets/marin-summit-s.jpg" alt="Ganesh and three friends on a rocky summit above Marin County" loading="lazy">
+            <figcaption><span>east peak, mount tam</span><span>with the crew</span></figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CALIBRATION -->
+  <section id="calibrate">
+    <div class="wrap cal">
+      <div class="sec-head" style="margin:0">
+        <p class="mono">a quant interview, but about me</p>
+        <h2>calibrate me.</h2>
+        <p class="lede">Give a range you're 90% sure contains the answer. A well-calibrated person catches about 9 out of 10. Most people catch far fewer.</p>
+        <div class="score" id="score">Fill in all three ranges, then check.</div>
+        <div class="actions" style="margin-top:0">
+          <button class="btn" id="checkBtn" type="button">check my ranges</button>
+          <button class="btn ghost" id="resetBtn" type="button">reset</button>
+        </div>
+      </div>
+      <div class="qs" id="qs"></div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="mono">side quests</p>
+        <h2>things i built for fun, or for a grade i forgot about.</h2>
+      </div>
+      <div class="projects">
+        <article class="proj"><p class="mono">2025 · python, pandas, scikit-learn, streamlit</p><h3>M&amp;A valuation engine</h3><p>Scraped 50,000 deals across 40 years with a custom Chrome extension, then priced small businesses with a KNN comps engine and regression. 0.25 MAPE on held-out deals.</p></article>
+        <article class="proj"><p class="mono">2026 · python, statsmodels</p><h3>Solar quantile analysis</h3><p>Cleaned a 332,000-row California solar dataset and implemented Minimum Distance Estimation for quantile regression from the asymptotic theory, checked against statsmodels.</p></article>
+        <article class="proj"><p class="mono">2025 · python, fastapi, react</p><h3>Eco Sim</h3><p>An agent-based economy of 100K+ households, firms and a government, with emergent pricing and a live dashboard of policy sliders.</p></article>
+        <article class="proj"><p class="mono">2025 · java</p><h3>Build Your Own World</h3><p>A procedurally generated dungeon with BFS lighting and save files that replay your keystrokes deterministically.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="wrap">
+      <h2 class="yap">wanna<br>yap<span>?</span></h2>
+      <p class="lede">Advice, a project, recruiting, a trail recommendation, or just to talk. I answer.</p>
+      <div class="actions">
+        <a class="btn" href="https://calendly.com/ganeshkarayi-berkeley/30min" target="_blank" rel="noopener">schedule 30 min →</a>
+        <span class="email" id="email">ganeshkarayi@berkeley.edu</span>
+        <button class="btn ghost" id="copyBtn" type="button">copy email</button>
+      </div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/ganesh-karayi/" target="_blank" rel="noopener">linkedin</a>
+        <a href="https://github.com/GaneshKar1" target="_blank" rel="noopener">github</a>
+        <a href="https://instagram.com/ganeshkarayi" target="_blank" rel="noopener">instagram</a>
+        <a href="../assets/Ganesh_Karayi_Resume.pdf">resume (pdf)</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap mono">
+    <span>© 2026 ganesh karayi</span>
+    <span>contours drawn live from noise · peak at 14,505 ft</span>
+  </div>
+</footer>
+
+<script>
+/* ================= topographic hero ================= */
+(function(){
+  const cv=document.getElementById('topo'), ctx=cv.getContext('2d'), hud=document.getElementById('hud');
+  const hero=cv.parentElement;
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const CELL=11, LEVELS=13;
+  let W=0,H=0,cols=0,rows=0,field=null,dpr=1;
+  // value noise
+  const P=new Uint8Array(512); {const p=[...Array(256).keys()];for(let i=255;i>0;i--){const j=(Math.sin(i*91.7)*43758.5453%1+1)%1*(i+1)|0;[p[i],p[j]]=[p[j],p[i]];}for(let i=0;i<512;i++)P[i]=p[i&255];}
+  const fade=t=>t*t*(3-2*t);
+  function vn(x,y){const xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi,a=P[(xi&255)+P[yi&255]],b=P[((xi+1)&255)+P[yi&255]],c=P[(xi&255)+P[(yi+1)&255]],d=P[((xi+1)&255)+P[(yi+1)&255]];const u=fade(xf),v=fade(yf);return ((a+(b-a)*u)+((c+(d-c)*u)-(a+(b-a)*u))*v)/255;}
+  function fbm(x,y){return vn(x,y)*.55+vn(x*2.1+5.2,y*2.1+1.3)*.3+vn(x*4.3+9.1,y*4.3+3.7)*.15;}
+  const ptr={x:-1e4,y:-1e4,tx:-1e4,ty:-1e4,amp:0,on:false};
+  function size(){const r=hero.getBoundingClientRect();dpr=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);cols=Math.ceil(W/CELL)+1;rows=Math.ceil(H/CELL)+1;field=new Float32Array(cols*rows);}
+  function css(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+  let colLine,colAmber,colorTick=0;
+  function sample(t){
+    const s=.0042, ox=t*.018, oy=t*.007;
+    // a standing massif on the right so the composition has a summit even at rest
+    const mx=W*.78, my=H*.42, mr=Math.min(W,H)*.55;
+    for(let j=0;j<rows;j++){const y=j*CELL;for(let i=0;i<cols;i++){const x=i*CELL;
+      let v=fbm(x*s+ox,y*s+oy)*.62;
+      const dm=((x-mx)**2+(y-my)**2)/(mr*mr); v+=.36*Math.exp(-dm*2.2);
+      if(ptr.amp>.001){const d=((x-ptr.x)**2+(y-ptr.y)**2)/(150*150); v+=.42*ptr.amp*Math.exp(-d);}
+      field[j*cols+i]=v;}}
+  }
+  function draw(t){
+    if(colorTick--<=0){colLine=css('--contour');colAmber=css('--amber');colorTick=60;}
+    sample(t);
+    ctx.clearRect(0,0,W,H);
+    const lo=.18,hi=.98,step=(hi-lo)/LEVELS;
+    for(let k=0;k<=LEVELS;k++){
+      const L=lo+k*step, top=k>=LEVELS-3, index=k%4===0;
+      ctx.beginPath();
+      for(let j=0;j<rows-1;j++){for(let i=0;i<cols-1;i++){
+        const a=field[j*cols+i],b=field[j*cols+i+1],c=field[(j+1)*cols+i+1],d=field[(j+1)*cols+i];
+        const idx=(a>L?8:0)|(b>L?4:0)|(c>L?2:0)|(d>L?1:0);
+        if(idx===0||idx===15)continue;
+        const x=i*CELL,y=j*CELL;
+        const T=[x+CELL*(L-a)/(b-a),y], R=[x+CELL,y+CELL*(L-b)/(c-b)], B=[x+CELL*(L-d)/(c-d),y+CELL], Lf=[x,y+CELL*(L-a)/(d-a)];
+        const seg=(p,q)=>{ctx.moveTo(p[0],p[1]);ctx.lineTo(q[0],q[1]);};
+        switch(idx){
+          case 1:case 14:seg(Lf,B);break; case 2:case 13:seg(B,R);break; case 3:case 12:seg(Lf,R);break;
+          case 4:case 11:seg(T,R);break; case 6:case 9:seg(T,B);break; case 7:case 8:seg(Lf,T);break;
+          case 5:seg(Lf,T);seg(B,R);break; case 10:seg(T,R);seg(Lf,B);break;
+        }
+      }}
+      ctx.strokeStyle=top?colAmber:colLine; ctx.globalAlpha=top?.55+.15*(k-(LEVELS-3)):1;
+      ctx.lineWidth=index||top?1.15:.7; ctx.stroke(); ctx.globalAlpha=1;
+    }
+  }
+  function elevAt(x,y){const i=Math.max(0,Math.min(cols-1,Math.round(x/CELL))),j=Math.max(0,Math.min(rows-1,Math.round(y/CELL)));const v=field[j*cols+i];return Math.max(0,Math.min(14505,Math.round(((v-.18)/(1.15-.18))*14505/10)*10));}
+  function move(e){const r=hero.getBoundingClientRect();ptr.tx=e.clientX-r.left;ptr.ty=e.clientY-r.top;if(ptr.x<-1e3){ptr.x=ptr.tx;ptr.y=ptr.ty;}ptr.on=true;hud.style.opacity=1;}
+  hero.addEventListener('pointermove',move);
+  hero.addEventListener('pointerdown',move);
+  hero.addEventListener('pointerleave',()=>{ptr.on=false;hud.style.opacity=0;});
+  let t0=performance.now(),last=0;
+  function frame(now){
+    if(now-last>32){ // ~30fps is plenty for drifting terrain
+      ptr.x+=(ptr.tx-ptr.x)*.18; ptr.y+=(ptr.ty-ptr.y)*.18;
+      ptr.amp+=((ptr.on?1:0)-ptr.amp)*.06;
+      draw((now-t0)/1000);
+      if(ptr.on){hud.style.left=ptr.x+'px';hud.style.top=ptr.y+'px';hud.textContent='elev '+elevAt(ptr.x,ptr.y).toLocaleString()+' ft';}
+      last=now;
+    }
+    if(visible)requestAnimationFrame(frame);
+  }
+  let visible=true;
+  new IntersectionObserver(es=>{const v=es[0].isIntersecting;if(v&&!visible&&!reduce){visible=true;requestAnimationFrame(frame);}visible=v;}).observe(hero);
+  addEventListener('resize',()=>{size();draw(reduce?0:(performance.now()-t0)/1000);});
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{colorTick=0;});
+  new MutationObserver(()=>{colorTick=0;}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+  size();
+  if(reduce){draw(0);hero.addEventListener('pointermove',()=>{ptr.amp=1;ptr.x=ptr.tx;ptr.y=ptr.ty;draw(0);hud.style.left=ptr.x+'px';hud.style.top=ptr.y+'px';hud.textContent='elev '+elevAt(ptr.x,ptr.y).toLocaleString()+' ft';});}
+  else requestAnimationFrame(frame);
+})();
+
+/* ================= the leak ================= */
+(function(){
+  const tg=document.getElementById('leakToggle'),big=document.getElementById('bigNum'),ver=document.getElementById('verdict'),lab=document.getElementById('leakLabel'),bar=document.getElementById('barLeak');
+  let cur=44.6,anim;
+  function to(v){cancelAnimationFrame(anim);const from=cur,st=performance.now();const go=n=>{const k=Math.min(1,(n-st)/650),e=1-Math.pow(1-k,3);cur=from+(v-from)*e;big.innerHTML=cur.toFixed(1)+'<small>%</small>';if(k<1)anim=requestAnimationFrame(go);};anim=requestAnimationFrame(go);}
+  tg.addEventListener('change',()=>{
+    if(tg.checked){to(44.6);ver.textContent='looks amazing. too amazing.';lab.textContent='leaked field: included';bar.classList.remove('gone');}
+    else{to(21.2);ver.textContent='less pretty. actually true.';lab.textContent='leaked field: removed';bar.classList.add('gone');}
+  });
+})();
+
+/* ================= work ledger ================= */
+const JOBS=[
+ {id:'shepherd',when:'jan 2026 – now',co:'Shepherd Ventures',sub:'San Diego, CA · promoted twice in 2026',one:'Quant research on portfolios built to hold up through market crashes.',
+  roles:[
+   {t:'Research Fellow',d:'Oct 2026 – Present',b:['Build the research infrastructure behind the crash-resilience model: a cached parameter-sweep engine, a config-driven toolkit, and an automated parity check against the original research code','Audit results for look-ahead bias and data errors, and write the replication guides teammates use to verify the work independently']},
+   {t:'Senior Quantitative Analyst',d:'Apr 2026 – Oct 2026',b:['Built stress-testing and portfolio-construction models for crash scenarios using clustering, mean-variance optimization, and volatility forecasting','Designed a market regime detection system that separates noise alarms from real corrections, and co-led the internal AI research team']},
+   {t:'Quantitative Analyst',d:'Jan 2026 – Apr 2026',b:['Traced corporate actions (splits and spin-offs) that were distorting backtest results and corrected the price data']}],
+  tech:'python · k-means · mean-variance optimization · garch · holt smoothing · backtesting'},
+ {id:'ipick',when:'jan 2026 – now',co:'IPick.AI',sub:'Cupertino, CA · via Open Project',one:'AI and finance tooling for an equity research platform.',
+  roles:[{t:'AI Engineer',d:'Jan 2026 – Present',b:['Coordinate three ML workstreams (26 engineers) building stock recommendation, portfolio analysis, and reinforcement learning systems','Designed a multi-repo architecture of versioned Python packages with shared typed contracts, plus a test-driven onboarding system (75 autograded tests) that has new engineers shipping in their first sprint','Led a team of 14 to ship a live equity knowledge graph of thousands of public companies, classifying relationships from 8,000+ SEC filings with FinBERT and the Claude API']}],
+  tech:'python · flask · postgresql · docker · aws · finbert · claude api · d3.js'},
+ {id:'lgnova',when:'aug 2026 – now',co:'LG NOVA',sub:'Remote · Atlas platform',one:'Ticket-based engineering on an AI document-analysis and company-data platform.',
+  roles:[{t:'Software Engineer',d:'Aug 2026 – Present',b:['Root-caused silent data loss from a 500-row cap in a Flask/PostgreSQL endpoint and shipped keyset pagination','Expanded search coverage of PitchBook financial fields by 233%, verified by a 38-test suite','Restored PowerPoint uploads to the AI document pipeline, adding PDF conversion as a fallback']}],
+  tech:'python · flask · postgresql · react · typescript · gitlab'},
+ {id:'rrid',when:'aug 2026 – now',co:'Rapid Reviews\\Infectious Diseases',sub:'Berkeley, CA',one:'Data team for an open peer-review journal of infectious-disease preprints.',
+  roles:[{t:'Data Science Researcher',d:'Aug 2026 – Present',b:['Building automation that keeps every active preprint stocked with AI-suggested reviewers, replacing a manual process','Building alerts that report why a data issue fired, and investigating automatic conflict-of-interest rejections']}],
+  tech:'python · automation · data pipelines'},
+ {id:'op',when:'aug 2025 – now',co:'Open Project',sub:"Berkeley, CA · Berkeley's largest tech club",one:'Shipping software for real clients every semester, 300+ members.',
+  roles:[{t:'VP of Projects',d:'May 2026 – Present',b:['Direct 40+ project managers across 15+ client projects, from cold outreach and client sourcing through delivery','Interviewed and selected 50+ PM candidates']},{t:'Project Manager',d:'Aug 2025 – May 2026',b:['Led the Nexus client project end to end, from scoping with the client to shipping']}],
+  tech:'project management · client delivery · recruiting'},
+ {id:'61b',when:'jan – aug 2026',co:'UC Berkeley EECS',sub:'CS 61B / 61BL course staff',one:'Taught data structures in a 1,100-student course.',
+  roles:[{t:'Course Staff',d:'Jan 2026 – Aug 2026',b:['Co-taught weekly discussion sections and ran daily labs for 20 students, debugging Java in real time','Delivered a midterm review to about 100 students']}],
+  tech:'java · data structures · algorithms · teaching'},
+ {id:'dealprint',when:'aug 2025 – jan 2026',co:'DealPrint',sub:'Berkeley, CA',one:'Self-directed research: a valuation tool for small-business acquisitions.',
+  roles:[{t:'Data Science Research Intern',d:'Aug 2025 – Jan 2026',b:['Collected 50,000 M&A transactions spanning 40 years with a custom Chrome extension','Built a KNN comparables engine weighted by industry, geography, and deal type, feeding a regression model (0.25 MAPE on held-out deals)','Shipped it as an interactive Streamlit dashboard']}],
+  tech:'python · pandas · scikit-learn · streamlit · plotly'}
+];
+(function(){
+  const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  document.getElementById('ledger').innerHTML=JOBS.map(j=>`
+  <details class="job" id="job-${j.id}">
+    <summary><span class="when tnum">${j.when}</span><span class="co">${esc(j.co)}<small>${esc(j.sub)}</small></span><span class="one">${esc(j.one)}</span><span class="plus" aria-hidden="true">+</span></summary>
+    <div class="detail"><div>${j.roles.map(r=>`<div><h4>${esc(r.t)} · ${r.d}</h4><ul>${r.b.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`).join('')}<p class="tech">${j.tech}</p></div></div>
+  </details>`).join('');
+  document.querySelectorAll('[data-open]').forEach(a=>a.addEventListener('click',e=>{
+    const d=document.getElementById('job-'+a.dataset.open); if(!d)return; e.preventDefault(); d.open=true; d.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+  }));
+})();
+
+/* ================= markets ================= */
+const MKTS=[
+ {q:'Will Ganesh summit Mount Whitney?',s:'yes',p:'YES 100¢',n:'14,505 ft, the highest point in the lower 48. Resolved on the summit.'},
+ {q:'Will Ganesh finish a half marathon?',s:'yes',p:'YES 100¢',n:'Resolved yes, more than once. My legs filed a complaint each time.'},
+ {q:'Will Ganesh become a hardware engineer?',s:'no',p:'NO 100¢',n:'One season on Formula Electric. I felt out of my depth and did not love the physics, so I moved to data. Best NO I ever took.'},
+ {q:'Will Ganesh get promoted at Shepherd in 2026?',s:'yes',p:'YES ×2',n:'Quant Analyst in January, Senior in April, Research Fellow in October.'},
+ {q:'Will the triangle idle game survive the redesign?',s:'no',p:'NO 100¢',n:'It lived in the whitespace of the old site and had turrets. It is remembered fondly.'},
+ {q:'Will Ganesh take it easier in Spring 2027?',s:'open',p:'YES 34¢',odds:34,n:'He says yes. The market has seen his calendar.'}
+];
+(function(){
+  let vote=null; try{vote=localStorage.getItem('gk-vote');}catch(e){}
+  const el=document.getElementById('mkts');
+  function render(){
+    el.innerHTML=MKTS.map((m,i)=>`
+    <article class="mkt ${m.s==='open'?'open-m':''}">
+      <h3 class="q">${m.q}</h3>
+      <p class="note">${m.n}</p>
+      ${m.s==='open'?`<div class="odds" aria-label="market odds ${m.odds} percent"><i style="width:${m.odds}%"></i></div>
+      <div class="vote" role="group" aria-label="Your bet"><button type="button" data-v="yes" aria-pressed="${vote==='yes'}">buy yes</button><button type="button" data-v="no" aria-pressed="${vote==='no'}">buy no</button></div>`:''}
+      <div class="foot"><span class="chip ${m.s}">${m.s==='open'?'open':'resolved '+m.s}</span><span class="price tnum">${m.p}</span></div>
+    </article>`).join('');
+    el.querySelectorAll('.vote button').forEach(b=>b.addEventListener('click',()=>{vote=b.dataset.v;try{localStorage.setItem('gk-vote',vote);}catch(e){}render();}));
+  }
+  render();
+})();
+
+/* ================= calibration ================= */
+const QS=[
+ {q:'How tall is Mount Whitney, in feet?',a:14505,u:'ft'},
+ {q:'How many students take CS 61B in a semester? (I taught it.)',a:1100,u:'students'},
+ {q:'How many crash backtests has my sweep engine run?',a:21504,u:'backtests'}
+];
+(function(){
+  const box=document.getElementById('qs'),score=document.getElementById('score');
+  box.innerHTML=QS.map((x,i)=>`
+   <div class="qcard"><p class="qq">${x.q}</p>
+    <div class="range"><label for="lo${i}">low</label><input id="lo${i}" inputmode="numeric" placeholder="e.g. 1,000" autocomplete="off">
+    <label for="hi${i}">high</label><input id="hi${i}" inputmode="numeric" placeholder="e.g. 20,000" autocomplete="off"></div>
+    <p class="res" id="r${i}"></p></div>`).join('');
+  const num=s=>{const v=parseFloat(String(s).replace(/[, ]/g,''));return isFinite(v)?v:NaN;};
+  const binom=k=>{const c=[1,3,3,1][k];return c*Math.pow(.9,k)*Math.pow(.1,3-k);};
+  document.getElementById('checkBtn').addEventListener('click',()=>{
+    let hits=0,missing=false;
+    QS.forEach((x,i)=>{
+      let lo=num(document.getElementById('lo'+i).value),hi=num(document.getElementById('hi'+i).value),r=document.getElementById('r'+i);
+      if(isNaN(lo)||isNaN(hi)){missing=true;r.className='res';r.textContent='needs a low and a high';return;}
+      if(lo>hi)[lo,hi]=[hi,lo];
+      const ok=x.a>=lo&&x.a<=hi; if(ok)hits++;
+      r.className='res '+(ok?'hit':'miss');
+      r.textContent=(ok?'caught it. ':'missed. ')+'answer: '+x.a.toLocaleString()+' '+x.u;
+    });
+    if(missing){score.textContent='Fill in every low and high, then check again.';return;}
+    const p=(binom(hits)*100);
+    const msg=hits===3?'Clean sweep. A truly 90% sure guesser does that 72.9% of the time.':
+      `If you were really 90% sure each time, catching only ${hits} of 3 happens ${p<1?p.toFixed(1):p.toFixed(1)}% of the time. Your ranges were probably too narrow, which is the most common mistake there is.`;
+    score.innerHTML=`<b>${hits} / 3.</b> ${msg}`;
+  });
+  document.getElementById('resetBtn').addEventListener('click',()=>{
+    QS.forEach((x,i)=>{document.getElementById('lo'+i).value='';document.getElementById('hi'+i).value='';const r=document.getElementById('r'+i);r.textContent='';r.className='res';});
+    score.textContent='Fill in all three ranges, then check.';
+  });
+})();
+
+/* ================= copy email ================= */
+document.getElementById('copyBtn').addEventListener('click',e=>{
+  const b=e.currentTarget, t=document.getElementById('email').textContent;
+  const done=()=>{b.textContent='copied';setTimeout(()=>b.textContent='copy email',1600);};
+  const sel=()=>{const r=document.createRange();r.selectNodeContents(document.getElementById('email'));const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='selected, press copy';};
+  try{navigator.clipboard.writeText(t).then(done,sel);}catch(err){sel();}
+});
+</script>
+
+</body>
+</html>

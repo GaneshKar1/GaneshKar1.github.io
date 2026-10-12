@@ -1,0 +1,39 @@
+<!doctype html><html><head><meta charset="utf-8"><title>ganesh.ipynb</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#E6EAE7;color:#13262D;font-family:'Bricolage Grotesque'}
+.top{background:#0F2A33;color:#E7EEE9;padding:14px clamp(16px,5vw,56px);display:flex;align-items:center;gap:16px;font-size:14px}
+.top b{font-family:'JetBrains Mono';font-weight:500}.top .run{margin-left:auto;background:#F2A541;color:#0F2A33;padding:7px 14px;font-weight:600;cursor:pointer}
+main{max-width:920px;margin:0 auto;padding:40px clamp(16px,4vw,32px) 80px}
+.md h1{font-size:clamp(52px,8vw,92px);font-weight:800;letter-spacing:-.045em;line-height:.9;margin:0 0 18px}
+.md p{font-family:'Newsreader';font-size:21px;line-height:1.5;max-width:36ch;margin:0 0 34px}
+.cell{display:grid;grid-template-columns:70px 1fr;margin:0 0 22px}
+.lab{font-family:'JetBrains Mono';font-size:12px;color:#5B7279;padding-top:12px}
+.in{background:#F5F7F6;border:1px solid #CBD5D0;border-left:3px solid #2E5A69;padding:11px 14px;font-family:'JetBrains Mono';font-size:14px;cursor:pointer}
+.in .k{color:#9A4E0E}
+.out{grid-column:2;padding:14px 4px 0;display:none}.cell.ran .out{display:block}.cell.ran .lab span{color:#2E5A69}
+table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;padding:7px 10px;border-bottom:1px solid #CBD5D0}th{font-family:'JetBrains Mono';font-weight:400;color:#5B7279;font-size:12px}
+.ph{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.ph img{width:100%;height:150px;object-fit:cover;display:block}
+.fig{font-family:'JetBrains Mono';font-size:12px;color:#5B7279;margin-top:6px}
+</style></head><body>
+<div class="top"><b>ganesh.ipynb</b><span>Python 3 · kernel idle</span><span class="run" id="all">▶ Run all</span></div>
+<main>
+<div class="md"><h1>Ganesh Karayi</h1><p>Applied math and data science at Berkeley. Quant research on market crashes, ML systems with big teams, and a lot of hiking. Run the cells to find out more.</p></div>
+<div class="cell"><div class="lab">In [<span>1</span>]:</div><div class="in">ganesh.<span class="k">experience</span>.sort_values(<span class="k">"start"</span>, ascending=False)</div>
+<div class="out"><table><tr><th></th><th>role</th><th>org</th><th>start</th></tr>
+<tr><td>0</td><td>Research Fellow</td><td>Shepherd Ventures</td><td>2026-10</td></tr><tr><td>1</td><td>Software Engineer</td><td>LG NOVA</td><td>2026-08</td></tr>
+<tr><td>2</td><td>Data Science Researcher</td><td>RR\ID</td><td>2026-08</td></tr><tr><td>3</td><td>VP of Projects</td><td>Open Project</td><td>2026-05</td></tr>
+<tr><td>4</td><td>Senior Quant Analyst</td><td>Shepherd Ventures</td><td>2026-04</td></tr><tr><td>5</td><td>AI Engineer</td><td>iPick.ai</td><td>2026-01</td></tr></table></div></div>
+<div class="cell"><div class="lab">In [<span>2</span>]:</div><div class="in">ganesh.<span class="k">projects</span>.head()</div>
+<div class="out"><table><tr><th></th><th>name</th><th>what</th></tr><tr><td>0</td><td>Solar quantile analysis</td><td>MDE estimator from scratch, 332k installs</td></tr><tr><td>1</td><td>Pairs trading backtester</td><td>rolling OLS hedge ratios, z-score signals</td></tr><tr><td>2</td><td>Eco Sim</td><td>100K-agent economy, React dashboard</td></tr></table></div></div>
+<div class="cell"><div class="lab">In [<span>3</span>]:</div><div class="in">plt.<span class="k">imshow</span>(ganesh.hikes.sample(3))</div>
+<div class="out"><div class="ph"><img src="../assets/tahoe-ridge-s.jpg"><img src="../assets/marin-summit-s.jpg"><img src="../assets/tahoe-lake-s.jpg"></div><div class="fig">Figure 1. Tahoe ridge, Marin summit, Lake Tahoe.</div></div></div>
+<div class="cell"><div class="lab">In [<span>4</span>]:</div><div class="in">ganesh.<span class="k">contact</span>()</div>
+<div class="out">ganeshkarayi@berkeley.edu · <u>schedule 30 min</u> · linkedin · github</div></div>
+</main>
+<script>
+const cells=[...document.querySelectorAll('.cell')];
+cells.forEach(c=>c.querySelector('.in').onclick=()=>c.classList.add('ran'));
+document.getElementById('all').onclick=()=>cells.forEach((c,i)=>setTimeout(()=>c.classList.add('ran'),i*350));
+cells.slice(0,1).forEach(c=>c.classList.add('ran'));
+</script></body></html>

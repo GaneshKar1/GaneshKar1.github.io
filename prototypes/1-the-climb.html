@@ -1,0 +1,66 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ganesh Karayi</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Newsreader:opsz,wght@6..72,400&display=swap" rel="stylesheet">
+<style>
+:root{--amber:#F2A541}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Bricolage Grotesque',sans-serif;color:#E9EFEA;background:#0B1F1A}
+.hero{height:100vh;position:relative;background:url(../assets/tahoe-sunrise-s.jpg) center 40%/cover;display:flex;align-items:flex-end}
+.hero:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,31,26,0) 40%,#0B1F1A)}
+.hero .in{position:relative;z-index:2;padding:0 clamp(16px,6vw,80px) 64px;max-width:900px}
+.hero h1{font-size:clamp(56px,11vw,150px);font-weight:800;letter-spacing:-.05em;line-height:.85;margin:0 0 20px}
+.hero p{font-family:'Newsreader';font-size:clamp(18px,2vw,23px);line-height:1.5;max-width:34ch;margin:0;color:#D5E0DA}
+.cue{margin-top:28px;font-size:14px;color:var(--amber)}
+section.stage{min-height:100vh;padding:120px clamp(16px,6vw,80px);display:grid;grid-template-columns:200px 1fr;gap:48px;align-items:start}
+.stage .tag{position:sticky;top:120px}
+.tag .el{font-size:44px;font-weight:800;letter-spacing:-.03em;line-height:1}.tag .nm{color:var(--amber);font-size:15px;margin-top:6px}
+.stops{display:flex;flex-direction:column;gap:56px;max-width:640px}
+.stop h3{font-size:30px;font-weight:600;letter-spacing:-.015em;margin:0 0 4px}
+.stop .w{font-size:15px;opacity:.75;margin-bottom:12px}
+.stop p{font-family:'Newsreader';font-size:19px;line-height:1.55;margin:0;opacity:.92}
+.s1{background:#0B1F1A}.s2{background:#123A35}.s3{background:#2E5A62}.s4{background:#7FA4B5;color:#0F2A33}.s5{background:#D9E6EC;color:#0F2A33}
+.s4 .tag .nm,.s5 .tag .nm{color:#9A4E0E}
+.alt{position:fixed;right:clamp(10px,2vw,28px);top:50%;transform:translateY(-50%);z-index:9;display:flex;flex-direction:column;align-items:center;gap:8px;mix-blend-mode:difference;color:#fff;font-size:12px}
+.alt .bar{width:2px;height:180px;background:rgba(255,255,255,.35);position:relative}.alt .fill{position:absolute;bottom:0;left:0;width:2px;background:#fff}
+.alt b{font-size:15px}
+.photos{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}.photos img{width:100%;height:180px;object-fit:cover;display:block}
+a{color:inherit}
+@media(max-width:700px){section.stage{grid-template-columns:1fr;gap:20px}.stage .tag{position:static}.photos{grid-template-columns:1fr 1fr}}
+</style></head><body>
+<header class="hero"><div class="in"><h1>Ganesh<br>Karayi</h1>
+<p>Applied math and data science at Berkeley. I study how portfolios hold up in a crash, build ML systems with teams of engineers, and hike whatever is tallest nearby.</p>
+<div class="cue">Scroll to climb ↓</div></div></header>
+
+<section class="stage s1" data-elev="6200"><div class="tag"><div class="el">6,200 ft</div><div class="nm">Trailhead · 2025</div></div>
+<div class="stops">
+<div class="stop"><h3>DealPrint</h3><div class="w">Data Science Research Intern · Aug 2025 – Jan 2026</div><p>Scraped 50,000 M&amp;A deals spanning 40 years with a Chrome extension I wrote, then built a comparables engine and regression with 0.25 MAPE on held-out deals.</p></div>
+<div class="stop"><h3>CS 61B course staff</h3><div class="w">Jan – Aug 2026</div><p>Taught sections of a 1,100-student data structures course and ran daily labs. The best way I've found to learn something is to explain it to twenty people at once.</p></div>
+</div></section>
+
+<section class="stage s2" data-elev="9100"><div class="tag"><div class="el">9,100 ft</div><div class="nm">Switchbacks · early 2026</div></div>
+<div class="stops">
+<div class="stop"><h3>iPick.ai</h3><div class="w">AI Engineer · since Jan 2026</div><p>Led 14 people to ship a live equity knowledge graph built from 8,000+ SEC filings. Now coordinating three ML workstreams, 26 engineers, on stock recommendation and portfolio analysis.</p></div>
+<div class="stop"><h3>Open Project</h3><div class="w">VP of Projects · since May 2026</div><p>40+ project managers, 15+ client projects a semester, at Berkeley's largest tech club.</p></div>
+</div></section>
+
+<section class="stage s3" data-elev="12,000"><div class="tag"><div class="el">12,000 ft</div><div class="nm">The ridge · fall 2026</div></div>
+<div class="stops">
+<div class="stop"><h3>LG NOVA</h3><div class="w">Software Engineer · since Aug 2026</div><p>Fixed silent data loss in a search API and expanded financial-field coverage 233% on Atlas, an AI document platform.</p></div>
+<div class="stop"><h3>Solar quantile analysis</h3><div class="w">Project · 2026</div><p>Quantile regression on 332,000 solar installs, with the estimator implemented from scratch. The expensive tail behaves nothing like the average.</p></div>
+</div></section>
+
+<section class="stage s4" data-elev="14505"><div class="tag"><div class="el">14,505 ft</div><div class="nm">Summit · now</div></div>
+<div class="stops">
+<div class="stop"><h3>Shepherd Ventures</h3><div class="w">Research Fellow · since Oct 2026 (Quant Analyst → Senior → Fellow)</div><p>Research on portfolios built to survive market crashes. These days I build the infrastructure that keeps that research honest: parameter sweeps, parity checks, and audits for look-ahead bias.</p></div>
+</div></section>
+
+<section class="stage s5" data-elev="14505"><div class="tag"><div class="el">The view</div><div class="nm">Off the clock</div></div>
+<div class="stops"><div class="stop"><h3>Outside</h3><p>Mount Whitney, Tahoe ridgelines, Marin at sunrise. If you want to talk quant, AI, or which trail to do next, <a href="#">grab 30 minutes</a>.</p>
+<div class="photos"><img src="../assets/tahoe-ridge-s.jpg"><img src="../assets/marin-summit-s.jpg"><img src="../assets/tahoe-lake-s.jpg"></div></div></div></section>
+
+<div class="alt"><b id="ft">6,200</b><div class="bar"><div class="fill" id="fill"></div></div><span>ft</span></div>
+<script>
+const lo=6200,hi=14505,ft=document.getElementById('ft'),fill=document.getElementById('fill');
+function up(){const m=document.documentElement.scrollHeight-innerHeight;const f=m>0?scrollY/m:0;const e=Math.round(lo+(hi-lo)*Math.min(1,f*1.15));ft.textContent=e.toLocaleString();fill.style.height=(Math.min(1,f*1.15)*100)+'%';}
+addEventListener('scroll',up,{passive:true});up();
+</script></body></html>
