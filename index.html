@@ -176,6 +176,19 @@ section[id],.job,.run{scroll-margin-top:72px}
 .more a{text-decoration:none;border-bottom:1px solid var(--line)}
 .more a:hover{color:var(--amber-ink)}
 
+/* coursework: one squircle card per subject */
+.edu{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline;margin:-8px 0 26px;color:var(--muted);font-size:1rem}
+.edu b{font-family:var(--display);font-weight:650;color:var(--fg);letter-spacing:-.01em}
+.courses{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+.subj{background:var(--bg-2);box-shadow:inset 0 0 0 1px var(--line);border-radius:var(--r-md);corner-shape:squircle;padding:20px 22px;display:flex;flex-direction:column;gap:12px}
+.subj h3{font-size:1.15rem;font-weight:650;letter-spacing:-.015em}
+.subj ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.subj li{display:grid;grid-template-columns:6.6rem minmax(0,1fr);gap:10px;align-items:baseline;font-size:.98rem;line-height:1.35}
+.subj .code{font-family:var(--mono);font-size:.7rem;letter-spacing:.04em;color:var(--amber-ink);white-space:nowrap}
+.subj li.cur{color:var(--fg)}
+.subj li.cur .tag{display:inline-flex;align-items:center;gap:6px;margin-left:8px;font-family:var(--mono);font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;color:var(--live);white-space:nowrap}
+.subj li.cur .tag::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--live)}
+
 /* outside */
 .outside{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(24px,4vw,48px);align-items:start}
 .photo{position:relative;margin:0;border-radius:6px;overflow:hidden;aspect-ratio:4/3}
@@ -226,8 +239,9 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
   .now .row{grid-template-columns:12px minmax(0,1fr) auto;gap:4px 10px}
   .now .org{grid-column:2/-1;grid-row:2}
   .now .head{display:none}
-  .top nav{gap:12px}
-  .top nav a,.theme{letter-spacing:.04em}
+  .top nav{gap:12px;flex-wrap:nowrap}
+  .top nav a,.theme{letter-spacing:.02em}
+  .top nav a.nav-resume{display:none} /* the hero has its own resume button */
 }
 /* theme switch: a circle grows from the toggle (View Transitions), else a color fade */
 ::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
@@ -243,8 +257,9 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
     <nav aria-label="Sections">
       <a href="#work">work</a>
       <a href="#projects">projects</a>
-      <a href="outdoors.html" class="opt">outside</a>
-      <a href="assets/Ganesh_Karayi_Resume.pdf">resume</a>
+      <a href="#courses">courses</a>
+      <a href="outdoors.html">outside</a>
+      <a href="assets/Ganesh_Karayi_Resume.pdf" class="nav-resume">resume</a>
       <button class="theme" id="themeBtn" type="button" aria-label="Toggle light and dark">◐</button>
     </nav>
   </div>
@@ -318,6 +333,17 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
         <div class="gh-foot"><span class="mono" id="ghNote"></span><span class="gh-legend mono">less <i style="background:var(--line)"></i><i style="background:var(--amber);opacity:.3"></i><i style="background:var(--amber);opacity:.55"></i><i style="background:var(--amber);opacity:.8"></i><i style="background:var(--amber)"></i> more</span></div>
         <div class="repos" id="ghRepos"></div>
       </div>
+    </div>
+  </section>
+
+  <section id="courses">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="mono">coursework</p>
+        <h2>what i've studied.</h2>
+      </div>
+      <p class="edu"><b>UC Berkeley</b><span>BA, Applied Mathematics + Data Science</span><span class="tnum">GPA 3.8</span><span class="tnum">expected May 2028</span></p>
+      <div class="courses" id="courseList"></div>
     </div>
   </section>
 
@@ -581,6 +607,21 @@ const JOBS=[
       <g transform="translate(${L},10)"><text x="0" y="3">wmt/tgt spread z-score</text><text x="${W-L-R}" y="3" text-anchor="end">trades fire beyond ±${th}</text></g>
     </svg>`;
   }
+})();
+
+/* coursework, grouped by subject; `now` marks this term's classes */
+const COURSES=[
+ {s:'Probability & statistics',c:[['EECS 126','Probability & Random Processes'],['ECON 141','Econometrics'],['ECON 143','Econometrics: Advanced Methods']]},
+ {s:'Mathematics',c:[['MATH 104','Real Analysis'],['MATH 113','Abstract Algebra',1],['MATH 54','Linear Algebra & Differential Equations'],['MATH 53','Multivariable Calculus'],['MATH 55','Discrete Mathematics']]},
+ {s:'Computer science & ML',c:[['CS 189','Introduction to Machine Learning',1],['CS 188','Introduction to Artificial Intelligence'],['CS 61B','Data Structures & Algorithms'],['CS 61A','Structure & Interpretation of Computer Programs']]},
+ {s:'Data science',c:[['DATA 100','Principles & Techniques of Data Science'],['DATA 104','Human Contexts & Ethics of Data'],['DATA 8','Foundations of Data Science']]},
+ {s:'Economics & finance',c:[['IEOR 198','Introduction to Quantitative Finance'],['HISTORY 133B','Wall Street / Main Street'],['ECON 2','Introduction to Economics']]}
+];
+(function(){
+  const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  const el=document.getElementById('courseList');if(!el)return;
+  el.innerHTML=COURSES.map(g=>`<article class="subj"><h3>${esc(g.s)}</h3><ul>${g.c.map(([code,name,now])=>
+    `<li class="${now?'cur':''}"><span class="code">${esc(code)}</span><span>${esc(name)}${now?'<span class="tag">this term</span>':''}</span></li>`).join('')}</ul></article>`).join('');
 })();
 
 /* github: contribution grid + recent public repos, from tools/build_github.py */
