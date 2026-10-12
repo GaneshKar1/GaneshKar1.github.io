@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Outside · Ganesh Karayi</title>
+<meta name="description" content="Hikes and runs, straight from my watch.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Companion to 5-glimpse.html. Hikes get maps; runs get stats only (they start from home). */
+:root{
+  --bg:#0F2A33; --bg-2:#0B222A; --fg:#ECE6D9; --muted:#93A9AE;
+  --line:rgba(236,230,217,.14); --grid:rgba(236,230,217,.07);
+  --amber:#F2A541; --amber-ink:#F2A541; --hr:#E98A6E; --low:#4A5A62;
+  --display:"Bricolage Grotesque","Arial Narrow",system-ui,sans-serif;
+  --body:"Newsreader",Georgia,serif;
+  --mono:"DM Mono",ui-monospace,Menlo,monospace;
+  --gutter:clamp(16px,4vw,48px);
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#EEF0EC; --bg-2:#E3E7E2; --fg:#10262E; --muted:#56696E;
+    --line:rgba(16,38,46,.14); --grid:rgba(16,38,46,.08);
+    --amber-ink:#A35F06; --hr:#BF4B2C; --low:#AEBCC0; color-scheme:light;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#EEF0EC; --bg-2:#E3E7E2; --fg:#10262E; --muted:#56696E;
+  --line:rgba(16,38,46,.14); --grid:rgba(16,38,46,.08);
+  --amber-ink:#A35F06; --hr:#BF4B2C; --low:#AEBCC0; color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:19px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:2px}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:var(--gutter)}
+.mono{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.tnum{font-variant-numeric:tabular-nums}
+h1,h2,h3{font-family:var(--display);font-weight:700;letter-spacing:-.02em;line-height:1;margin:0;text-wrap:balance}
+p{margin:0}
+
+/* top bar */
+.top .wrap{display:flex;justify-content:space-between;align-items:center;padding-block:22px;gap:16px}
+.top nav{display:flex;gap:clamp(12px,2.4vw,26px);align-items:center}
+.top nav a,.theme{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:var(--muted)}
+.top nav a:hover,.theme:hover{color:var(--amber-ink)}
+.top nav a.on{color:var(--amber-ink)}
+.theme{background:none;border:1px solid var(--line);border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:.8rem;letter-spacing:0}
+.mark{font-family:var(--display);font-weight:800;font-size:1.05rem;text-decoration:none;letter-spacing:-.02em}
+.mark span{color:var(--amber-ink)}
+
+/* header */
+header.page{padding-block:clamp(40px,7vw,80px) clamp(20px,3vw,32px)}
+header.page h1{font-size:clamp(3rem,10vw,7rem);font-weight:800;letter-spacing:-.05em;line-height:.9}
+header.page h1 span{color:var(--amber)}
+header.page .lede{font-style:italic;font-size:clamp(1.1rem,2vw,1.35rem);max-width:44ch;margin-top:18px}
+
+/* tabs */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--line);margin-top:clamp(24px,4vw,40px)}
+.tab{font-family:var(--display);font-weight:650;font-size:1.15rem;letter-spacing:-.01em;background:none;border:0;color:var(--muted);padding:12px 18px 12px 0;margin-right:18px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab small{font-family:var(--mono);font-size:.68rem;font-weight:400;margin-left:6px}
+.tab[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--amber)}
+.panel{padding-block:clamp(28px,4vw,44px) 0}
+.panel[hidden]{display:none}
+
+/* shared stat blocks */
+.stats{display:flex;flex-wrap:wrap;gap:6px clamp(20px,3.5vw,40px)}
+.stat b{display:block;font-family:var(--display);font-weight:650;font-size:clamp(1.15rem,2.2vw,1.45rem);letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.2}
+.stat span{font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.big .stat b{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:750}
+svg text{font-family:var(--mono);font-size:10px;fill:var(--muted)}
+
+/* hikes */
+.hike{padding-block:clamp(28px,4vw,40px);border-top:1px solid var(--line)}
+.hike:first-child{border-top:0;padding-top:0}
+.hike .when{color:var(--amber-ink)}
+.hike h2{font-size:clamp(1.6rem,3.6vw,2.3rem);font-weight:650;margin-top:8px}
+.hike .where{color:var(--muted);font-size:1rem;margin-top:4px}
+.hike .viz{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.4fr);gap:clamp(16px,3vw,32px);align-items:end;margin-top:22px}
+.route{background:var(--bg-2);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.route svg{display:block;width:100%;height:auto}
+.prof svg{display:block;width:100%;height:auto}
+.legend{display:flex;gap:16px;margin-bottom:6px}
+.legend i{display:inline-block;width:14px;height:2px;vertical-align:middle;margin-right:6px}
+.hike .stats{margin-top:22px}
+.photos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:22px}
+.photos a{display:block;aspect-ratio:4/3;overflow:hidden;border-radius:4px;background:var(--bg-2)}
+.photos img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .2s}
+.photos a:hover img{opacity:.85}
+.hike.small{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 24px;align-items:end}
+.hike.small h2{font-size:clamp(1.25rem,2.6vw,1.6rem)}
+.hike.small .stats{margin-top:0}
+
+/* runs */
+.overview{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(20px,4vw,48px);margin-top:clamp(28px,4vw,44px)}
+.chart h3{font-size:1.15rem;font-weight:650;margin-bottom:4px}
+.chart p{font-size:.95rem;color:var(--muted);margin-bottom:10px;line-height:1.4}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.dot{cursor:default}
+.dot:hover{stroke:var(--fg);stroke-width:2}
+
+.runs{margin-top:clamp(36px,5vw,56px);border-top:1px solid var(--fg)}
+.run{border-bottom:1px solid var(--line)}
+.run summary{list-style:none;display:grid;grid-template-columns:7.5em minmax(0,1fr) 5em 5.5em 5em 1.4em;gap:12px;align-items:baseline;padding:14px 0;cursor:pointer}
+.run summary::-webkit-details-marker{display:none}
+.run summary:hover .wk{color:var(--amber-ink)}
+.run .d{font-family:var(--mono);font-size:.74rem;color:var(--muted)}
+.run .wk{font-family:var(--display);font-weight:600;font-size:1.05rem;letter-spacing:-.01em}
+.run .n{font-family:var(--mono);font-size:.8rem;text-align:right;font-variant-numeric:tabular-nums}
+.run .n.hr{color:var(--hr)}
+.run .plus{font-family:var(--mono);color:var(--amber-ink);justify-self:end;transition:transform .25s}
+.run[open] .plus{transform:rotate(45deg)}
+.runs .head{display:grid;grid-template-columns:7.5em minmax(0,1fr) 5em 5.5em 5em 1.4em;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.runs .head span:nth-child(n+3){text-align:right}
+.detail{padding:4px 0 26px 0;display:flex;flex-direction:column;gap:22px}
+.groups{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.group h4{margin:0 0 8px;font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;font-weight:500;color:var(--amber-ink)}
+.group dl{margin:0;display:grid;grid-template-columns:auto auto;gap:4px 12px;font-size:.95rem}
+.group dt{color:var(--muted)}
+.group dd{margin:0;text-align:right;font-family:var(--mono);font-size:.82rem;font-variant-numeric:tabular-nums;align-self:center}
+.vs{font-size:.92rem;color:var(--muted);font-style:italic}
+.vs b{font-style:normal;font-weight:600;color:var(--fg)}
+
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-block:24px;border-top:1px solid var(--line);margin-top:clamp(56px,8vw,96px)}
+
+@media (max-width:860px){
+  .hike .viz,.overview{grid-template-columns:minmax(0,1fr)}
+  .groups{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:560px){
+  body{font-size:17.5px}
+  .run summary,.runs .head{grid-template-columns:5.2em minmax(0,1fr) 4em 4.4em 1.2em;gap:8px}
+  .run .n.hr,.runs .head .hrh{display:none}
+  .hike.small{grid-template-columns:minmax(0,1fr)}
+  .photos{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="mark" href="5-glimpse.html">gk<span>.</span></a>
+    <nav aria-label="Site">
+      <a href="5-glimpse.html#work">work</a>
+      <a href="5-glimpse.html#projects">projects</a>
+      <a href="5-outdoors.html" class="on">outside</a>
+      <button class="theme" id="themeBtn" type="button" aria-label="Toggle light and dark">◐</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <header class="page">
+    <p class="mono">straight from my watch</p>
+    <h1>outside<span>.</span></h1>
+    <p class="lede" id="lede"></p>
+  </header>
+
+  <div class="tabs" role="tablist" aria-label="Activity type">
+    <button class="tab" role="tab" id="tab-hikes" aria-controls="panel-hikes" aria-selected="true">hikes <small id="nHikes"></small></button>
+    <button class="tab" role="tab" id="tab-runs" aria-controls="panel-runs" aria-selected="false">runs <small id="nRuns"></small></button>
+  </div>
+
+  <section class="panel" id="panel-hikes" role="tabpanel" aria-labelledby="tab-hikes"></section>
+  <section class="panel" id="panel-runs" role="tabpanel" aria-labelledby="tab-runs" hidden></section>
+</main>
+
+<footer>
+  <div class="wrap mono">
+    <span>© 2026 ganesh karayi</span>
+    <span id="built"></span>
+  </div>
+</footer>
+
+<script src="../outdoors-data.js"></script>
+<script>
+const O=window.OUTDOORS||{hikes:[],runs:[]};
+
+/* theme */
+(function(){
+  const root=document.documentElement;
+  try{const s=localStorage.getItem('gk-theme');if(s==='light'||s==='dark')root.dataset.theme=s;}catch(e){}
+  document.getElementById('themeBtn').addEventListener('click',()=>{
+    const cur=root.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+    const next=cur==='dark'?'light':'dark';root.dataset.theme=next;
+    try{localStorage.setItem('gk-theme',next);}catch(e){}
+  });
+})();
+
+/* formatting */
+const pace=s=>s?Math.floor(s/60)+':'+String(Math.round(s%60)).padStart(2,'0'):'–';
+const dur=s=>{if(!s)return'–';const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return h?`${h}h ${m}m`:`${m}:${String(x).padStart(2,'0')}`;};
+const n0=v=>v==null?'–':Math.round(v).toLocaleString();
+const day=iso=>new Date(iso).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+const dayLong=iso=>new Date(iso).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+
+/* tabs, with #runs / #hikes deep links */
+(function(){
+  const tabs=[...document.querySelectorAll('.tab')];
+  function show(id){tabs.forEach(t=>{const on=t.getAttribute('aria-controls')===id;t.setAttribute('aria-selected',on);document.getElementById(t.getAttribute('aria-controls')).hidden=!on;});}
+  tabs.forEach(t=>t.addEventListener('click',()=>{const id=t.getAttribute('aria-controls');show(id);history.replaceState(null,'','#'+id.replace('panel-',''));}));
+  window.showTab=show;
+})();
+
+/* ---------- hikes ---------- */
+function ramp(t){const a=[74,80,88],b=[242,165,65];return'rgb('+a.map((v,i)=>Math.round(v+(b[i]-v)*t)).join(',')+')';}
+
+function routeSVG(h){
+  const tr=h.track,prof=h.profile,W=360,H=300,P=22;
+  const la=tr.map(t=>t[0]),lo=tr.map(t=>t[1]);
+  const la0=Math.min(...la),la1=Math.max(...la),lo0=Math.min(...lo),lo1=Math.max(...lo);
+  const k=Math.cos((la0+la1)/2*Math.PI/180),sx=(lo1-lo0)*k||1e-6,sy=(la1-la0)||1e-6;
+  const s=Math.min((W-2*P)/sx,(H-2*P)/sy),ox=(W-sx*s)/2,oy=(H-sy*s)/2;
+  const X=v=>ox+(v-lo0)*k*s,Y=v=>H-oy-(v-la0)*s;
+  const pts=tr.map(t=>[X(t[1]),Y(t[0])]);
+  // tint each segment by elevation, sampled from the profile at the same fraction of the route
+  const ft=prof.ft.filter(v=>v!=null),e0=Math.min(...ft),e1=Math.max(...ft);
+  const eleAt=f=>{const i=Math.min(prof.ft.length-1,Math.round(f*(prof.ft.length-1)));return prof.ft[i]??e0;};
+  let seg='';
+  for(let i=1;i<pts.length;i++){const f=i/(pts.length-1),t=(eleAt(f)-e0)/((e1-e0)||1);
+    seg+=`<line x1="${pts[i-1][0].toFixed(1)}" y1="${pts[i-1][1].toFixed(1)}" x2="${pts[i][0].toFixed(1)}" y2="${pts[i][1].toFixed(1)}" stroke="${ramp(t)}"/>`;}
+  const d=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+  // scale bar
+  const pxPerMi=1609.34/(111320/s);let mi=.1;[.1,.25,.5,1,2].forEach(m=>{if(m*pxPerMi<W*.35)mi=m;});
+  const bw=mi*pxPerMi,a=pts[0];
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Route map of ${esc(h.title)}">
+    <path d="${d}" fill="none" stroke="var(--amber)" stroke-opacity=".12" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>
+    <g stroke-width="2.6" stroke-linecap="round">${seg}</g>
+    <circle cx="${a[0].toFixed(1)}" cy="${a[1].toFixed(1)}" r="5" fill="var(--bg)" stroke="var(--fg)" stroke-width="2"/>
+    <g transform="translate(${W-18},20)" fill="var(--muted)" stroke="var(--muted)"><line x1="0" y1="10" x2="0" y2="-6" stroke-width="1.2"/><path d="M0 -11 L4 -3 L-4 -3 Z" stroke="none"/><text x="0" y="22" text-anchor="middle" stroke="none">N</text></g>
+    <g stroke="var(--muted)" stroke-width="1.3"><line x1="14" y1="${H-22}" x2="${(14+bw).toFixed(1)}" y2="${H-22}"/><line x1="14" y1="${H-26}" x2="14" y2="${H-18}"/><line x1="${(14+bw).toFixed(1)}" y1="${H-26}" x2="${(14+bw).toFixed(1)}" y2="${H-18}"/></g>
+    <text x="14" y="${H-8}">${mi} mi</text>
+  </svg>`;
+}
+
+// elevation area + heart-rate line against miles
+function profileSVG(p,opt={}){
+  const W=640,H=opt.h||180,L=44,R=opt.right?40:12,T=12,B=24;
+  const xs=p.mi,tot=xs[xs.length-1]||1,X=v=>L+v/tot*(W-L-R);
+  const ft=p.ft.map(v=>v??null),fv=ft.filter(v=>v!=null);
+  const f0=Math.min(...fv),f1=Math.max(...fv),fr=(f1-f0)||1,Yf=v=>H-B-(v-f0)/fr*(H-T-B)*.92;
+  let out='';
+  // grid + left axis (feet)
+  [0,.5,1].forEach(q=>{const v=f0+fr*q,y=Yf(v);out+=`<line x1="${L}" x2="${W-R}" y1="${y.toFixed(1)}" y2="${y.toFixed(1)}" stroke="var(--grid)"/><text x="${L-6}" y="${(y+3.5).toFixed(1)}" text-anchor="end">${Math.round(v).toLocaleString()}</text>`;});
+  const step=tot>8?2:tot>3?1:.5;
+  for(let m=step;m<tot;m+=step)out+=`<text x="${X(m).toFixed(1)}" y="${H-6}" text-anchor="middle">${m}</text>`;
+  out+=`<text x="${W-R}" y="${H-6}" text-anchor="end">${tot.toFixed(1)} mi</text><text x="${L-6}" y="${H-6}" text-anchor="end">ft</text>`;
+  const pts=xs.map((x,i)=>ft[i]==null?null:[X(x),Yf(ft[i])]).filter(Boolean);
+  const line=pts.map((q,i)=>(i?'L':'M')+q[0].toFixed(1)+' '+q[1].toFixed(1)).join(' ');
+  out+=`<path d="${line} L${pts[pts.length-1][0].toFixed(1)} ${H-B} L${pts[0][0].toFixed(1)} ${H-B} Z" fill="var(--muted)" fill-opacity=".16"/><path d="${line}" fill="none" stroke="var(--muted)" stroke-opacity=".7" stroke-width="1.4"/>`;
+  // second series on its own scale: heart rate, or pace for runs
+  const series=opt.series||'hr',vals=p[series]||[],sv=vals.filter(v=>v!=null);
+  if(sv.length>10){
+    let lo=Math.min(...sv),hi=Math.max(...sv);
+    if(series==='pace'){const s=[...sv].sort((a,b)=>a-b);lo=s[Math.floor(s.length*.03)];hi=s[Math.floor(s.length*.97)];}
+    const r=(hi-lo)||1,inv=series==='pace';
+    const Ys=v=>{const c=Math.max(lo,Math.min(hi,v));const f=(c-lo)/r;return T+(inv?f:1-f)*(H-T-B);};
+    // break the line wherever a sample is missing
+    let d='',pen=false;
+    xs.forEach((x,i)=>{if(vals[i]==null){pen=false;return;}d+=(pen?'L':'M')+X(x).toFixed(1)+' '+Ys(vals[i]).toFixed(1)+' ';pen=true;});
+    const col=series==='hr'?'var(--hr)':'var(--amber)';
+    out+=`<path d="${d}" fill="none" stroke="${col}" stroke-width="1.5" stroke-linejoin="round"/>`;
+    if(opt.right){const fmt=series==='pace'?pace:v=>Math.round(v);
+      out+=`<text x="${W-R+6}" y="${(Ys(hi)+3.5).toFixed(1)}" fill="${col}" style="fill:${col}">${fmt(hi)}</text><text x="${W-R+6}" y="${(Ys(lo)+3.5).toFixed(1)}" style="fill:${col}">${fmt(lo)}</text>`;}
+  }
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Elevation and ${series==='hr'?'heart rate':'pace'} by distance">${out}</svg>`;
+}
+
+function stat(v,l){return `<div class="stat"><b>${v}</b><span>${l}</span></div>`;}
+
+(function(){
+  const box=document.getElementById('panel-hikes');
+  box.innerHTML=O.hikes.map(h=>{
+    const s=stat(h.miles.toFixed(2)+' mi','distance')+stat(dur(h.movingS),'moving')+stat('+'+n0(h.gainFt)+' ft','gain')+stat(n0(h.maxFt)+' ft','high point')+(h.avgHR?stat(n0(h.avgHR)+' / '+n0(h.maxHR),'avg / max hr'):'');
+    if(!h.track) return `<article class="hike small"><div><p class="mono when">${dayLong(h.start)}</p><h2>${esc(h.title)}</h2><p class="where">${esc(h.place)}</p></div><div class="stats">${s}</div></article>`;
+    return `<article class="hike">
+      <p class="mono when">${dayLong(h.start)}</p><h2>${esc(h.title)}</h2><p class="where">${esc(h.place)}</p>
+      <div class="viz"><div class="route">${routeSVG(h)}</div>
+        <div class="prof"><div class="legend mono"><span><i style="background:var(--muted)"></i>elevation</span><span><i style="background:var(--hr)"></i>heart rate</span></div>${profileSVG(h.profile,{right:true})}</div></div>
+      <div class="stats">${s}</div>
+      ${h.photos.length?`<div class="photos">${h.photos.map(p=>`<a href="../${p}" target="_blank" rel="noopener"><img src="../${p}" alt="${esc(h.title)}" loading="lazy"></a>`).join('')}</div>`:''}
+    </article>`;
+  }).join('');
+})();
+
+/* ---------- runs ---------- */
+(function(){
+  const R=O.runs,box=document.getElementById('panel-runs');
+  if(!R.length){box.innerHTML='<p>No runs yet.</p>';return;}
+  const road=R.filter(r=>!r.track&&r.avgPace&&r.avgHR);
+  const miles=R.reduce((a,r)=>a+r.miles,0),secsAll=road.reduce((a,r)=>a+r.movingS,0),miRoad=road.reduce((a,r)=>a+r.miles,0);
+  const avgPace=secsAll/miRoad,avgHR=road.reduce((a,r)=>a+r.avgHR*r.movingS,0)/secsAll;
+  const longest=R.reduce((a,r)=>r.miles>a.miles?r:a,R[0]),first=R[R.length-1];
+
+  // monthly mileage
+  const months={};R.forEach(r=>{const k=r.date.slice(0,7);months[k]=(months[k]||0)+r.miles;});
+  const keys=Object.keys(months).sort(),mx=Math.max(...Object.values(months));
+  const bw=560/keys.length,CH=200;
+  const bars=keys.map((k,i)=>{const h=months[k]/mx*(CH-40),x=40+i*bw;const lab=new Date(k+'-15').toLocaleDateString('en-US',{month:'short'}).toLowerCase();
+    return `<rect x="${(x+bw*.18).toFixed(1)}" y="${(CH-20-h).toFixed(1)}" width="${(bw*.64).toFixed(1)}" height="${h.toFixed(1)}" rx="2" fill="var(--amber)" fill-opacity="${i===keys.length-1?.45:.9}"><title>${lab}: ${months[k].toFixed(1)} mi</title></rect>
+      <text x="${(x+bw/2).toFixed(1)}" y="${(CH-26-h).toFixed(1)}" text-anchor="middle" style="fill:var(--fg)">${months[k].toFixed(1)}</text><text x="${(x+bw/2).toFixed(1)}" y="${CH-2}" text-anchor="middle">${lab}</text>`;}).join('');
+
+  // pace vs heart rate: up and to the left is fitter
+  const hrs=road.map(r=>r.avgHR),ps=road.map(r=>r.avgPace);
+  const h0=Math.min(...hrs)-5,h1=Math.max(...hrs)+5,p0=Math.min(...ps)-20,p1=Math.max(...ps)+20;
+  const SX=v=>40+(v-h0)/(h1-h0)*560,SY=v=>14+(v-p0)/(p1-p0)*164;
+  const t0=new Date(first.start).getTime(),tN=new Date(R[0].start).getTime();
+  let ax='';[0,.5,1].forEach(q=>{const v=p0+(p1-p0)*q;ax+=`<line x1="40" x2="600" y1="${SY(v).toFixed(1)}" y2="${SY(v).toFixed(1)}" stroke="var(--grid)"/><text x="34" y="${(SY(v)+3.5).toFixed(1)}" text-anchor="end">${pace(v)}</text>`;});
+  for(let v=Math.ceil(h0/10)*10;v<=h1;v+=10)ax+=`<text x="${SX(v).toFixed(1)}" y="198" text-anchor="middle">${v}</text>`;
+  const dots=road.slice().reverse().map(r=>{const f=(new Date(r.start).getTime()-t0)/((tN-t0)||1);
+    return `<circle class="dot" cx="${SX(r.avgHR).toFixed(1)}" cy="${SY(r.avgPace).toFixed(1)}" r="${(3+r.miles*.9).toFixed(1)}" fill="${ramp(f)}" fill-opacity=".85"><title>${day(r.start)} · ${r.miles} mi · ${pace(r.avgPace)}/mi at ${r.avgHR} bpm</title></circle>`;}).join('');
+
+  const row=r=>{
+    const dp=r.avgPace&&!r.track?r.avgPace-avgPace:null,dh=r.avgHR?r.avgHR-avgHR:null;
+    const vs=dp!=null?`<p class="vs">${Math.abs(dp)<5?'right at':'<b>'+pace(Math.abs(dp))+(dp<0?' faster':' slower')+'</b> than'} my average pace${dh!=null?`, heart rate <b>${Math.abs(Math.round(dh))} bpm ${dh<0?'lower':'higher'}</b>`:''}.</p>`:'';
+    const g=(t,items)=>{const rows=items.filter(x=>x[1]!=null&&x[1]!=='–');return rows.length?`<div class="group"><h4>${t}</h4><dl>${rows.map(x=>`<dt>${x[0]}</dt><dd>${x[1]}</dd>`).join('')}</dl></div>`:'';};
+    const u=(v,s)=>v==null?null:v+s;
+    return `<details class="run" id="run-${r.start.replace(/[^0-9]/g,'').slice(0,12)}">
+      <summary><span class="d">${day(r.start)}</span><span class="wk">${esc(r.workout)}</span><span class="n">${r.miles.toFixed(2)} mi</span><span class="n">${r.track?'track':pace(r.avgPace)+'/mi'}</span><span class="n hr">${r.avgHR?n0(r.avgHR)+' bpm':'–'}</span><span class="plus" aria-hidden="true">+</span></summary>
+      <div class="detail">
+        ${vs}
+        ${r.profile?`<div class="prof"><div class="legend mono"><span><i style="background:var(--muted)"></i>elevation</span><span><i style="background:var(--amber)"></i>pace</span></div>${profileSVG(r.profile,{series:'pace',right:true,h:150})}${profileSVG(r.profile,{series:'hr',right:true,h:120})}</div>`:''}
+        <div class="groups">
+          ${g('pace',[['average',r.avgPace&&pace(r.avgPace)+'/mi'],['best',r.bestPace&&pace(r.bestPace)+'/mi'],['grade-adjusted',r.gap&&pace(r.gap)+'/mi'],['moving time',dur(r.movingS)],['laps',r.laps]])}
+          ${g('effort',[['avg hr',u(r.avgHR,' bpm')],['max hr',u(r.maxHR,' bpm')],['aerobic te',r.aerobicTE],['calories',r.calories&&n0(r.calories)]])}
+          ${g('form',[['cadence',u(r.avgCad,' spm')],['stride',u(r.strideM,' m')],['ground contact',u(r.gctMs,' ms')],['vert. oscillation',u(r.vertOscCm,' cm')],['vert. ratio',u(r.vertRatio,'%')]])}
+          ${g('power & course',[['avg power',u(r.avgPower,' W')],['max power',u(r.maxPower,' W')],['climb',r.gainFt!=null?'+'+n0(r.gainFt)+' ft':null],['temp',r.tempF&&r.tempF[1]!=null?Math.round(r.tempF[0])+'–'+Math.round(r.tempF[1])+'°F':null]])}
+        </div>
+      </div></details>`;
+  };
+
+  box.innerHTML=`
+    <div class="stats big">${stat(miles.toFixed(1),'miles since '+new Date(first.start).toLocaleDateString('en-US',{month:'short'}).toLowerCase())+stat(R.length,'runs')+stat(longest.miles.toFixed(1)+' mi','longest')+stat(pace(avgPace)+'/mi','avg pace')+stat(Math.round(avgHR)+' bpm','avg hr')}</div>
+    <div class="overview">
+      <div class="chart"><h3>miles by month</h3><p>Building toward the Berkeley Half on Nov 15.</p><svg viewBox="0 0 610 200">${bars}</svg></div>
+      <div class="chart"><h3>pace vs heart rate</h3><p>Each dot is a run, sized by distance, amber for recent. Up and to the left means faster for the same effort.</p><svg viewBox="0 0 610 200">${ax}${dots}<text x="40" y="198" text-anchor="start">bpm →</text><text x="600" y="8" text-anchor="end">faster ↑</text></svg></div>
+    </div>
+    <div class="runs">
+      <div class="head mono"><span>date</span><span>workout</span><span>dist</span><span>pace</span><span class="hrh">hr</span><span></span></div>
+      ${R.map(row).join('')}
+    </div>`;
+})();
+
+/* deep links: #runs, #hikes, or #run-YYYYMMDDHHMM opens that run */
+(function(){
+  const h=location.hash.slice(1);
+  if(h==='runs'||h.startsWith('run-'))window.showTab('panel-runs');
+  if(h.startsWith('run-')){const d=document.getElementById(h);if(d){d.open=true;requestAnimationFrame(()=>d.scrollIntoView({block:'start'}));}}
+})();
+
+/* header copy from the data */
+(function(){
+  const gain=O.hikes.reduce((a,h)=>a+(h.gainFt||0),0),mi=O.runs.reduce((a,r)=>a+r.miles,0);
+  document.getElementById('lede').textContent=`${O.hikes.length} hikes and ${Math.round(gain).toLocaleString()} ft of climbing, ${O.runs.length} runs and ${Math.round(mi)} miles. Hikes get maps. Runs start from home, so they get numbers instead.`;
+  document.getElementById('nHikes').textContent=O.hikes.length;
+  document.getElementById('nRuns').textContent=O.runs.length;
+  document.getElementById('built').textContent='synced from garmin · '+(O.built||'');
+})();
+</script>
+</body>
+</html>
