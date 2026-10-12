@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ganesh Karayi</title>
-<meta name="description" content="Ganesh Karayi — junior at UC Berkeley studying applied math and data science, working in quantitative finance.">
+<meta name="description" content="Ganesh Karayi: UC Berkeley applied math and data science student working on quantitative research, ML and AI systems.">
 <script src="./support.js"></script>
 </head>
 <body>
@@ -35,7 +35,7 @@
 <div style="{{ themeVars }}" data-theme-root="1">
 <div style="{{ pageWrapperStyle }}">
 
-  <nav style="position:sticky; top:0; z-index:10; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; padding:18px 40px; background:var(--bg); border-bottom:1px solid var(--line);">
+  <nav style="position:sticky; top:0; z-index:10; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; padding:16px clamp(16px, 5vw, 40px); background:var(--bg); border-bottom:1px solid var(--line);">
     <div onClick="{{ goHome }}" style="font-family:'Montserrat',sans-serif; font-size:18px; font-weight:600; cursor:pointer; padding:2px 8px; margin:0 -8px; transition:background 0.25s ease;" style-hover="background:color-mix(in oklch, var(--accent) 14%, transparent); color:var(--fg);">Ganesh Karayi</div>
     <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
       <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="5">
@@ -47,7 +47,7 @@
   </nav>
 
   <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
-    <main style="max-width:940px; width:100%; box-sizing:border-box; margin:0 auto; padding:44px 40px 40px; flex:1; display:flex; flex-direction:column;">
+    <main style="max-width:940px; width:100%; box-sizing:border-box; margin:0 auto; padding:44px clamp(16px, 5vw, 40px) 40px; flex:1; display:flex; flex-direction:column;">
       <div style="display:flex; gap:34px; flex-wrap:wrap; align-items:flex-start;">
         <div style="width:148px; flex-shrink:0;">
           <div style="width:148px; height:186px; overflow:hidden; background:var(--card);">
@@ -71,8 +71,8 @@
         </div>
         <div style="flex:1; min-width:300px;">
           <h1 style="font-family:'Montserrat',sans-serif; font-weight:600; letter-spacing:-0.015em; font-size:38px; line-height:1.05; margin:0 0 12px;">Ganesh Karayi</h1>
-          <p style="font-size:15.5px; line-height:1.6; font-weight:300; color:var(--fg); max-width:560px; margin:0 0 10px;">i'm a junior at <span style="font-weight:500; color:var(--fg);">uc berkeley</span> studying <span style="font-weight:500; color:var(--fg);">applied math and data science</span>. my interests are in <span style="font-weight:500; color:var(--fg);">quantitative finance</span>, particularly portfolio models that hold up during a crash, and the data pipelines that support them. i'm also into teaching, running, and hiking.</p>
-          <p style="font-size:15.5px; line-height:1.6; font-weight:300; color:var(--fg); max-width:560px; margin:0 0 10px;">right now i'm a <span style="font-weight:500; color:var(--fg);">senior quantitative analyst at shepherd ventures</span>, researching crash-resilient portfolio construction, and an <span style="font-weight:500; color:var(--fg);">ai engineer at ipick.ai</span> leading a team of over 20 members. before that, i was <span style="font-weight:500; color:var(--fg);">course staff for cs 61b</span> and did data research on m&amp;a deals at <span style="font-weight:500; color:var(--fg);">dealprint</span>.</p>
+          <p style="font-size:15.5px; line-height:1.6; font-weight:300; color:var(--fg); max-width:560px; margin:0 0 10px;">i'm a junior at <span style="font-weight:500; color:var(--fg);">uc berkeley</span> studying <span style="font-weight:500; color:var(--fg);">applied math and data science</span>. i like problems where the data is messy and being wrong is expensive: <span style="font-weight:500; color:var(--fg);">quantitative research</span> on how portfolios behave in a crash, and building the <span style="font-weight:500; color:var(--fg);">ml and ai systems</span> around it. outside of that i climb, run, and hike.</p>
+          <p style="font-size:15.5px; line-height:1.6; font-weight:300; color:var(--fg); max-width:560px; margin:0 0 10px;">before this, i was <span style="font-weight:500; color:var(--fg);">course staff for cs 61b</span> and built an m&amp;a valuation model at <span style="font-weight:500; color:var(--fg);">dealprint</span>.</p>
           <p style="font-size:15.5px; line-height:1.6; font-weight:300; color:var(--muted); max-width:560px; margin:0 0 16px;"><a href="outdoors.html" style="color:var(--fg); background:color-mix(in oklch, var(--accent) 26%, transparent); padding:1px 4px; margin:0 -2px; transition:background 0.25s ease;" style-hover="background:color-mix(in oklch, var(--accent) 48%, transparent);">check out my adventures in the outdoors tab if you wanna see something cool :D</a></p>
         </div>
       </div>
@@ -116,26 +116,36 @@
   </sc-if>
 
   <sc-if value="{{ isExperience }}" hint-placeholder-val="{{ false }}">
-    <main style="max-width:820px; margin:0 auto; padding:64px 40px 100px;">
+    <main style="max-width:820px; margin:0 auto; padding:56px clamp(16px, 5vw, 40px) 100px;">
       <h1 style="font-family:'Montserrat',sans-serif; font-weight:600; letter-spacing:-0.015em; font-size:34px; margin:0 0 44px;">Experience</h1>
       <sc-for list="{{ experiences }}" as="job" hint-placeholder-count="4">
         <div id="{{ job.slug }}" style="display:flex; gap:20px; padding:28px 0; transition:background 0.6s ease; background:{{ job.glow }};">
           <div style="width:14px; flex-shrink:0; position:relative;">
             <div style="position:absolute; left:6px; top:0; bottom:-28px; width:1px; background:var(--line);"></div>
-            <div style="position:absolute; left:2px; top:7px; width:9px; height:9px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 4px var(--bg); transition:box-shadow 0.3s ease;"></div>
+            <div style="position:absolute; left:2px; top:9px; width:9px; height:9px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 4px var(--bg); transition:box-shadow 0.3s ease;"></div>
           </div>
           <div style="flex:1; min-width:0;">
-            <div style="font-family:'Work Sans',sans-serif; font-size:21px; font-weight:600;">{{ job.company }} — {{ job.title }}</div>
-            <div style="font-size:13px; color:var(--accent); margin:5px 0 14px;">{{ job.dates }} · {{ job.location }}</div>
-            <p style="font-size:15px; line-height:1.6; color:var(--fg); margin:0 0 14px;">{{ job.context }}</p>
-            <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px;">
-              <sc-for list="{{ job.bullets }}" as="b" hint-placeholder-count="4">
-                <div style="display:flex; gap:10px; font-size:15px; line-height:1.55; color:var(--muted);">
-                  <span style="color:var(--accent);">—</span><span>{{ b }}</span>
-                </div>
-              </sc-for>
+            <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:baseline;">
+              <div style="font-family:'Montserrat',sans-serif; font-size:21px; font-weight:600; letter-spacing:-0.01em;">{{ job.company }}</div>
+              <div style="font-size:13px; color:var(--muted);">{{ job.location }}</div>
             </div>
-            <div style="font-size:13px; color:var(--muted); opacity:0.8;">{{ job.tech }}</div>
+            <p style="font-size:15px; line-height:1.6; color:var(--fg); margin:6px 0 4px; max-width:640px;">{{ job.context }}</p>
+            <sc-for list="{{ job.roles }}" as="r" hint-placeholder-count="2">
+              <div style="margin-top:16px; padding-left:14px; border-left:2px solid {{ r.rail }};">
+                <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:baseline;">
+                  <div style="font-size:16px; font-weight:600; color:var(--fg);">{{ r.title }}</div>
+                  <div style="font-size:13px; color:var(--accent); white-space:nowrap;">{{ r.dates }}</div>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:7px; margin-top:8px;">
+                  <sc-for list="{{ r.bullets }}" as="b" hint-placeholder-count="3">
+                    <div style="display:flex; gap:10px; font-size:15px; line-height:1.55; color:var(--muted); max-width:660px;">
+                      <span style="color:var(--accent); flex-shrink:0;">–</span><span>{{ b }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+            <div style="font-size:13px; color:var(--muted); opacity:0.8; margin-top:16px;">{{ job.tech }}</div>
           </div>
         </div>
       </sc-for>
@@ -143,27 +153,33 @@
   </sc-if>
 
   <sc-if value="{{ isProjects }}" hint-placeholder-val="{{ false }}">
-    <main style="max-width:900px; margin:0 auto; padding:64px 40px 100px;">
+    <main style="max-width:900px; margin:0 auto; padding:56px clamp(16px, 5vw, 40px) 100px;">
       <h1 style="font-family:'Montserrat',sans-serif; font-weight:600; letter-spacing:-0.015em; font-size:34px; margin:0 0 44px;">Projects</h1>
-      <sc-for list="{{ projects }}" as="p" hint-placeholder-count="5">
-        <div style="padding:28px 0; border-top:1px solid var(--line);">
-          <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; align-items:baseline; margin-bottom:6px;">
-            <div style="font-family:'Work Sans',sans-serif; font-size:20px; font-weight:600;">{{ p.name }}</div>
-            <div style="font-size:13px; color:var(--muted);">{{ p.meta }}</div>
-          </div>
-          <p style="font-size:15px; line-height:1.6; color:var(--muted); margin:0 0 14px; max-width:680px;">{{ p.desc }}</p>
-          <div style="display:flex; gap:8px; flex-wrap:wrap;">
-            <sc-for list="{{ p.tags }}" as="tag" hint-placeholder-count="4">
-              <div style="font-size:12px; padding:4px 10px; border:1px solid var(--line); color:var(--muted);">{{ tag }}</div>
-            </sc-for>
-          </div>
+      <sc-for list="{{ projectGroups }}" as="grp" hint-placeholder-count="2">
+        <div style="margin-bottom:48px;">
+          <h2 style="font-family:'Montserrat',sans-serif; font-weight:600; font-size:15px; color:var(--accent); margin:0 0 4px;">{{ grp.title }}</h2>
+          <p style="font-size:14px; color:var(--muted); margin:0 0 8px;">{{ grp.blurb }}</p>
+          <sc-for list="{{ grp.items }}" as="p" hint-placeholder-count="3">
+            <div style="padding:24px 0; border-top:1px solid var(--line);">
+              <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; align-items:baseline; margin-bottom:6px;">
+                <div style="font-family:'Work Sans',sans-serif; font-size:19px; font-weight:600;">{{ p.name }}</div>
+                <div style="font-size:13px; color:var(--muted);">{{ p.meta }}</div>
+              </div>
+              <p style="font-size:15px; line-height:1.6; color:var(--muted); margin:0 0 14px; max-width:680px;">{{ p.desc }}</p>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <sc-for list="{{ p.tags }}" as="tag" hint-placeholder-count="4">
+                  <div style="font-size:12px; padding:4px 10px; border:1px solid var(--line); color:var(--muted);">{{ tag }}</div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
         </div>
       </sc-for>
     </main>
   </sc-if>
 
   <sc-if value="{{ isCoursework }}" hint-placeholder-val="{{ false }}">
-    <main style="max-width:820px; margin:0 auto; padding:64px 40px 100px;">
+    <main style="max-width:820px; margin:0 auto; padding:56px clamp(16px, 5vw, 40px) 100px;">
       <h1 style="font-family:'Montserrat',sans-serif; font-weight:600; letter-spacing:-0.015em; font-size:34px; margin:0 0 8px;">Coursework</h1>
       <p style="font-size:15px; color:var(--muted); margin:0 0 44px;">UC Berkeley, BA Applied Math &amp; Data Science — Expected May 2028</p>
       <sc-for list="{{ courseGroups }}" as="g" hint-placeholder-count="4">
@@ -179,7 +195,7 @@
   </sc-if>
 
 
-  <footer style="text-align:center; padding:30px; font-size:12px; color:var(--muted); border-top:1px solid var(--line);">© 2026 Ganesh Karayi</footer>
+  <footer style="text-align:center; padding:30px; font-size:12px; color:var(--muted); border-top:1px solid var(--line);">© 2026 Ganesh Karayi · updated October 2026</footer>
 </div>
 </div>
 
@@ -728,46 +744,82 @@ class Component extends DCLogic {
 
   expData() {
     return [
-        { company: 'Shepherd Ventures', title: 'Senior Quantitative Analyst', dates: 'Jan 2026 – Present', location: 'San Diego, CA',
-          context: 'Primary researcher on crash-resilient portfolio construction; co-leads the internal AI team.',
-          bullets: [
-            'Built a Black Swan stress-testing pipeline (K-Means resilient-equity selection → MVO optimization), backtested to a 54% downside capture ratio vs. the S&P 100',
-            'Built a fear-regime detection system with Claude combining moving-average slope decay and shock triggers — 100% recall across 8 labeled crash events in a 20-year backtest',
-            'Tripled 20-year precision (0.21 → 0.57) and lifted F1 (0.34 → 0.73) by introducing a false-positive classification metric',
-            'Designed a three-state Market Condition model (Robust / Unsettled / Fragile) with hysteresis rules to prevent state whipsaws',
+        { company: 'Shepherd Ventures', location: 'San Diego, CA',
+          context: 'Quantitative research on portfolios built to hold up through market crashes. Promoted twice in 2026.',
+          roles: [
+            { title: 'Research Fellow', dates: 'Oct 2026 – Present', bullets: [
+              'Build the research infrastructure behind the crash-resilience model: a cached parameter-sweep engine, a config-driven toolkit, and an automated parity check against the original research code',
+              'Audit results for look-ahead bias and data errors, and write the replication guides teammates use to verify the work independently',
+            ] },
+            { title: 'Senior Quantitative Analyst', dates: 'Apr 2026 – Oct 2026', bullets: [
+              'Built stress-testing and portfolio-construction models for crash scenarios using clustering, mean-variance optimization, and volatility forecasting',
+              'Designed a market regime detection system that separates noise alarms from real corrections, and co-led the internal AI research team',
+            ] },
+            { title: 'Quantitative Analyst', dates: 'Jan 2026 – Apr 2026', bullets: [
+              'Traced corporate actions (splits and spin-offs) that were distorting backtest results and corrected the price data',
+            ] },
           ],
-          tech: 'Python · K-Means · MVO · GARCH · Holt Exponential Smoothing · backtesting' },
-        { company: 'IPick.AI', title: 'AI Engineer', dates: 'Jan 2026 – Present', location: 'Cupertino, CA',
-          context: 'Leads a team of over 20 to ship a live equity intelligence platform (ipick.ai/nexus) covering 4,000+ public companies.',
-          bullets: [
-            'Engineered an NLP extraction pipeline over 8,000+ SEC EDGAR filings, classifying corporate relationships via FinBERT, Claude API, and Llama 3.2',
-            'Directed full-stack architecture: Python/Flask, PostgreSQL, Docker, AWS EC2, D3.js',
-            'Built a real-time news-to-analysis pipeline scraping 20+ financial sources into per-ticker AI-generated analysis',
+          tech: 'Python · K-Means · mean-variance optimization · GARCH · Holt smoothing · backtesting' },
+        { company: 'IPick.AI', location: 'Cupertino, CA',
+          context: 'AI and finance tooling for an equity research platform, delivered through Open Project.',
+          roles: [
+            { title: 'AI Engineer', dates: 'Jan 2026 – Present', bullets: [
+              'Coordinate three ML workstreams (26 engineers) building stock recommendation, portfolio analysis, and reinforcement learning systems',
+              'Designed a multi-repo architecture of versioned Python packages with shared typed contracts, plus a test-driven onboarding system (75 autograded tests) that has new engineers shipping in their first sprint',
+              'Led a team of 14 to ship a live equity knowledge graph of thousands of public companies, classifying relationships from 8,000+ SEC filings with FinBERT and the Claude API',
+            ] },
           ],
-          tech: 'Python · Flask · PostgreSQL · Docker · AWS · FinBERT · NLP · team leadership' },
-        { company: 'Open Project', title: 'Vice President of Projects', dates: 'Aug 2025 – Present', location: 'Berkeley, CA',
-          context: "Leadership at Berkeley's largest tech club (300+ members); VP of Projects since May 2026.",
-          bullets: [
-            'Overseeing 19 projects and 50+ project managers',
-            'Ships 5 client projects per semester across the organization',
+          tech: 'Python · Flask · PostgreSQL · Docker · AWS · FinBERT · Claude API · D3.js' },
+        { company: 'LG NOVA', location: 'Remote',
+          context: 'Ticket-based engineering on Atlas, an AI document-analysis and company-data platform.',
+          roles: [
+            { title: 'Software Engineer', dates: 'Aug 2026 – Present', bullets: [
+              'Root-caused silent data loss from a 500-row cap in a Flask/PostgreSQL endpoint and shipped keyset pagination',
+              'Expanded search coverage of PitchBook financial fields by 233%, verified by a 38-test suite',
+              'Restored PowerPoint uploads to the AI document pipeline, adding PDF conversion as a fallback',
+            ] },
           ],
-          tech: 'project management · client delivery · team leadership' },
-        { company: 'UC Berkeley EECS', title: 'CS 61B Course Staff', dates: 'Jan 2026 – May 2026', location: 'Berkeley, CA',
-          context: 'Supported discussion and lab sections for a 1,100-student data structures course.',
-          bullets: [
-            'Independently facilitated ~50% of student support during section, operating alongside TAs',
-            'Ran daily CS61BL lab sections for 20 students through the full DSA curriculum',
-            'Delivered a midterm review session to ~100 students',
+          tech: 'Python · Flask · PostgreSQL · React · TypeScript · GitLab' },
+        { company: 'Rapid Reviews\\Infectious Diseases', location: 'Berkeley, CA',
+          context: 'Data team for an open peer-review journal of infectious-disease preprints.',
+          roles: [
+            { title: 'Data Science Researcher', dates: 'Aug 2026 – Present', bullets: [
+              'Building automation that keeps every active preprint stocked with AI-suggested reviewers, replacing a manual process',
+              'Building alerts that report why a data issue fired, and investigating automatic conflict-of-interest rejections',
+            ] },
           ],
-          tech: 'Java · data structures · algorithms · teaching · debugging' },
-        { company: 'DealPrint', title: 'Data Science Research Intern', dates: 'Aug 2025 – Jan 2026', location: 'Berkeley, CA',
-          context: 'Self-directed research building an end-to-end M&A valuation tool.',
-          bullets: [
-            'Built a Chrome extension to scrape 50,000 M&A transactions spanning 40 years from a legacy platform',
-            'Built a tiered KNN comparables engine (NAICS hierarchy, geography, deal type) combined with a regression model — 0.25 MAPE on held-out transactions',
-            'Delivered as an interactive Streamlit dashboard with real-time parameter tuning',
+          tech: 'Python · automation · data pipelines' },
+        { company: 'Open Project', location: 'Berkeley, CA',
+          context: "Berkeley's largest tech club (300+ members), shipping software for real clients every semester.",
+          roles: [
+            { title: 'VP of Projects', dates: 'May 2026 – Present', bullets: [
+              'Direct 40+ project managers across 15+ client projects, from cold outreach and client sourcing through delivery',
+              'Interviewed and selected 50+ PM candidates',
+            ] },
+            { title: 'Project Manager', dates: 'Aug 2025 – May 2026', bullets: [
+              'Led the Nexus client project end to end, from scoping with the client to shipping',
+            ] },
           ],
-          tech: 'Python · pandas · scikit-learn · Streamlit · Plotly · KNN · regression' },
+          tech: 'project management · client delivery · recruiting' },
+        { company: 'UC Berkeley EECS', location: 'Berkeley, CA',
+          context: 'CS 61B (Data Structures), a 1,100-student course, and its summer lab version CS 61BL.',
+          roles: [
+            { title: 'Course Staff', dates: 'Jan 2026 – Aug 2026', bullets: [
+              'Co-taught weekly discussion sections and ran daily labs for 20 students, debugging Java in real time',
+              'Delivered a midterm review to about 100 students',
+            ] },
+          ],
+          tech: 'Java · data structures · algorithms · teaching' },
+        { company: 'DealPrint', location: 'Berkeley, CA',
+          context: 'Self-directed research: an end-to-end valuation tool for small-business acquisitions.',
+          roles: [
+            { title: 'Data Science Research Intern', dates: 'Aug 2025 – Jan 2026', bullets: [
+              'Collected 50,000 M&A transactions spanning 40 years with a custom Chrome extension',
+              'Built a KNN comparables engine weighted by industry, geography, and deal type, feeding a regression model (0.25 MAPE on held-out deals)',
+              'Shipped it as an interactive Streamlit dashboard',
+            ] },
+          ],
+          tech: 'Python · pandas · scikit-learn · Streamlit · Plotly' },
       ];
   }
 
@@ -829,38 +881,48 @@ class Component extends DCLogic {
       isProjects: page === 'projects',
       isCoursework: page === 'coursework',
       currently: [
-        { role: 'Senior Quantitative Analyst', org: 'Shepherd Ventures — crash-resilient portfolio research', since: 'since Jan 2026', go: () => this.focusRole('role-shepherd-ventures') },
-        { role: 'AI Engineer', org: 'IPick.AI — leading a 20+ person team on equity intelligence', since: 'since Jan 2026', go: () => this.focusRole('role-ipick-ai') },
-        { role: 'VP of Projects', org: "Open Project — Berkeley's largest tech club", since: 'since May 2026', go: () => this.focusRole('role-open-project') },
+        { role: 'Research Fellow', org: 'Shepherd Ventures, crash-resilient portfolio research', since: 'since Oct 2026', go: () => this.focusRole('role-shepherd-ventures') },
+        { role: 'AI Engineer', org: 'IPick.AI, three ML workstreams', since: 'since Jan 2026', go: () => this.focusRole('role-ipick-ai') },
+        { role: 'Software Engineer', org: 'LG NOVA, Atlas platform', since: 'since Aug 2026', go: () => this.focusRole('role-lg-nova') },
+        { role: 'VP of Projects', org: "Open Project, Berkeley's largest tech club", since: 'since May 2026', go: () => this.focusRole('role-open-project') },
       ],
       experiences: this.expData().map((j) => ({
         ...j,
+        roles: j.roles.map((r, i) => ({ ...r, rail: i === 0 ? 'var(--accent)' : 'var(--line)' })),
         slug: 'role-' + j.company.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
         glow: this.state.focus === 'role-' + j.company.toLowerCase().replace(/[^a-z0-9]+/g, '-')
           ? 'color-mix(in oklch, var(--accent) 12%, transparent)' : 'transparent',
       })),
-      projects: [
-        { name: 'Solar Panel Market Quantile Analysis', meta: 'Class project, 2026',
-          desc: 'Self-sourced and cleaned a 332,000-row California solar interconnection dataset. Implemented a Minimum Distance Estimator for quantile regression from scratch, cross-validated against statsmodels.QuantReg. Found nonlinear cost dynamics across unit tiers and an extreme price premium at the 90th percentile.',
-          tags: ['Python', 'pandas', 'statsmodels', 'quantile regression'] },
-        { name: 'Quantitative Trading Strategy & Backtesting Engine', meta: 'DeCal project, 2025',
-          desc: 'Built a statistical pairs trading engine (WMT/TGT) using rolling 60-day OLS regression for dynamic hedge ratios, with z-score mean-reversion signals and modeled transaction costs.',
-          tags: ['Python', 'pandas', 'statsmodels', 'yfinance'] },
-        { name: 'Eco Sim', meta: 'Team project, 2025',
-          desc: 'Full-stack agent-based simulation of 100K+ autonomous agents (households, firms, government) with emergent pricing, production, and labor behavior. Real-time React dashboard with live GDP graphs and policy sliders.',
-          tags: ['Python', 'FastAPI', 'React', 'Tailwind', 'SQLite'] },
-        { name: 'Build Your Own World', meta: 'CS 61B Final Project, 2025',
-          desc: 'Procedurally generated 2D dungeon game with seeded randomization. Implemented BFS-based dynamic lighting optimized to recalculate only on state change, and a save/load system via deterministic keystroke replay.',
-          tags: ['Java', 'BFS', 'procedural generation'] },
-        { name: 'Spam Email Classifier', meta: 'Data 100 project, 2026',
-          desc: 'Logistic regression spam classifier reaching 99.4% accuracy on a held-out test set, with a custom set-based feature selection method.',
-          tags: ['Python', 'scikit-learn', 'logistic regression'] },
+      projectGroups: [
+        { title: 'Quant and data', blurb: 'Statistics and modeling, built from the estimator up.', items: [
+          { name: 'Solar Panel Market Quantile Analysis', meta: '2026',
+            desc: 'Self-sourced and cleaned a 332,000-row California solar interconnection dataset. Implemented Minimum Distance Estimation for quantile regression from scratch, following the asymptotic theory, and cross-validated it against statsmodels. Found nonlinear cost dynamics across system tiers and a steep price premium at the 90th percentile.',
+            tags: ['Python', 'statsmodels', 'quantile regression', 'econometrics'] },
+          { name: 'Pairs Trading Backtester', meta: '2025',
+            desc: 'A statistical pairs-trading engine on WMT/TGT: rolling 60-day OLS hedge ratios to avoid look-ahead bias, z-score mean-reversion signals, and modeled transaction costs.',
+            tags: ['Python', 'pandas', 'statsmodels', 'yfinance'] },
+          { name: 'Spam Email Classifier', meta: '2026',
+            desc: 'Logistic regression classifier reaching 99.4% accuracy on a held-out test set, with a custom feature-selection method based on words common in spam and absent from ham.',
+            tags: ['Python', 'scikit-learn', 'logistic regression'] },
+        ] },
+        { title: 'Software', blurb: 'Things that run, render, or get played.', items: [
+          { name: 'Eco Sim', meta: 'Team project, 2025',
+            desc: 'Full-stack agent-based simulation of 100K+ households, firms, and government agents with emergent pricing, production, and labor behavior. Real-time React dashboard with live GDP graphs and policy sliders.',
+            tags: ['Python', 'FastAPI', 'React', 'SQLite'] },
+          { name: 'Build Your Own World', meta: '2025',
+            desc: 'Procedurally generated 2D dungeon game with seeded randomization, BFS-based dynamic lighting that recalculates only on state change, and save/load through deterministic keystroke replay.',
+            tags: ['Java', 'BFS', 'procedural generation'] },
+          { name: 'This website', meta: '2026',
+            desc: 'My corner of the internet, with a small tower-defense idle game hiding on the home page. Go click a triangle.',
+            tags: ['JavaScript', 'canvas'] },
+        ] },
       ],
       courseGroups: [
-        { subject: 'Math', courses: 'Multivariable Calculus (MATH 53) · Linear Algebra & Differential Equations (MATH 54) · Discrete Math (MATH 55) · Real Analysis (MATH 104) · Probability & Random Processes (EECS 126)', inProgress: 'Abstract Algebra (MATH 113)' },
-        { subject: 'Computer Science', courses: 'Structure and Interpretation of Computer Programs (CS 61A) · Data Structures & Algorithms (CS 61B) · Intro to AI (CS 188)', inProgress: 'Intro to Machine Learning (CS 189)' },
-        { subject: 'Data Science', courses: 'Foundations of Data Science (DATA 8) · Principles & Techniques of Data Science (DATA 100)', inProgress: null },
-        { subject: 'Economics & Finance', courses: 'Intro to Economics (ECON 2) · Econometrics (ECON 141) · Econometrics: Advanced Methods (ECON 143) · Intro to Quant Finance (IEOR 198)', inProgress: null },
+        { subject: 'Math', courses: 'Multivariable Calculus (MATH 53) · Linear Algebra & Differential Equations (MATH 54) · Discrete Math (MATH 55) · Real Analysis (MATH 104)', inProgress: 'Abstract Algebra (MATH 113)' },
+        { subject: 'Probability & Statistics', courses: 'Probability & Random Processes (EECS 126) · Econometrics (ECON 141) · Econometrics: Advanced Methods (ECON 143)', inProgress: null },
+        { subject: 'Computer Science & ML', courses: 'Structure and Interpretation of Computer Programs (CS 61A) · Data Structures & Algorithms (CS 61B) · Intro to AI (CS 188)', inProgress: 'Intro to Machine Learning (CS 189)' },
+        { subject: 'Data Science', courses: 'Foundations of Data Science (DATA 8) · Principles & Techniques of Data Science (DATA 100) · Human Contexts & Ethics of Data (DATA 104)', inProgress: null },
+        { subject: 'Economics & Finance', courses: 'Intro to Economics (ECON 2) · Intro to Quant Finance (IEOR 198) · Wall Street / Main Street (HISTORY 133B)', inProgress: null },
       ],
     };
   }
