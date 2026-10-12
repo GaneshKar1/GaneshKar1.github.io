@@ -51,8 +51,12 @@ section{padding-block:clamp(64px,10vw,120px) 0}
 .sec-head{display:flex;flex-direction:column;gap:12px;margin-bottom:clamp(24px,4vw,40px)}
 
 /* top bar */
-.top{position:absolute;inset:0 0 auto 0;z-index:3}
-.top .wrap{display:flex;justify-content:space-between;align-items:center;padding-block:22px;gap:16px}
+/* header stays on screen; it picks up a solid backdrop once the page scrolls */
+.top{position:fixed;inset:0 0 auto 0;z-index:20;border-bottom:1px solid transparent;transition:background-color .3s ease,border-color .3s ease,backdrop-filter .3s ease}
+.top.scrolled{background:color-mix(in srgb,var(--bg) 84%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom-color:var(--line)}
+.top .wrap{display:flex;justify-content:space-between;align-items:center;padding-block:22px;gap:16px;transition:padding .3s ease}
+.top.scrolled .wrap{padding-block:12px}
+section[id],.job,.run{scroll-margin-top:72px}
 .top nav{display:flex;gap:clamp(12px,2.4vw,26px);align-items:center;flex-wrap:wrap;justify-content:flex-end}
 .top nav a,.theme{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:var(--muted)}
 .top nav a:hover,.theme:hover{color:var(--amber-ink)}
@@ -181,7 +185,8 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
   .now .row{grid-template-columns:12px minmax(0,1fr) auto;gap:4px 10px}
   .now .org{grid-column:2/-1;grid-row:2}
   .now .head{display:none}
-  .top nav a.opt{display:none}
+  .top nav{gap:12px}
+  .top nav a,.theme{letter-spacing:.04em}
 }
 /* theme switch: a circle grows from the toggle (View Transitions), else a color fade */
 ::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
@@ -517,6 +522,12 @@ const JOBS=[
       <div><b>${a.title}</b><span class="where">${a.place}</span></div>
       <div class="nums tnum">${a.miles.toFixed(2)} mi<br><span class="gain">+${a.gainFt.toLocaleString()} ft</span></div>
     </div>`).join('');
+})();
+/* sticky header: solid once scrolled */
+(function(){
+  const bar=document.querySelector('.top');
+  const on=()=>bar.classList.toggle('scrolled',scrollY>24);
+  addEventListener('scroll',on,{passive:true});on();
 })();
 </script>
 </body>

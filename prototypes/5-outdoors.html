@@ -43,7 +43,12 @@ h1,h2,h3{font-family:var(--display);font-weight:700;letter-spacing:-.02em;line-h
 p{margin:0}
 
 /* top bar */
-.top .wrap{display:flex;justify-content:space-between;align-items:center;padding-block:22px;gap:16px}
+/* header stays on screen; it picks up a solid backdrop once the page scrolls */
+.top{position:fixed;inset:0 0 auto 0;z-index:20;border-bottom:1px solid transparent;transition:background-color .3s ease,border-color .3s ease,backdrop-filter .3s ease}
+.top.scrolled{background:color-mix(in srgb,var(--bg) 84%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom-color:var(--line)}
+.top .wrap{display:flex;justify-content:space-between;align-items:center;padding-block:22px;gap:16px;transition:padding .3s ease}
+.top.scrolled .wrap{padding-block:12px}
+section[id],.job,.run{scroll-margin-top:72px}
 .top nav{display:flex;gap:clamp(12px,2.4vw,26px);align-items:center}
 .top nav a,.theme{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:var(--muted)}
 .top nav a:hover,.theme:hover{color:var(--amber-ink)}
@@ -53,10 +58,9 @@ p{margin:0}
 .mark span{color:var(--amber-ink)}
 
 /* header */
-header.page{padding-block:clamp(40px,7vw,80px) clamp(20px,3vw,32px)}
+header.page{padding-block:calc(76px + clamp(40px,7vw,80px)) clamp(20px,3vw,32px)}
 header.page h1{font-size:clamp(3rem,10vw,7rem);font-weight:800;letter-spacing:-.05em;line-height:.9}
 header.page h1 span{color:var(--amber)}
-header.page .lede{font-style:italic;font-size:clamp(1.1rem,2vw,1.35rem);max-width:44ch;margin-top:18px}
 
 /* tabs */
 .tabs{display:flex;gap:0;border-bottom:1px solid var(--line);margin-top:clamp(24px,4vw,40px)}
@@ -104,7 +108,8 @@ svg text{font-family:var(--mono);font-size:10px;fill:var(--muted)}
 
 .runs{margin-top:clamp(36px,5vw,56px);border-top:1px solid var(--fg)}
 .run{border-bottom:1px solid var(--line)}
-.run summary{list-style:none;display:grid;grid-template-columns:7.5em minmax(0,1fr) 5em 5.5em 5em 1.4em;gap:12px;align-items:baseline;padding:14px 0;cursor:pointer}
+.runs{--cols:8rem minmax(0,1fr) 5.5rem 6rem 5.5rem 1.4rem}
+.run summary{list-style:none;display:grid;grid-template-columns:var(--cols);gap:12px;align-items:baseline;padding:14px 0;cursor:pointer}
 .run summary::-webkit-details-marker{display:none}
 .run summary:hover .wk{color:var(--amber-ink)}
 .run .d{font-family:var(--mono);font-size:.74rem;color:var(--muted)}
@@ -113,7 +118,7 @@ svg text{font-family:var(--mono);font-size:10px;fill:var(--muted)}
 .run .n.hr{color:var(--hr)}
 .run .plus{font-family:var(--mono);color:var(--amber-ink);justify-self:end;transition:transform .25s}
 .run[open] .plus{transform:rotate(45deg)}
-.runs .head{display:grid;grid-template-columns:7.5em minmax(0,1fr) 5em 5.5em 5em 1.4em;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.runs .head{display:grid;grid-template-columns:var(--cols);gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
 .runs .head span:nth-child(n+3){text-align:right}
 .detail{padding:4px 0 26px 0;display:flex;flex-direction:column;gap:22px}
 .groups{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
@@ -132,7 +137,8 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
 }
 @media (max-width:560px){
   body{font-size:17.5px}
-  .run summary,.runs .head{grid-template-columns:5.2em minmax(0,1fr) 4em 4.4em 1.2em;gap:8px}
+  .runs{--cols:6.4rem minmax(0,1fr) 4.4rem 4.8rem 1.2rem}
+  .run summary,.runs .head{gap:8px}
   .run .n.hr,.runs .head .hrh{display:none}
   .hike.small{grid-template-columns:minmax(0,1fr)}
   .photos{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -160,7 +166,6 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
   <header class="page">
     <p class="mono">straight from my watch</p>
     <h1>outside<span>.</span></h1>
-    <p class="lede" id="lede"></p>
   </header>
 
   <div class="tabs" role="tablist" aria-label="Activity type">
@@ -370,11 +375,15 @@ function stat(v,l){return `<div class="stat"><b>${v}</b><span>${l}</span></div>`
 
 /* header copy from the data */
 (function(){
-  const gain=O.hikes.reduce((a,h)=>a+(h.gainFt||0),0),mi=O.runs.reduce((a,r)=>a+r.miles,0);
-  document.getElementById('lede').textContent=`${O.hikes.length} hikes and ${Math.round(gain).toLocaleString()} ft of climbing, ${O.runs.length} runs and ${Math.round(mi)} miles. Hikes get maps. Runs start from home, so they get numbers instead.`;
   document.getElementById('nHikes').textContent=O.hikes.length;
   document.getElementById('nRuns').textContent=O.runs.length;
   document.getElementById('built').textContent='synced from garmin · '+(O.built||'');
+})();
+/* sticky header: solid once scrolled */
+(function(){
+  const bar=document.querySelector('.top');
+  const on=()=>bar.classList.toggle('scrolled',scrollY>24);
+  addEventListener('scroll',on,{passive:true});on();
 })();
 </script>
 </body>
