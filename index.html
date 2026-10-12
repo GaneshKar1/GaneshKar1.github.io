@@ -1,933 +1,629 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ganesh Karayi</title>
-<meta name="description" content="Ganesh Karayi: UC Berkeley applied math and data science student working on quantitative research, ML and AI systems.">
-<script src="./support.js"></script>
+<meta name="description" content="Ganesh Karayi: applied math and data science at UC Berkeley. Quant research, ML systems, and steep trails.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Prototype 5: prototype 4 cut down to roughly 80% evidence, 20% personality.
+   Glimpse at the top (topo hero + what I'm doing now), proof below (work, projects),
+   personality last (outside, drawn from real GPS tracks). */
+:root{
+  --bg:#0F2A33; --bg-2:#0B222A; --fg:#ECE6D9; --muted:#93A9AE;
+  --line:rgba(236,230,217,.14); --contour:rgba(147,169,174,.30);
+  --amber:#F2A541; --amber-ink:#F2A541; --live:#7CC8A4;
+  --display:"Bricolage Grotesque","Arial Narrow",system-ui,sans-serif;
+  --body:"Newsreader",Georgia,serif;
+  --mono:"DM Mono",ui-monospace,Menlo,monospace;
+  --gutter:clamp(16px,4vw,48px);
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#EEF0EC; --bg-2:#E3E7E2; --fg:#10262E; --muted:#56696E;
+    --line:rgba(16,38,46,.14); --contour:rgba(16,38,46,.20);
+    --amber-ink:#A35F06; --live:#23855C; color-scheme:light;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#EEF0EC; --bg-2:#E3E7E2; --fg:#10262E; --muted:#56696E;
+  --line:rgba(16,38,46,.14); --contour:rgba(16,38,46,.20);
+  --amber-ink:#A35F06; --live:#23855C; color-scheme:light;
+}
+
+/* squircles: continuous-curve corners where the browser supports corner-shape,
+   with a slightly larger radius to match; plain rounded corners elsewhere */
+:root{--r-sm:12px;--r-md:18px;--r-lg:24px;--press:scale(.97);--fill:color-mix(in srgb,var(--fg) 8%,transparent);--fill-2:color-mix(in srgb,var(--fg) 13%,transparent)}
+@supports (corner-shape: squircle){:root{--r-sm:18px;--r-md:28px;--r-lg:38px}}
+.btn,.card,.sheet,.repo,.shot,.carousel,.chip,.now .row,.sheet-x,.proj .links a{corner-shape:squircle}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:19px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+::selection{background:var(--amber);color:#0F2A33}
+:focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:2px}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:var(--gutter)}
+.mono{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.tnum{font-variant-numeric:tabular-nums}
+h1,h2,h3{font-family:var(--display);font-weight:700;letter-spacing:-.02em;line-height:1;margin:0;text-wrap:balance}
+h2{font-size:clamp(1.9rem,4.6vw,3.1rem);font-weight:650}
+p{margin:0}
+section{padding-block:clamp(64px,10vw,120px) 0}
+.sec-head{display:flex;flex-direction:column;gap:12px;margin-bottom:clamp(24px,4vw,40px)}
+
+/* top bar */
+/* header stays on screen; it picks up a solid backdrop once the page scrolls */
+.top{position:fixed;inset:0 0 auto 0;z-index:20;border-bottom:1px solid transparent;transition:background-color .3s ease,border-color .3s ease,backdrop-filter .3s ease}
+.top.scrolled{background:color-mix(in srgb,var(--bg) 84%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom-color:var(--line)}
+.top .wrap{display:flex;justify-content:space-between;align-items:center;padding-block:22px;gap:16px;transition:padding .3s ease}
+.top.scrolled .wrap{padding-block:12px}
+section[id],.job,.run{scroll-margin-top:72px}
+.top nav{display:flex;gap:clamp(12px,2.4vw,26px);align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.top nav a,.theme{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:var(--muted)}
+.top nav a:hover,.theme:hover{color:var(--amber-ink)}
+.theme{background:none;border:1px solid var(--line);border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:.8rem;letter-spacing:0}
+.mark{font-family:var(--display);font-weight:800;font-size:1.05rem;text-decoration:none;letter-spacing:-.02em}
+.mark span{color:var(--amber-ink)}
+
+/* hero */
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line);padding:0}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero-inner{position:relative;z-index:2;padding-block:clamp(120px,15vw,180px) clamp(36px,5vw,56px)}
+.name{font-size:clamp(3.4rem,13vw,10rem);font-weight:800;letter-spacing:-.055em;line-height:.84}
+.name .dot{color:var(--amber)}
+.lede{font-style:italic;font-size:clamp(1.15rem,2.1vw,1.4rem);line-height:1.45;max-width:34ch;margin-top:clamp(20px,3vw,30px)}
+.lede em{font-style:normal;font-family:var(--display);font-weight:600;color:var(--amber-ink)}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.btn{font-family:var(--display);font-size:.98rem;font-weight:600;letter-spacing:-.01em;padding:12px 20px;border-radius:var(--r-sm);border:0;background:var(--amber);color:#0F2A33;text-decoration:none;display:inline-flex;align-items:center;gap:8px;cursor:pointer;transition:transform .15s ease,filter .2s ease,background-color .2s ease}
+.btn:hover{filter:brightness(1.07)}
+.btn:active{transform:var(--press)}
+.btn.ghost{background:var(--fill);color:var(--fg)}
+.btn.ghost:hover{background:var(--fill-2);filter:none}
+
+.now{margin-top:clamp(36px,5vw,56px);border-top:1px solid var(--line)}
+.now .row{display:grid;grid-template-columns:14px minmax(0,1fr) minmax(0,1.5fr) auto;gap:14px;align-items:baseline;padding:12px 14px;margin:0 -14px;border-radius:var(--r-sm);text-decoration:none;transition:background-color .2s ease,transform .15s ease}
+.now a.row{cursor:pointer}
+.now a.row:hover{background:var(--fill)}
+.now a.row:active{transform:scale(.99)}
+.now .row:hover .role{color:var(--amber-ink)}
+.now .head{padding:10px 0}
+.live{width:7px;height:7px;border-radius:50%;background:var(--live);align-self:center}
+.role{font-family:var(--display);font-weight:600;font-size:1.08rem;letter-spacing:-.01em}
+.org{color:var(--muted);font-size:1rem}
+.since{font-family:var(--mono);font-size:.72rem;color:var(--muted);text-align:right}
+
+/* work: squircle cards that zoom open into a sheet */
+.jobs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.card{all:unset;box-sizing:border-box;position:relative;display:flex;flex-direction:column;gap:8px;padding:22px;min-height:220px;border-radius:var(--r-md);background:var(--bg-2);color:var(--fg);
+  box-shadow:inset 0 0 0 1px var(--line);cursor:pointer;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease,background-color .25s ease}
+.card:hover{transform:translateY(-3px);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--amber) 45%,transparent),0 14px 34px rgba(0,0,0,.22)}
+.card:active{transform:var(--press)}
+.card:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+.card.wide{grid-column:span 2}
+.card .c-when{display:flex;align-items:center;gap:8px}
+.card .c-co{display:block;font-family:var(--display);font-weight:700;font-size:clamp(1.3rem,2.2vw,1.6rem);letter-spacing:-.025em;line-height:1.05;margin-top:6px}
+.card.wide .c-co{font-size:clamp(1.7rem,3.2vw,2.3rem)}
+.card .c-role{display:block;font-family:var(--mono);font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--amber-ink)}
+.card .c-one{display:block;font-family:var(--body);font-size:1rem;color:var(--muted);line-height:1.45;flex:1}
+.card .c-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:6px}
+.card .c-tech{font-family:var(--mono);font-size:.66rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .c-plus{flex:none;width:30px;height:30px;border-radius:50%;background:var(--fill);display:grid;place-items:center;font-family:var(--mono);color:var(--amber-ink);transition:background-color .2s,color .2s,transform .25s}
+.card:hover .c-plus{background:var(--amber);color:#0F2A33;transform:rotate(90deg)}
+.card.resume{background:transparent;justify-content:flex-end;text-decoration:none}
+.card.resume .c-co{font-size:clamp(1.3rem,2.2vw,1.6rem)}
+
+.sheet{border:0;padding:0;margin:auto;background:var(--bg-2);color:var(--fg);border-radius:var(--r-lg);width:min(760px,calc(100vw - 24px));max-height:min(88vh,920px);
+  box-shadow:0 40px 100px rgba(0,0,0,.5),inset 0 0 0 1px var(--line);overflow:hidden;transform-origin:top left}
+.sheet::backdrop{background:rgba(4,14,18,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.sheet .in{max-height:min(88vh,920px);overflow:auto;padding:clamp(24px,4vw,40px);display:flex;flex-direction:column;gap:22px}
+.sheet h3{font-size:clamp(1.9rem,4vw,2.8rem);font-weight:750;letter-spacing:-.035em;padding-right:44px}
+.sheet .s-sub{font-style:italic;color:var(--muted);margin-top:6px}
+.sheet .s-role h4{margin:0 0 8px;font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;font-weight:500;color:var(--amber-ink)}
+.sheet ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:8px;font-size:1.02rem}
+.sheet .chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-family:var(--mono);font-size:.7rem;padding:6px 10px;border-radius:var(--r-sm);background:var(--fill);color:var(--fg)}
+.sheet-x{position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:50%;border:0;background:var(--fill);color:var(--fg);font-size:1rem;cursor:pointer;display:grid;place-items:center;transition:background-color .2s,transform .15s;z-index:2}
+.sheet-x:hover{background:var(--fill-2)}
+.sheet-x:active{transform:var(--press)}
+@media (max-width:860px){.jobs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.jobs{grid-template-columns:minmax(0,1fr)}.card.wide{grid-column:auto}.card{min-height:0}}
+
+/* projects */
+.projects{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2.5vw,28px)}
+.proj{display:flex;flex-direction:column;gap:12px}
+.shot{position:relative;margin:0;aspect-ratio:16/10;border:1px dashed var(--line);border-radius:var(--r-md);background:var(--bg-2);overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;padding:16px}
+/* drop a 1600x1000 image at the src path and it covers the placeholder; missing files remove themselves */
+.shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.shot .file{font-family:var(--mono);font-size:.62rem;color:var(--amber-ink);letter-spacing:.02em;text-transform:none}
+.proj h3{font-size:1.3rem;font-weight:650;letter-spacing:-.02em}
+.proj p{font-size:1rem;color:var(--muted);line-height:1.5}
+.proj p.mono{font-size:.68rem}
+.proj .links{display:flex;gap:16px;margin-top:auto}
+.proj .links a{font-family:var(--display);font-weight:600;font-size:.9rem;text-decoration:none;padding:8px 14px;border-radius:var(--r-sm);background:var(--fill);transition:background-color .2s,transform .15s}
+.proj .links a:hover{background:var(--fill-2);color:var(--amber-ink)}
+.proj .links a:active{transform:var(--press)}
+.more{margin-top:28px}
+
+/* github activity */
+.gh{margin-top:clamp(40px,6vw,64px);border-top:1px solid var(--line);padding-top:clamp(24px,3vw,32px)}
+.gh-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.gh-head h3{font-size:1.3rem;font-weight:650;letter-spacing:-.02em}
+.gh-head a{text-decoration:none;border-bottom:1px solid var(--line)}
+.gh-head a:hover{color:var(--amber-ink)}
+.gh-stats{display:flex;flex-wrap:wrap;gap:6px clamp(20px,3.5vw,40px);margin-bottom:20px}
+.gh-stats b{display:block;font-family:var(--display);font-weight:650;font-size:1.35rem;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.gh-stats span{font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.grid-scroll{overflow-x:auto;scrollbar-width:thin}
+.grid-scroll svg{display:block;min-width:660px;width:100%;height:auto}
+.grid-scroll text{font-family:var(--mono);font-size:9px;fill:var(--muted)}
+.gh-foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:10px}
+.gh-legend{display:flex;align-items:center;gap:4px}
+.gh-legend i{width:10px;height:10px;border-radius:2px;display:inline-block}
+.repos{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:24px}
+.repo{background:var(--bg-2);box-shadow:inset 0 0 0 1px var(--line);border-radius:var(--r-md);padding:16px;text-decoration:none;display:flex;flex-direction:column;gap:6px;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s}
+.repo:hover{transform:translateY(-2px);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--amber) 45%,transparent),0 10px 26px rgba(0,0,0,.2)}
+.repo:active{transform:var(--press)}
+.repo b{font-family:var(--display);font-weight:600;font-size:1rem;letter-spacing:-.01em}
+.repo p{font-size:.92rem;color:var(--muted);line-height:1.4;flex:1}
+@media (max-width:860px){.repos{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.more a{text-decoration:none;border-bottom:1px solid var(--line)}
+.more a:hover{color:var(--amber-ink)}
+
+/* outside */
+.outside{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(24px,4vw,48px);align-items:start}
+.photo{position:relative;margin:0;border-radius:6px;overflow:hidden;aspect-ratio:4/3}
+/* photo carousel: native horizontal scroll with snap, so swipe and trackpads just work */
+.carousel{position:relative;border-radius:var(--r-lg);overflow:hidden}
+.ctrack{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;overscroll-behavior-x:contain}
+.ctrack::-webkit-scrollbar{display:none}
+.ctrack:focus-visible{outline:2px solid var(--amber);outline-offset:-2px}
+.ctrack .photo{flex:0 0 100%;scroll-snap-align:start;border-radius:0}
+.cbtn{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:1px solid rgba(244,239,228,.35);
+  background:rgba(8,24,30,.5);color:#F4EFE4;font-size:1rem;cursor:pointer;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;transition:opacity .2s,background-color .2s}
+.cbtn:hover{background:rgba(8,24,30,.75)}
+.carousel:hover .cbtn,.cbtn:focus-visible{opacity:1}
+.cbtn.prev{left:12px}.cbtn.next{right:12px}
+@media (hover:none){.cbtn{opacity:.85;width:34px;height:34px}}
+@media (prefers-reduced-motion: reduce){.ctrack{scroll-behavior:auto}}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.photo figcaption{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:#F4EFE4;background:linear-gradient(transparent,rgba(8,24,30,.78))}
+.hikes{border-top:1px solid var(--line)}
+.hike{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.hike svg{display:block;width:56px;height:56px}
+.hike b{font-family:var(--display);font-weight:600;font-size:1.02rem;letter-spacing:-.01em;display:block}
+.hike .where{font-size:.9rem;color:var(--muted)}
+.hike .nums{font-family:var(--mono);font-size:.72rem;color:var(--muted);text-align:right;line-height:1.7}
+.hike .gain{color:var(--amber-ink)}
+.next{margin-top:24px}
+.next .item{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px dashed var(--line)}
+.next .item b{font-family:var(--display);font-weight:600;font-size:1rem}
+.next .item span{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+.outside .more{margin-top:20px;font-size:1rem}
+
+/* contact */
+.contact{padding-block:clamp(72px,11vw,130px) clamp(44px,6vw,72px)}
+.ask{font-size:clamp(2.8rem,9vw,6.5rem);font-weight:800;letter-spacing:-.05em;line-height:.9}
+.ask span{color:var(--amber)}
+.contact .lede{max-width:40ch}
+.social{display:flex;gap:22px;flex-wrap:wrap;margin-top:36px}
+.social a{font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:3px}
+.social a:hover{color:var(--amber-ink);border-color:var(--amber)}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-block:24px;border-top:1px solid var(--line)}
+
+@media (max-width:860px){
+  .outside{grid-template-columns:minmax(0,1fr)}
+  .projects{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:560px){
+  body{font-size:17.5px}
+  .now .row{grid-template-columns:12px minmax(0,1fr) auto;gap:4px 10px}
+  .now .org{grid-column:2/-1;grid-row:2}
+  .now .head{display:none}
+  .top nav{gap:12px}
+  .top nav a,.theme{letter-spacing:.04em}
+}
+/* theme switch: a circle grows from the toggle (View Transitions), else a color fade */
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+.theme-fade,.theme-fade *{transition:background-color .45s ease,color .45s ease,border-color .45s ease,fill .45s ease,stroke .45s ease!important}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{transition:none!important} }
+</style>
 </head>
 <body>
-<x-dc>
-<helmet>
-  <link rel="preconnect" href="https://fonts.googleapis.com"></link>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"></link>
-  <style>
-    :root { --bg:#1a1c1f; --fg:#e3e5e8; --muted:#8d949c; --line:#2b2e33; --card:#212429; }
-    body { margin: 0; background: var(--bg); }
-    a { color: inherit; text-decoration: none; }
-    a:hover { color: var(--accent, #93b6cf); }
-    html.gk-custom-cursor, html.gk-custom-cursor * { cursor: none !important; }
-    #gkCursor {
-      position: fixed; top: 0; left: 0; width: 22px; height: 22px; border-radius: 50%;
-      border: 1.5px solid var(--accent); box-sizing: border-box;
-      pointer-events: none; z-index: 9999; opacity: 0;
-      transform: translate(-50%, -50%);
-      transition: width 0.18s ease, height 0.18s ease, background-color 0.18s ease, border-color 0.18s ease, opacity 0.2s ease;
-    }
-    #gkCursor.gk-active { opacity: 1; }
-    #gkCursor.gk-hover { width: 36px; height: 36px; background: var(--accent); border-color: transparent; }
-  </style>
-  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet"></link>
-  <script src="https://assets.calendly.com/assets/external/widget.js" async="async"></script>
-</helmet>
 
-<div style="{{ themeVars }}" data-theme-root="1">
-<div style="{{ pageWrapperStyle }}">
+<header class="top">
+  <div class="wrap">
+    <a class="mark" href="#top">gk<span>.</span></a>
+    <nav aria-label="Sections">
+      <a href="#work">work</a>
+      <a href="#projects">projects</a>
+      <a href="outdoors.html" class="opt">outside</a>
+      <a href="assets/Ganesh_Karayi_Resume.pdf">resume</a>
+      <button class="theme" id="themeBtn" type="button" aria-label="Toggle light and dark">◐</button>
+    </nav>
+  </div>
+</header>
 
-  <nav style="position:sticky; top:0; z-index:10; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; padding:16px clamp(16px, 5vw, 40px); background:var(--bg); border-bottom:1px solid var(--line);">
-    <div onClick="{{ goHome }}" style="font-family:'Montserrat',sans-serif; font-size:18px; font-weight:600; cursor:pointer; padding:2px 8px; margin:0 -8px; transition:background 0.25s ease;" style-hover="background:color-mix(in oklch, var(--accent) 14%, transparent); color:var(--fg);">Ganesh Karayi</div>
-    <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
-      <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="5">
-        <div onClick="{{ item.go }}" style="{{ item.style }}" style-hover="background:color-mix(in oklch, var(--accent) 14%, transparent); color:var(--fg);">{{ item.label }}</div>
-      </sc-for>
-      <a href="outdoors.html" style="font-size:14px; padding:6px 12px; color:var(--muted); border-bottom:1px solid transparent; transition:background 0.25s ease, color 0.25s ease;" style-hover="background:color-mix(in oklch, var(--accent) 14%, transparent); color:var(--fg);">Outdoors</a>
-      <div onClick="{{ toggleTheme }}" title="Toggle theme" style="cursor:pointer; margin-left:8px; width:30px; height:30px; display:flex; align-items:center; justify-content:center; border:1px solid var(--line); border-radius:50%; font-size:13px; color:var(--muted); transition:background 0.25s ease, color 0.25s ease;" style-hover="background:color-mix(in oklch, var(--accent) 14%, transparent); color:var(--fg);">{{ themeIcon }}</div>
+<main id="top">
+  <section class="hero" aria-label="Intro">
+    <canvas id="topo" aria-hidden="true"></canvas>
+    <div class="wrap hero-inner">
+      <p class="mono tnum">37.8719° N · 122.2585° W · berkeley, ca</p>
+      <h1 class="name">ganesh<br>karayi<span class="dot">.</span></h1>
+      <p class="lede">applied math + data science at berkeley. i do <em>quant research</em> on how portfolios behave in a crash, and build the <em>ml systems</em> around it.</p>
+      <div class="cta">
+        <a class="btn" href="assets/Ganesh_Karayi_Resume.pdf">resume (pdf)</a>
+        <a class="btn ghost" href="#contact">get in touch</a>
+      </div>
+
+      <div class="now" role="list" aria-label="Current roles">
+        <div class="row head mono"><span></span><span>right now</span><span>where</span><span class="since">since</span></div>
+        <a class="row" role="listitem" href="#job-shepherd" data-open="shepherd"><i class="live"></i><span class="role">Research Fellow</span><span class="org">Shepherd Ventures, crash-resilient portfolios</span><span class="since tnum">oct 2026</span></a>
+        <a class="row" role="listitem" href="#job-ipick" data-open="ipick"><i class="live"></i><span class="role">AI Engineer</span><span class="org">IPick.AI, ML for equity research</span><span class="since tnum">jan 2026</span></a>
+        <a class="row" role="listitem" href="#job-lgnova" data-open="lgnova"><i class="live"></i><span class="role">Software Engineer</span><span class="org">LG NOVA, the Atlas platform</span><span class="since tnum">aug 2026</span></a>
+      </div>
     </div>
-  </nav>
+  </section>
 
-  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
-    <main style="max-width:940px; width:100%; box-sizing:border-box; margin:0 auto; padding:44px clamp(16px, 5vw, 40px) 40px; flex:1; display:flex; flex-direction:column;">
-      <div style="display:flex; gap:34px; flex-wrap:wrap; align-items:flex-start;">
-        <div style="width:148px; flex-shrink:0;">
-          <div style="width:148px; height:186px; overflow:hidden; background:var(--card);">
-            <img src="assets/portrait.jpg" alt="Ganesh Karayi" style="width:100%; height:100%; object-fit:cover; object-position:50% 30%; display:block;"></img>
-          </div>
-          <a href="assets/Ganesh_Karayi_Resume.pdf" target="_blank" rel="noopener" style="display:block; text-align:center; font-size:13px; padding:7px 0; margin-top:12px; border:1px solid var(--line); color:var(--fg); transition:background 0.25s ease;" style-hover="background:color-mix(in oklch, var(--accent) 14%, transparent);">Resume</a>
-          <div style="display:flex; gap:13px; align-items:center; justify-content:center; margin-top:12px;">
-            <a href="https://www.linkedin.com/in/ganesh-karayi/" title="LinkedIn" aria-label="LinkedIn" style="display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px;">
-              <span style="width:19px; height:19px; background-color:var(--muted); mask-image:url('https://unpkg.com/lucide-static@0.436.0/icons/linkedin.svg'); mask-repeat:no-repeat; mask-size:contain; mask-position:center; -webkit-mask-image:url('https://unpkg.com/lucide-static@0.436.0/icons/linkedin.svg'); -webkit-mask-repeat:no-repeat; -webkit-mask-size:contain; -webkit-mask-position:center; transition:background-color 0.25s ease;" style-hover="background-color:var(--fg);"></span>
-            </a>
-            <a href="https://github.com/GaneshKar1" title="GitHub" aria-label="GitHub" style="display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px;">
-              <span style="width:19px; height:19px; background-color:var(--muted); mask-image:url('https://unpkg.com/lucide-static@0.436.0/icons/github.svg'); mask-repeat:no-repeat; mask-size:contain; mask-position:center; -webkit-mask-image:url('https://unpkg.com/lucide-static@0.436.0/icons/github.svg'); -webkit-mask-repeat:no-repeat; -webkit-mask-size:contain; -webkit-mask-position:center; transition:background-color 0.25s ease;" style-hover="background-color:var(--fg);"></span>
-            </a>
-            <a href="https://instagram.com/ganeshkarayi" title="Instagram" aria-label="Instagram" style="display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px;">
-              <span style="width:19px; height:19px; background-color:var(--muted); mask-image:url('https://unpkg.com/lucide-static@0.436.0/icons/instagram.svg'); mask-repeat:no-repeat; mask-size:contain; mask-position:center; -webkit-mask-image:url('https://unpkg.com/lucide-static@0.436.0/icons/instagram.svg'); -webkit-mask-repeat:no-repeat; -webkit-mask-size:contain; -webkit-mask-position:center; transition:background-color 0.25s ease;" style-hover="background-color:var(--fg);"></span>
-            </a>
-            <a href="mailto:ganeshkarayi@berkeley.edu" title="Email" aria-label="Email" style="display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px;">
-              <span style="width:19px; height:19px; background-color:var(--muted); mask-image:url('https://unpkg.com/lucide-static@0.436.0/icons/mail.svg'); mask-repeat:no-repeat; mask-size:contain; mask-position:center; -webkit-mask-image:url('https://unpkg.com/lucide-static@0.436.0/icons/mail.svg'); -webkit-mask-repeat:no-repeat; -webkit-mask-size:contain; -webkit-mask-position:center; transition:background-color 0.25s ease;" style-hover="background-color:var(--fg);"></span>
-            </a>
-          </div>
-        </div>
-        <div style="flex:1; min-width:300px;">
-          <h1 style="font-family:'Montserrat',sans-serif; font-weight:600; letter-spacing:-0.015em; font-size:38px; line-height:1.05; margin:0 0 12px;">Ganesh Karayi</h1>
-          <p style="font-size:15.5px; line-height:1.6; font-weight:300; color:var(--fg); max-width:560px; margin:0 0 10px;">i'm a junior at <span style="font-weight:500; color:var(--fg);">uc berkeley</span> studying <span style="font-weight:500; color:var(--fg);">applied math and data science</span>. i like problems where the data is messy and being wrong is expensive: <span style="font-weight:500; color:var(--fg);">quantitative research</span> on how portfolios behave in a crash, and building the <span style="font-weight:500; color:var(--fg);">ml and ai systems</span> around it. outside of that i climb, run, and hike.</p>
-          <p style="font-size:15.5px; line-height:1.6; font-weight:300; color:var(--fg); max-width:560px; margin:0 0 10px;">before this, i was <span style="font-weight:500; color:var(--fg);">course staff for cs 61b</span> and built an m&amp;a valuation model at <span style="font-weight:500; color:var(--fg);">dealprint</span>.</p>
-          <p style="font-size:15.5px; line-height:1.6; font-weight:300; color:var(--muted); max-width:560px; margin:0 0 16px;"><a href="outdoors.html" style="color:var(--fg); background:color-mix(in oklch, var(--accent) 26%, transparent); padding:1px 4px; margin:0 -2px; transition:background 0.25s ease;" style-hover="background:color-mix(in oklch, var(--accent) 48%, transparent);">check out my adventures in the outdoors tab if you wanna see something cool :D</a></p>
-        </div>
+  <section id="work">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="mono">work</p>
+        <h2>where the hours go.</h2>
       </div>
+      <div class="jobs" id="jobs"></div>
+      <dialog class="sheet" id="sheet" aria-labelledby="sheetTitle"><button class="sheet-x" type="button" aria-label="Close">✕</button><div class="in" id="sheetBody"></div></dialog>
+    </div>
+  </section>
 
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:40px; margin-top:38px; padding-top:22px; border-top:1px solid var(--line);">
-        <sc-if value="{{ showCurrently }}" hint-placeholder-val="{{ true }}">
-          <div>
-            <div style="font-family:'Montserrat',sans-serif; font-weight:600; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); margin-bottom:12px;">Currently</div>
-            <div style="display:flex; flex-direction:column;">
-              <sc-for list="{{ currently }}" as="c" hint-placeholder-count="3">
-                <div onClick="{{ c.go }}" style="padding:11px 10px; margin:0 -10px; border-bottom:1px solid var(--line); cursor:pointer; transition:background 0.35s ease;" style-hover="background:color-mix(in oklch, var(--accent) 12%, transparent);">
-                  <div style="display:flex; justify-content:space-between; gap:12px; align-items:baseline;">
-                    <div style="font-family:'Montserrat',sans-serif; font-size:16px; font-weight:600;">{{ c.role }}</div>
-                    <div style="font-size:11.5px; color:var(--accent); white-space:nowrap;">{{ c.since }}</div>
-                  </div>
-                  <div style="font-size:13.5px; color:var(--muted); line-height:1.45; margin-top:2px;">{{ c.org }}</div>
-                </div>
-              </sc-for>
-            </div>
+  <section id="projects">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="mono">selected projects</p>
+        <h2>things i built.</h2>
+      </div>
+      <div class="projects">
+        <article class="proj">
+          <figure class="shot mono"><span>screenshot: quantile fit across price tiers</span><span class="file">assets/projects/solar-quantile.png · 1600×1000</span><img src="assets/projects/solar-quantile.png" alt="Quantile regression fits across solar system price tiers" loading="lazy" onerror="this.remove()"></figure>
+          <p class="mono">2026 · python, statsmodels</p>
+          <h3>Solar quantile analysis</h3>
+          <p>Cleaned a 332,000-row California solar dataset and implemented Minimum Distance Estimation for quantile regression following the asymptotic theory, checked against statsmodels. The expensive tail prices nothing like the median.</p>
+          <div class="links"><a href="https://github.com/GaneshKar1/Solar-Pannel-Quantile-Analysis" target="_blank" rel="noopener">view code ↗</a></div>
+        </article>
+        <article class="proj">
+          <figure class="shot mono"><span>screenshot: live gdp dashboard + policy sliders</span><span class="file">assets/projects/ecosim-dashboard.png · 1600×1000</span><img src="assets/projects/ecosim-dashboard.png" alt="Eco Sim dashboard with live GDP chart and policy sliders" loading="lazy" onerror="this.remove()"></figure>
+          <p class="mono">2025 · python, fastapi, react · team</p>
+          <h3>Eco Sim</h3>
+          <p>An agent-based economy of 100K+ households, firms and a government, with emergent pricing, production and labor, and a live dashboard where you move policy sliders and watch GDP respond.</p>
+          <div class="links"><a href="https://github.com/GaneshKar1/Ecosim" target="_blank" rel="noopener">view code ↗</a></div>
+        </article>
+        <article class="proj">
+          <figure class="shot mono"><span>screenshot: spread z-score with entry and exit bands</span><span class="file">assets/projects/pairs-zscore.png · 1600×1000</span><img src="assets/projects/pairs-zscore.png" alt="WMT/TGT spread z-score with entry and exit bands" loading="lazy" onerror="this.remove()"></figure>
+          <p class="mono">2025 · python, pandas, statsmodels</p>
+          <h3>Pairs trading backtester</h3>
+          <p>A statistical pairs engine on WMT/TGT: rolling 60-day OLS hedge ratios so nothing peeks ahead, z-score mean-reversion signals, and modeled transaction costs.</p>
+          <div class="links"><a href="https://github.com/GaneshKar1/Trading-Strat" target="_blank" rel="noopener">view code ↗</a></div>
+        </article>
+      </div>
+      <div class="gh" id="github" hidden>
+        <div class="gh-head"><h3>on github</h3><a class="mono" href="https://github.com/GaneshKar1" target="_blank" rel="noopener">@GaneshKar1 →</a></div>
+        <div class="gh-stats" id="ghStats"></div>
+        <div class="grid-scroll" id="ghGrid"></div>
+        <div class="gh-foot"><span class="mono" id="ghNote"></span><span class="gh-legend mono">less <i style="background:var(--line)"></i><i style="background:var(--amber);opacity:.3"></i><i style="background:var(--amber);opacity:.55"></i><i style="background:var(--amber);opacity:.8"></i><i style="background:var(--amber)"></i> more</span></div>
+        <div class="repos" id="ghRepos"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="outside">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="mono">off the clock</p>
+        <h2>i go uphill on purpose.</h2>
+      </div>
+      <div class="outside">
+        <div class="carousel" aria-roledescription="carousel" aria-label="Photos from my hikes">
+          <div class="ctrack" id="ctrack" tabindex="0" aria-label="Use the arrow keys to move between photos">
+            <figure class="photo">
+              <img src="assets/tahoe-sunrise-s.jpg" alt="Sitting on a granite summit at sunrise above Lake Tahoe">
+              <figcaption class="tnum"><span>rubicon peak · el dorado county</span><span>aug 24, 2026 · sunrise</span></figcaption>
+            </figure>
           </div>
-        </sc-if>
-
+          <button class="cbtn prev" type="button" aria-label="Previous photo">←</button>
+          <button class="cbtn next" type="button" aria-label="Next photo">→</button>
+        </div>
         <div>
-          <div style="font-family:'Montserrat',sans-serif; font-weight:600; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); margin-bottom:12px;">Get in touch</div>
-          <p style="font-size:15px; line-height:1.6; font-weight:300; color:var(--fg); margin:0 0 14px;">if you ever want to talk about anything, whether that be asking me for advice, or just to yap, feel free to message me, or schedule a meeting!</p>
-          <div style="display:flex; gap:8px; flex-wrap:wrap;">
-            <div onClick="{{ openCalendly }}" style="font-size:13.5px; padding:7px 14px; border:1px solid var(--accent); color:var(--accent); cursor:pointer; transition:background 0.25s ease;" style-hover="background:color-mix(in oklch, var(--accent) 16%, transparent);">Schedule 30 min</div>
+          <p class="mono" style="margin-bottom:10px">recent, from my watch</p>
+          <div class="hikes" id="hikes"></div>
+          <div class="next">
+            <p class="mono" style="margin-bottom:4px">up next</p>
+            <div class="item"><b>Berkeley Half Marathon</b><span class="tnum">nov 15, 2026</span></div>
+            <div class="item"><b>Mount Whitney</b><span class="tnum">aug 1, 2027 · 14,505 ft</span></div>
           </div>
+          <p class="more"><a href="outdoors.html">every hike and run →</a></p>
         </div>
       </div>
+    </div>
+  </section>
 
-      <div style="margin-top:32px; flex:1;">
-        <div id="idleGameBox" style="position:relative; width:100%; height:100%; min-height:140px; box-sizing:border-box; overflow:hidden; border:1px solid var(--line); background:var(--card);">
-          <canvas id="idleGameCanvas" style="position:absolute; inset:0; width:100%; height:100%; display:block; cursor:pointer;"></canvas>
-          <div id="idleGameHint" style="position:absolute; top:10px; left:50%; transform:translateX(-50%); font-family:'Work Sans',sans-serif; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); opacity:0.45; pointer-events:none; user-select:none; transition:opacity 0.4s ease;">click a triangle</div>
-          <div id="idleGameScore" style="position:absolute; top:10px; right:12px; font-family:'Montserrat',sans-serif; font-size:13px; letter-spacing:0.08em; color:var(--accent); opacity:0; pointer-events:none; transition:opacity 0.4s ease;">0000</div>
-          <div id="idleGameShop" style="position:absolute; top:10px; left:12px; max-height:calc(100% - 20px); display:flex; flex-direction:column; gap:4px; opacity:0; pointer-events:none; overflow-y:auto; transition:opacity 0.4s ease;"></div>
-        </div>
+  <section class="contact" id="contact">
+    <div class="wrap">
+      <h2 class="ask">just ask<span>.</span></h2>
+      <p class="lede">recruiting, a project, advice, or a trail recommendation. i answer.</p>
+      <div class="cta">
+        <a class="btn" href="https://calendly.com/ganeshkarayi-berkeley/30min" target="_blank" rel="noopener">schedule 30 min →</a>
+        <a class="btn ghost" href="mailto:ganeshkarayi@berkeley.edu">ganeshkarayi@berkeley.edu</a>
       </div>
-    </main>
-  </sc-if>
+      <div class="social">
+        <a href="https://www.linkedin.com/in/ganesh-karayi/" target="_blank" rel="noopener">linkedin</a>
+        <a href="https://github.com/GaneshKar1" target="_blank" rel="noopener">github</a>
+        <a href="https://instagram.com/ganeshkarayi" target="_blank" rel="noopener">instagram</a>
+      </div>
+    </div>
+  </section>
+</main>
 
-  <sc-if value="{{ isExperience }}" hint-placeholder-val="{{ false }}">
-    <main style="max-width:820px; margin:0 auto; padding:56px clamp(16px, 5vw, 40px) 100px;">
-      <h1 style="font-family:'Montserrat',sans-serif; font-weight:600; letter-spacing:-0.015em; font-size:34px; margin:0 0 44px;">Experience</h1>
-      <sc-for list="{{ experiences }}" as="job" hint-placeholder-count="4">
-        <div id="{{ job.slug }}" style="display:flex; gap:20px; padding:28px 0; transition:background 0.6s ease; background:{{ job.glow }};">
-          <div style="width:14px; flex-shrink:0; position:relative;">
-            <div style="position:absolute; left:6px; top:0; bottom:-28px; width:1px; background:var(--line);"></div>
-            <div style="position:absolute; left:2px; top:9px; width:9px; height:9px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 4px var(--bg); transition:box-shadow 0.3s ease;"></div>
-          </div>
-          <div style="flex:1; min-width:0;">
-            <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:baseline;">
-              <div style="font-family:'Montserrat',sans-serif; font-size:21px; font-weight:600; letter-spacing:-0.01em;">{{ job.company }}</div>
-              <div style="font-size:13px; color:var(--muted);">{{ job.location }}</div>
-            </div>
-            <p style="font-size:15px; line-height:1.6; color:var(--fg); margin:6px 0 4px; max-width:640px;">{{ job.context }}</p>
-            <sc-for list="{{ job.roles }}" as="r" hint-placeholder-count="2">
-              <div style="margin-top:16px; padding-left:14px; border-left:2px solid {{ r.rail }};">
-                <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:baseline;">
-                  <div style="font-size:16px; font-weight:600; color:var(--fg);">{{ r.title }}</div>
-                  <div style="font-size:13px; color:var(--accent); white-space:nowrap;">{{ r.dates }}</div>
-                </div>
-                <div style="display:flex; flex-direction:column; gap:7px; margin-top:8px;">
-                  <sc-for list="{{ r.bullets }}" as="b" hint-placeholder-count="3">
-                    <div style="display:flex; gap:10px; font-size:15px; line-height:1.55; color:var(--muted); max-width:660px;">
-                      <span style="color:var(--accent); flex-shrink:0;">–</span><span>{{ b }}</span>
-                    </div>
-                  </sc-for>
-                </div>
-              </div>
-            </sc-for>
-            <div style="font-size:13px; color:var(--muted); opacity:0.8; margin-top:16px;">{{ job.tech }}</div>
-          </div>
-        </div>
-      </sc-for>
-    </main>
-  </sc-if>
+<footer>
+  <div class="wrap mono">
+    <span>© 2026 ganesh karayi</span>
+    <span>contours drawn live from noise</span>
+  </div>
+</footer>
 
-  <sc-if value="{{ isProjects }}" hint-placeholder-val="{{ false }}">
-    <main style="max-width:900px; margin:0 auto; padding:56px clamp(16px, 5vw, 40px) 100px;">
-      <h1 style="font-family:'Montserrat',sans-serif; font-weight:600; letter-spacing:-0.015em; font-size:34px; margin:0 0 44px;">Projects</h1>
-      <sc-for list="{{ projectGroups }}" as="grp" hint-placeholder-count="2">
-        <div style="margin-bottom:48px;">
-          <h2 style="font-family:'Montserrat',sans-serif; font-weight:600; font-size:15px; color:var(--accent); margin:0 0 4px;">{{ grp.title }}</h2>
-          <p style="font-size:14px; color:var(--muted); margin:0 0 8px;">{{ grp.blurb }}</p>
-          <sc-for list="{{ grp.items }}" as="p" hint-placeholder-count="3">
-            <div style="padding:24px 0; border-top:1px solid var(--line);">
-              <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; align-items:baseline; margin-bottom:6px;">
-                <div style="font-family:'Work Sans',sans-serif; font-size:19px; font-weight:600;">{{ p.name }}</div>
-                <div style="font-size:13px; color:var(--muted);">{{ p.meta }}</div>
-              </div>
-              <p style="font-size:15px; line-height:1.6; color:var(--muted); margin:0 0 14px; max-width:680px;">{{ p.desc }}</p>
-              <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                <sc-for list="{{ p.tags }}" as="tag" hint-placeholder-count="4">
-                  <div style="font-size:12px; padding:4px 10px; border:1px solid var(--line); color:var(--muted);">{{ tag }}</div>
-                </sc-for>
-              </div>
-            </div>
-          </sc-for>
-        </div>
-      </sc-for>
-    </main>
-  </sc-if>
-
-  <sc-if value="{{ isCoursework }}" hint-placeholder-val="{{ false }}">
-    <main style="max-width:820px; margin:0 auto; padding:56px clamp(16px, 5vw, 40px) 100px;">
-      <h1 style="font-family:'Montserrat',sans-serif; font-weight:600; letter-spacing:-0.015em; font-size:34px; margin:0 0 8px;">Coursework</h1>
-      <p style="font-size:15px; color:var(--muted); margin:0 0 44px;">UC Berkeley, BA Applied Math &amp; Data Science — Expected May 2028</p>
-      <sc-for list="{{ courseGroups }}" as="g" hint-placeholder-count="4">
-        <div style="padding:26px 0; border-top:1px solid var(--line);">
-          <div style="font-family:'Work Sans',sans-serif; font-size:18px; font-weight:600; margin-bottom:10px;">{{ g.subject }}</div>
-          <p style="font-size:15px; line-height:1.7; color:var(--fg); margin:0;">{{ g.courses }}</p>
-          <sc-if value="{{ g.inProgress }}" hint-placeholder-val="{{ false }}">
-            <p style="font-size:14px; line-height:1.7; color:var(--accent); margin:8px 0 0;">In progress: {{ g.inProgress }}</p>
-          </sc-if>
-        </div>
-      </sc-for>
-    </main>
-  </sc-if>
-
-
-  <footer style="text-align:center; padding:30px; font-size:12px; color:var(--muted); border-top:1px solid var(--line);">© 2026 Ganesh Karayi · updated October 2026</footer>
-</div>
-</div>
-
-</x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;accentColor&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: null, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;oklch(74% 0.06 235)&quot;, &quot;oklch(48% 0.06 245)&quot;, &quot;oklch(78% 0.055 145)&quot;, &quot;oklch(84% 0.012 245)&quot;], &quot;section&quot;: &quot;Theme&quot;}, &quot;showCurrently&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Home&quot;}}">
-// A thin ring that trails the pointer and fills solid in the accent color
-// over anything clickable. Only on devices with a real mouse (touch/coarse
-// pointers keep the native cursor), and only once JS actually initializes it
-// so a script failure can't leave visitors with no visible cursor at all.
-function initCustomCursor() {
-  if (document.getElementById('gkCursor')) return;
-  try {
-    if (window.matchMedia && !window.matchMedia('(pointer: fine)').matches) return;
-  } catch (e) { return; }
-
-  var host = document.querySelector('[data-theme-root]') || document.body;
-  var ring = document.createElement('div');
-  ring.id = 'gkCursor';
-  host.appendChild(ring);
-  document.documentElement.classList.add('gk-custom-cursor');
-
-  var hovering = false;
-
-  function isInteractive(el) {
-    // Walk inline styles directly, not getComputedStyle — the global
-    // `cursor: none !important` rule that hides the native cursor would
-    // otherwise mask every element's real (pre-override) cursor value.
-    while (el && el.nodeType === 1) {
-      // The idle-game canvas is one big cursor:pointer target, but the fill
-      // blob is too coarse for aiming at small triangles — keep the ring
-      // thin there instead of treating the whole box as "clickable".
-      if (el.id === 'idleGameCanvas') return false;
-      if (el.tagName === 'A' && el.hasAttribute('href')) return true;
-      if (el.style && el.style.cursor === 'pointer') return true;
-      el = el.parentElement;
-    }
-    return false;
-  }
-
-  document.addEventListener('mousemove', function (e) {
-    ring.style.transform = 'translate(' + e.clientX + 'px, ' + e.clientY + 'px) translate(-50%, -50%)';
-    ring.classList.add('gk-active');
-    var h = isInteractive(e.target);
-    if (h !== hovering) { hovering = h; ring.classList.toggle('gk-hover', h); }
-  }, { passive: true });
-
-  document.documentElement.addEventListener('mouseleave', function () { ring.classList.remove('gk-active'); });
-  document.documentElement.addEventListener('mouseenter', function () { ring.classList.add('gk-active'); });
-}
-
-function initialDarkMode() {
-  try {
-    const saved = localStorage.getItem('gk-theme');
-    if (saved === 'light') return false;
-    if (saved === 'dark') return true;
-  } catch (e) {}
-  try {
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) return true;
-  } catch (e) {}
-  return false;
-}
-
-function loadIdleGameState() {
-  var def = { points: 0, pointsLevel: 0, turretCount: 0, speedLevel: 0 };
-  try {
-    var raw = localStorage.getItem('gk-idle-game');
-    if (raw) return Object.assign({}, def, JSON.parse(raw));
-  } catch (e) {}
-  return def;
-}
-
-function saveIdleGameState(s) {
-  try {
-    localStorage.setItem('gk-idle-game', JSON.stringify({
-      points: s.points, pointsLevel: s.pointsLevel,
-      turretCount: s.turretCount, speedLevel: s.speedLevel,
-    }));
-  } catch (e) {}
-}
-
-function idleGameCost(base, growth, level) {
-  return Math.round(base * Math.pow(growth, level));
-}
-
-var idleGameHandle = null;
-
-// A tiny idle-clicker/tower-defense easter egg that lives in the whitespace
-// below the home page. It's plain canvas + imperative DOM (not the {{ }}
-// reactive bindings) so its animation loop survives independent of re-renders.
-function mountIdleGame(root) {
-  var canvas = root.querySelector('#idleGameCanvas');
-  var hintEl = root.querySelector('#idleGameHint');
-  var scoreEl = root.querySelector('#idleGameScore');
-  var shopEl = root.querySelector('#idleGameShop');
-  if (!canvas) return { destroy: function () {} };
-  var ctx = canvas.getContext('2d');
-
-  var W = 0, H = 0;
-  var dpr = Math.min(window.devicePixelRatio || 1, 2);
-  var gs = loadIdleGameState();
-  var MAX_TURRETS = 5;
-  var TARGET_TRIANGLES = 10;
-  var PROJECTILE_SPEED = 240;
-  var BASE_FIRE_INTERVAL = 1.3;
-  var TURRET_TURN_SPEED = Math.PI * 1.1; // radians/sec, max swivel rate
-  var AIM_TOLERANCE = 0.12; // radians; must be roughly on-target to fire
-
-  var triangles = [];
-  var turrets = [];
-  var projectiles = [];
-  var shards = [];
-  var raf = null;
-  var last = null;
-  var destroyed = false;
-  // Every fresh mount starts paused, even if there's saved progress —
-  // only a click on a triangle resumes turrets/scoring for this session.
-  var running = false;
-
-  function rand(a, b) { return a + Math.random() * (b - a); }
-
-  function angleDiff(a, b) {
-    var d = (b - a) % (Math.PI * 2);
-    if (d > Math.PI) d -= Math.PI * 2;
-    if (d < -Math.PI) d += Math.PI * 2;
-    return d;
-  }
-
-  function spawnTriangle() {
-    var r = rand(8, 13);
-    var margin = r + 4;
-    var x = rand(margin, Math.max(margin + 1, W - margin));
-    var y = rand(margin, Math.max(margin + 1, H - margin));
-    var speed = rand(14, 30);
-    var dir = rand(0, Math.PI * 2);
-    triangles.push({
-      x: x, y: y, r: r,
-      vx: Math.cos(dir) * speed, vy: Math.sin(dir) * speed,
-      rot: rand(0, Math.PI * 2), vrot: rand(-0.6, 0.6),
+<script src="outdoors-data.js"></script>
+<script src="github-data.js"></script>
+<script>
+/* theme: follow the system until toggled, then remember */
+(function(){
+  const root=document.documentElement;
+  try{const s=localStorage.getItem('gk-theme');if(s==='light'||s==='dark')root.dataset.theme=s;}catch(e){}
+  function setTheme(next,btn){
+    const apply=()=>{root.dataset.theme=next;};
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches){apply();return;}
+    if(!document.startViewTransition){root.classList.add('theme-fade');apply();setTimeout(()=>root.classList.remove('theme-fade'),500);return;}
+    const r=btn.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2;
+    const end=Math.hypot(Math.max(x,innerWidth-x),Math.max(y,innerHeight-y));
+    document.startViewTransition(apply).ready.then(()=>{
+      root.animate({clipPath:[`circle(0px at ${x}px ${y}px)`,`circle(${end}px at ${x}px ${y}px)`]},
+        {duration:600,easing:'cubic-bezier(.4,0,.2,1)',pseudoElement:'::view-transition-new(root)'});
     });
   }
+  document.getElementById('themeBtn').addEventListener('click',e=>{
+    const cur=root.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+    const next=cur==='dark'?'light':'dark';
+    setTheme(next,e.currentTarget);
+    try{localStorage.setItem('gk-theme',next);}catch(e){}
+  });
+})();
 
-  function ensureTriangles() {
-    while (triangles.length < TARGET_TRIANGLES) spawnTriangle();
-  }
-
-  function layoutTurrets() {
-    var n = turrets.length;
-    for (var i = 0; i < n; i++) {
-      turrets[i].x = ((i + 1) / (n + 1)) * W;
-      turrets[i].y = H - 14;
-    }
-  }
-
-  function addTurret() {
-    turrets.push({ x: 0, y: 0, angle: -Math.PI / 2, fireTimer: rand(0, 0.5) });
-    layoutTurrets();
-  }
-
-  for (var gi = 0; gi < gs.turretCount; gi++) addTurret();
-
-  function resize() {
-    var rect = root.getBoundingClientRect();
-    W = Math.max(1, rect.width);
-    H = Math.max(1, rect.height);
-    canvas.width = Math.round(W * dpr);
-    canvas.height = Math.round(H * dpr);
-    layoutTurrets();
-  }
-  resize();
-  ensureTriangles();
-
-  var ro = null;
-  try {
-    ro = new ResizeObserver(function () { resize(); });
-    ro.observe(root);
-  } catch (e) {
-    window.addEventListener('resize', resize);
-  }
-
-  function colors() {
-    // Read from the canvas itself, not document.documentElement — the live
-    // theme variables are set on the [data-theme-root] div (a descendant of
-    // <body>), so the <html> element only ever sees the static dark-mode
-    // fallback values baked into the stylesheet, regardless of the active
-    // theme. The canvas inherits the real, current values correctly.
-    var cs = getComputedStyle(canvas);
-    return {
-      line: cs.getPropertyValue('--line').trim() || '#888',
-      muted: cs.getPropertyValue('--muted').trim() || '#888',
-      fg: cs.getPropertyValue('--fg').trim() || '#eee',
-    };
-  }
-
-  function pointsPerKill() { return 1 + gs.pointsLevel; }
-  function fireInterval() { return BASE_FIRE_INTERVAL / (1 + gs.speedLevel * 0.22); }
-
-  function updateScoreEl() {
-    scoreEl.textContent = String(gs.points).padStart(4, '0');
-  }
-
-  function renderShop() {
-    var items = [];
-    items.push({
-      label: 'Increase Points', sub: '+1 per kill',
-      cost: idleGameCost(8, 1.55, gs.pointsLevel),
-      onBuy: function () { gs.pointsLevel++; }
-    });
-    if (gs.turretCount < MAX_TURRETS) {
-      items.push({
-        label: 'Buy Turret', sub: gs.turretCount + '/' + MAX_TURRETS,
-        cost: idleGameCost(40, 2.1, gs.turretCount),
-        onBuy: function () { gs.turretCount++; addTurret(); }
-      });
-    }
-    if (gs.turretCount >= 1) {
-      items.push({
-        label: 'Turret Speed', sub: 'lvl ' + gs.speedLevel,
-        cost: idleGameCost(25, 1.6, gs.speedLevel),
-        onBuy: function () { gs.speedLevel++; }
-      });
-    }
-
-    shopEl.innerHTML = '';
-    items.forEach(function (it) {
-      var affordable = gs.points >= it.cost;
-      var btn = document.createElement('div');
-      btn.style.cssText = 'font-family:"Work Sans",sans-serif; font-size:11px; line-height:1.2; padding:4px 8px; white-space:nowrap; ' +
-        'border:1px solid var(--line); cursor:pointer; user-select:none; background:var(--bg); ' +
-        'color:' + (affordable ? 'var(--fg)' : 'var(--muted)') + '; opacity:' + (affordable ? '1' : '0.55') + '; ' +
-        'transition:background 0.2s ease, opacity 0.2s ease;';
-      btn.innerHTML = '<span style="font-weight:600;">' + it.label + '</span>' +
-        '<span style="opacity:0.75;"> &middot; ' + it.sub + ' &middot; ' + it.cost + '</span>';
-      btn.addEventListener('mouseenter', function () { if (gs.points >= it.cost) btn.style.background = 'color-mix(in oklch, var(--accent) 14%, transparent)'; });
-      btn.addEventListener('mouseleave', function () { btn.style.background = 'var(--bg)'; });
-      btn.addEventListener('click', function () {
-        if (gs.points < it.cost) return;
-        gs.points -= it.cost;
-        it.onBuy();
-        updateScoreEl();
-        saveIdleGameState(gs);
-        renderShop();
-      });
-      shopEl.appendChild(btn);
-    });
-  }
-
-  function resume() {
-    if (running) return;
-    running = true;
-    hintEl.style.opacity = '0';
-    scoreEl.style.opacity = '1';
-    shopEl.style.opacity = '1';
-    shopEl.style.pointerEvents = 'auto';
-  }
-
-  function spawnShards(t) {
-    var count = 5;
-    for (var i = 0; i < count; i++) {
-      var ang = rand(0, Math.PI * 2);
-      var spd = rand(55, 120);
-      shards.push({
-        x: t.x, y: t.y, r: Math.max(2.5, t.r * rand(0.5, 0.75)),
-        vx: Math.cos(ang) * spd + t.vx * 0.25, vy: Math.sin(ang) * spd + t.vy * 0.25,
-        rot: rand(0, Math.PI * 2), vrot: rand(-5, 5),
-        life: 0.55, maxLife: 0.55,
-      });
-    }
-  }
-
-  function killTriangle(idx) {
-    spawnShards(triangles[idx]);
-    triangles.splice(idx, 1);
-    gs.points += pointsPerKill();
-    ensureTriangles();
-    updateScoreEl();
-    saveIdleGameState(gs);
-    renderShop();
-  }
-
-  function onClick(e) {
-    var rect = canvas.getBoundingClientRect();
-    var px = e.clientX - rect.left;
-    var py = e.clientY - rect.top;
-    for (var i = triangles.length - 1; i >= 0; i--) {
-      var t = triangles[i];
-      var dx = px - t.x, dy = py - t.y;
-      if (dx * dx + dy * dy <= (t.r + 6) * (t.r + 6)) {
-        if (!running) resume();
-        killTriangle(i);
-        return;
-      }
-    }
-  }
-  canvas.addEventListener('click', onClick);
-
-  updateScoreEl();
-  renderShop();
-
-  function nearestTriangle(x, y) {
-    var best = null, bestD = Infinity;
-    for (var i = 0; i < triangles.length; i++) {
-      var t = triangles[i];
-      var dx = t.x - x, dy = t.y - y;
-      var d = dx * dx + dy * dy;
-      if (d < bestD) { bestD = d; best = t; }
-    }
-    return best;
-  }
-
-  function drawTriangleShape(t) {
-    ctx.save();
-    ctx.translate(t.x, t.y);
-    ctx.rotate(t.rot);
-    ctx.beginPath();
-    ctx.moveTo(0, -t.r);
-    ctx.lineTo(t.r * 0.87, t.r * 0.6);
-    ctx.lineTo(-t.r * 0.87, t.r * 0.6);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
-  }
-
-  function drawTurret(tu, c) {
-    ctx.save();
-    ctx.translate(tu.x, tu.y);
-    ctx.fillStyle = c.line;
-    ctx.beginPath();
-    ctx.moveTo(0, -10);
-    ctx.lineTo(9, 8);
-    ctx.lineTo(-9, 8);
-    ctx.closePath();
-    ctx.fill();
-    ctx.translate(0, -10);
-    ctx.rotate(tu.angle + Math.PI / 2);
-    ctx.fillStyle = c.fg;
-    ctx.fillRect(-2.5, -14, 5, 14);
-    ctx.beginPath();
-    ctx.arc(0, 0, 3, 0, Math.PI * 2);
-    ctx.fillStyle = c.line;
-    ctx.fill();
-    ctx.restore();
-  }
-
-  function draw() {
-    ctx.save();
-    ctx.scale(dpr, dpr);
-    ctx.clearRect(0, 0, W, H);
-    var c = colors();
-
-    ctx.fillStyle = c.muted;
-    ctx.globalAlpha = 0.85;
-    for (var i = 0; i < triangles.length; i++) drawTriangleShape(triangles[i]);
-
-    for (var s = 0; s < shards.length; s++) {
-      var sh = shards[s];
-      ctx.globalAlpha = 0.85 * (sh.life / sh.maxLife);
-      drawTriangleShape(sh);
-    }
-    ctx.globalAlpha = 1;
-
-    for (var j = 0; j < turrets.length; j++) drawTurret(turrets[j], c);
-
-    ctx.fillStyle = c.muted;
-    for (var p = 0; p < projectiles.length; p++) {
-      var pr = projectiles[p];
+/* topo hero: slow drifting contours, no interaction */
+(function(){
+  const cv=document.getElementById('topo'),ctx=cv.getContext('2d'),hero=cv.parentElement;
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const CELL=11,LEVELS=13;
+  let W=0,H=0,cols=0,rows=0,field=null;
+  const P=new Uint8Array(512);{const p=[...Array(256).keys()];for(let i=255;i>0;i--){const j=(Math.sin(i*91.7)*43758.5453%1+1)%1*(i+1)|0;[p[i],p[j]]=[p[j],p[i]];}for(let i=0;i<512;i++)P[i]=p[i&255];}
+  const fade=t=>t*t*(3-2*t);
+  function vn(x,y){const xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi,a=P[(xi&255)+P[yi&255]],b=P[((xi+1)&255)+P[yi&255]],c=P[(xi&255)+P[(yi+1)&255]],d=P[((xi+1)&255)+P[(yi+1)&255]];const u=fade(xf),v=fade(yf);return((a+(b-a)*u)+((c+(d-c)*u)-(a+(b-a)*u))*v)/255;}
+  const fbm=(x,y)=>vn(x,y)*.55+vn(x*2.1+5.2,y*2.1+1.3)*.3+vn(x*4.3+9.1,y*4.3+3.7)*.15;
+  function size(){const r=hero.getBoundingClientRect(),dpr=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);cols=Math.ceil(W/CELL)+1;rows=Math.ceil(H/CELL)+1;field=new Float32Array(cols*rows);}
+  const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  let colLine,colAmber,colorTick=0;
+  function draw(t){
+    if(colorTick--<=0){colLine=css('--contour');colAmber=css('--amber');colorTick=60;}
+    const s=.0042,ox=t*.018,oy=t*.007,mx=W*.78,my=H*.36,mr=Math.min(W,H)*.55;
+    for(let j=0;j<rows;j++){const y=j*CELL;for(let i=0;i<cols;i++){const x=i*CELL;
+      field[j*cols+i]=fbm(x*s+ox,y*s+oy)*.62+.36*Math.exp(-((x-mx)**2+(y-my)**2)/(mr*mr)*2.2);}}
+    ctx.clearRect(0,0,W,H);
+    const lo=.18,step=(.98-lo)/LEVELS;
+    for(let k=0;k<=LEVELS;k++){
+      const L=lo+k*step,top=k>=LEVELS-3;
       ctx.beginPath();
-      ctx.arc(pr.x, pr.y, 3, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    ctx.restore();
-  }
-
-  function step(ts) {
-    if (destroyed) return;
-    if (last == null) last = ts;
-    var dt = Math.min(0.05, (ts - last) / 1000);
-    last = ts;
-
-    for (var i = 0; i < triangles.length; i++) {
-      var t = triangles[i];
-      t.x += t.vx * dt; t.y += t.vy * dt; t.rot += t.vrot * dt;
-      if (t.x - t.r < 0) { t.x = t.r; t.vx = Math.abs(t.vx); }
-      if (t.x + t.r > W) { t.x = W - t.r; t.vx = -Math.abs(t.vx); }
-      if (t.y - t.r < 0) { t.y = t.r; t.vy = Math.abs(t.vy); }
-      if (t.y + t.r > H) { t.y = H - t.r; t.vy = -Math.abs(t.vy); }
-    }
-
-    for (var sh = shards.length - 1; sh >= 0; sh--) {
-      var s = shards[sh];
-      s.x += s.vx * dt; s.y += s.vy * dt; s.rot += s.vrot * dt;
-      s.vx *= 0.9; s.vy *= 0.9;
-      s.life -= dt;
-      if (s.life <= 0) shards.splice(sh, 1);
-    }
-    for (var a = 0; a < triangles.length; a++) {
-      for (var b = a + 1; b < triangles.length; b++) {
-        var ta = triangles[a], tb = triangles[b];
-        var dx = tb.x - ta.x, dy = tb.y - ta.y;
-        var dist = Math.sqrt(dx * dx + dy * dy) || 0.001;
-        var minDist = ta.r + tb.r;
-        if (dist < minDist) {
-          var nx = dx / dist, ny = dy / dist;
-          var overlap = (minDist - dist) / 2;
-          ta.x -= nx * overlap; ta.y -= ny * overlap;
-          tb.x += nx * overlap; tb.y += ny * overlap;
-          var rvx = tb.vx - ta.vx, rvy = tb.vy - ta.vy;
-          var rel = rvx * nx + rvy * ny;
-          if (rel < 0) {
-            ta.vx += nx * rel; ta.vy += ny * rel;
-            tb.vx -= nx * rel; tb.vy -= ny * rel;
-          }
-        }
+      for(let j=0;j<rows-1;j++)for(let i=0;i<cols-1;i++){
+        const a=field[j*cols+i],b=field[j*cols+i+1],c=field[(j+1)*cols+i+1],d=field[(j+1)*cols+i];
+        const idx=(a>L?8:0)|(b>L?4:0)|(c>L?2:0)|(d>L?1:0);
+        if(idx===0||idx===15)continue;
+        const x=i*CELL,y=j*CELL;
+        const T=[x+CELL*(L-a)/(b-a),y],R=[x+CELL,y+CELL*(L-b)/(c-b)],B=[x+CELL*(L-d)/(c-d),y+CELL],Lf=[x,y+CELL*(L-a)/(d-a)];
+        const seg=(p,q)=>{ctx.moveTo(p[0],p[1]);ctx.lineTo(q[0],q[1]);};
+        switch(idx){case 1:case 14:seg(Lf,B);break;case 2:case 13:seg(B,R);break;case 3:case 12:seg(Lf,R);break;
+          case 4:case 11:seg(T,R);break;case 6:case 9:seg(T,B);break;case 7:case 8:seg(Lf,T);break;
+          case 5:seg(Lf,T);seg(B,R);break;case 10:seg(T,R);seg(Lf,B);break;}
       }
-    }
-
-    var fInterval = fireInterval();
-    for (var ti = 0; running && ti < turrets.length; ti++) {
-      var tu = turrets[ti];
-      var target = nearestTriangle(tu.x, tu.y);
-      var desired = tu.angle;
-      if (target) {
-        var tdx = target.x - tu.x, tdy = target.y - tu.y;
-        var tdist = Math.sqrt(tdx * tdx + tdy * tdy) || 1;
-        var lead = tdist / PROJECTILE_SPEED;
-        var aimX = target.x + target.vx * lead;
-        var aimY = target.y + target.vy * lead;
-        desired = Math.atan2(aimY - tu.y, aimX - tu.x);
-      }
-      var diff = angleDiff(tu.angle, desired);
-      var maxStep = TURRET_TURN_SPEED * dt;
-      if (Math.abs(diff) <= maxStep) tu.angle = desired;
-      else tu.angle += (diff > 0 ? 1 : -1) * maxStep;
-      tu.angle = Math.atan2(Math.sin(tu.angle), Math.cos(tu.angle));
-
-      tu.fireTimer -= dt;
-      if (target && tu.fireTimer <= 0 && Math.abs(angleDiff(tu.angle, desired)) < AIM_TOLERANCE) {
-        tu.fireTimer = fInterval;
-        projectiles.push({
-          x: tu.x, y: tu.y - 10,
-          vx: Math.cos(tu.angle) * PROJECTILE_SPEED,
-          vy: Math.sin(tu.angle) * PROJECTILE_SPEED,
-          life: 2.5,
-        });
-      }
-    }
-
-    for (var p = projectiles.length - 1; p >= 0; p--) {
-      var pr = projectiles[p];
-      pr.x += pr.vx * dt; pr.y += pr.vy * dt; pr.life -= dt;
-      var hit = -1;
-      for (var k = 0; k < triangles.length; k++) {
-        var tk = triangles[k];
-        var ddx = pr.x - tk.x, ddy = pr.y - tk.y;
-        if (ddx * ddx + ddy * ddy <= (tk.r + 3) * (tk.r + 3)) { hit = k; break; }
-      }
-      if (hit >= 0) {
-        projectiles.splice(p, 1);
-        killTriangle(hit);
-        continue;
-      }
-      if (pr.life <= 0 || pr.x < -20 || pr.x > W + 20 || pr.y < -20 || pr.y > H + 20) {
-        projectiles.splice(p, 1);
-      }
-    }
-
-    draw();
-    raf = requestAnimationFrame(step);
-  }
-
-  raf = requestAnimationFrame(step);
-
-  return {
-    destroy: function () {
-      destroyed = true;
-      if (raf) cancelAnimationFrame(raf);
-      canvas.removeEventListener('click', onClick);
-      if (ro) ro.disconnect(); else window.removeEventListener('resize', resize);
-    }
-  };
-}
-
-class Component extends DCLogic {
-  state = { page: 'home', dark: initialDarkMode(), focus: null };
-
-  initIdleGame() {
-    if (idleGameHandle) return;
-    var root = document.getElementById('idleGameBox');
-    if (root) idleGameHandle = mountIdleGame(root);
-  }
-
-  teardownIdleGame() {
-    if (idleGameHandle) {
-      idleGameHandle.destroy();
-      idleGameHandle = null;
+      ctx.strokeStyle=top?colAmber:colLine;ctx.globalAlpha=top?.5+.15*(k-(LEVELS-3)):1;
+      ctx.lineWidth=(k%4===0||top)?1.15:.7;ctx.stroke();ctx.globalAlpha=1;
     }
   }
+  let t0=performance.now(),last=0,visible=true;
+  function frame(now){if(now-last>40){draw((now-t0)/1000);last=now;}if(visible)requestAnimationFrame(frame);}
+  new IntersectionObserver(es=>{const v=es[0].isIntersecting;if(v&&!visible&&!reduce){visible=true;requestAnimationFrame(frame);}visible=v;}).observe(hero);
+  addEventListener('resize',()=>{size();draw(reduce?0:(performance.now()-t0)/1000);});
+  new MutationObserver(()=>{colorTick=0;if(reduce)draw(0);}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{colorTick=0;});
+  size();
+  if(reduce)draw(0);else requestAnimationFrame(frame);
+})();
 
-  componentDidMount() {
-    initCustomCursor();
-    // Allow the outdoors page to link back into a specific section.
-    var hash = (location.hash || '').replace('#', '');
-    var targetPage = ['home','experience','projects','coursework'].indexOf(hash) >= 0 ? hash : this.state.page;
-    if (hash && targetPage !== this.state.page) this.setState({ page: targetPage });
-    this.syncBody();
-    if (targetPage === 'home') this.initIdleGame();
+/* work: ordered by relevance to quant / ML, not by date */
+const JOBS=[
+ {id:'shepherd',open:true,when:'jan 2026 – now',co:'Shepherd Ventures',sub:'San Diego, CA · promoted twice in 2026',one:'Quant research on portfolios built to hold up through market crashes.',
+  roles:[
+   {t:'Research Fellow',d:'Oct 2026 – Present',b:['Build the research infrastructure behind the crash-resilience model: a cached parameter-sweep engine, a config-driven toolkit, and an automated parity check against the original research code','Audit results for look-ahead bias and data errors, and write the replication guides teammates use to verify the work independently']},
+   {t:'Senior Quantitative Analyst',d:'Apr 2026 – Oct 2026',b:['Built stress-testing and portfolio-construction models for crash scenarios using clustering, mean-variance optimization, and volatility forecasting','Designed a market regime detection system that separates noise alarms from real corrections, and co-led the internal AI research team']},
+   {t:'Quantitative Analyst',d:'Jan 2026 – Apr 2026',b:['Traced corporate actions (splits and spin-offs) that were distorting backtest results and corrected the price data']}],
+  tech:'python · k-means · mean-variance optimization · garch · holt smoothing · backtesting'},
+ {id:'ipick',when:'jan 2026 – now',co:'IPick.AI',sub:'Cupertino, CA · via Open Project',one:'ML and finance tooling for an equity research platform.',
+  roles:[{t:'AI Engineer',d:'Jan 2026 – Present',b:['Coordinate three ML workstreams (26 engineers) building stock recommendation, portfolio analysis, and reinforcement learning systems','Designed a multi-repo architecture of versioned Python packages with shared typed contracts, plus a test-driven onboarding system (75 autograded tests) that has new engineers shipping in their first sprint','Led a team of 14 to ship a live equity knowledge graph of thousands of public companies, classifying relationships from 8,000+ SEC filings with FinBERT and the Claude API']}],
+  tech:'python · flask · postgresql · docker · aws · finbert · claude api · d3.js'},
+ {id:'lgnova',when:'aug 2026 – now',co:'LG NOVA',sub:'Remote · Atlas platform',one:'Engineering on an AI document-analysis and company-data platform.',
+  roles:[{t:'Software Engineer',d:'Aug 2026 – Present',b:['Root-caused silent data loss from a 500-row cap in a Flask/PostgreSQL endpoint and shipped keyset pagination','Expanded search coverage of PitchBook financial fields by 233%, verified by a 38-test suite','Restored PowerPoint uploads to the AI document pipeline, adding PDF conversion as a fallback']}],
+  tech:'python · flask · postgresql · react · typescript · gitlab'},
+ {id:'dealprint',when:'aug 2025 – jan 2026',co:'DealPrint',sub:'Berkeley, CA',one:'A valuation engine for small-business acquisitions, built end to end.',
+  roles:[{t:'Data Science Research Intern',d:'Aug 2025 – Jan 2026',b:['Collected 50,000 M&A transactions spanning 40 years with a custom Chrome extension','Built a KNN comparables engine weighted by industry, geography, and deal type, feeding a regression model (0.25 MAPE on held-out deals)','Shipped it as an interactive Streamlit dashboard']}],
+  tech:'python · pandas · scikit-learn · streamlit · plotly'},
+ {id:'rrid',when:'aug 2026 – now',co:'Rapid Reviews\\Infectious Diseases',sub:'Berkeley, CA',one:'Data team for an open peer-review journal of infectious-disease preprints.',
+  roles:[{t:'Data Science Researcher',d:'Aug 2026 – Present',b:['Building automation that keeps every active preprint stocked with AI-suggested reviewers, replacing a manual process','Building alerts that report why a data issue fired, and investigating automatic conflict-of-interest rejections']}],
+  tech:'python · automation · data pipelines'},
+ {id:'op',when:'aug 2025 – now',co:'Open Project',sub:"Berkeley, CA · Berkeley's largest tech club",one:'Shipping software for real clients every semester, 300+ members.',
+  roles:[{t:'VP of Projects',d:'May 2026 – Present',b:['Direct 40+ project managers across 15+ client projects, from cold outreach and client sourcing through delivery','Interviewed and selected 50+ PM candidates']},{t:'Project Manager',d:'Aug 2025 – May 2026',b:['Led the Nexus client project end to end, from scoping with the client to shipping']}],
+  tech:'project management · client delivery · recruiting'},
+ {id:'61b',when:'jan – aug 2026',co:'UC Berkeley EECS',sub:'CS 61B / 61BL course staff',one:'Taught data structures in a 1,100-student course.',
+  roles:[{t:'Course Staff',d:'Jan 2026 – Aug 2026',b:['Co-taught weekly discussion sections and ran daily labs for 20 students, debugging Java in real time','Delivered a midterm review to about 100 students']}],
+  tech:'java · data structures · algorithms · teaching'}
+];
+(function(){
+  const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  const grid=document.getElementById('jobs'),sheet=document.getElementById('sheet'),body=document.getElementById('sheetBody');
+  const reduce=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+  grid.innerHTML=JOBS.map((j,i)=>{
+    const live=/now/.test(j.when),tech=j.tech.split(' · ').slice(0,3).join(' · ');
+    const role=j.roles[0].t+(j.roles.length>1?` · +${j.roles.length-1} earlier`:'');
+    return `<button class="card${i===0?' wide':''}" type="button" data-job="${j.id}" aria-haspopup="dialog">
+      <span class="c-when mono tnum">${live?'<i class="live"></i>':''}${j.when}</span>
+      <span class="c-co">${esc(j.co)}</span><span class="c-role">${esc(role)}</span>
+      <span class="c-one">${esc(j.one)}</span>
+      <span class="c-foot"><span class="c-tech">${esc(tech)}</span><span class="c-plus" aria-hidden="true">+</span></span></button>`;
+  }).join('')+`<a class="card resume" href="assets/Ganesh_Karayi_Resume.pdf"><span class="mono">the full version</span><span class="c-co">resume ↗</span></a>`;
+
+  // the sheet zooms out of whatever was clicked (a card, or a "right now" row), and back into it on close
+  let from=null,busy=false;
+  function flip(el,dir){
+    const a=el.getBoundingClientRect(),b=sheet.getBoundingClientRect();
+    const t=`translate(${a.left-b.left}px,${a.top-b.top}px) scale(${a.width/b.width},${a.height/b.height})`;
+    const opts={duration:dir>0?460:320,easing:dir>0?'cubic-bezier(.2,.8,.2,1)':'cubic-bezier(.4,0,.6,1)'};
+    body.animate(dir>0?[{opacity:0},{opacity:0,offset:.35},{opacity:1}]:[{opacity:1},{opacity:0,offset:.5},{opacity:0}],opts);
+    sheet.animate({opacity:dir>0?[0,1]:[1,0]},{...opts,pseudoElement:'::backdrop'});
+    const frames=[{transform:t,opacity:.6},{transform:'none',opacity:1}];
+    return sheet.animate(dir>0?frames:frames.reverse(),opts).finished;
   }
-
-  componentDidUpdate(prevProps) {
-    this.syncBody();
-    if (this.state.page === 'home') this.initIdleGame();
-    else this.teardownIdleGame();
+  function open(id,el){
+    const j=JOBS.find(x=>x.id===id);if(!j||busy)return;
+    from=el;
+    body.innerHTML=`<div><p class="mono tnum">${j.when}</p><h3 id="sheetTitle" style="margin-top:10px">${esc(j.co)}</h3><p class="s-sub">${esc(j.sub)}</p></div>
+      <p>${esc(j.one)}</p>
+      ${j.roles.map(r=>`<div class="s-role"><h4>${esc(r.t)} · ${r.d}</h4><ul>${r.b.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`).join('')}
+      <div class="chips">${j.tech.split(' · ').map(t=>`<span class="chip">${esc(t)}</span>`).join('')}</div>`;
+    sheet.showModal();body.scrollTop=0;
+    if(!reduce()&&el){busy=true;flip(el,1).catch(()=>{}).finally(()=>busy=false);}
   }
-
-  calendlyUrl() {
-    var dark = this.state.dark;
-    var acc = dark ? '93b6cf' : '46647d';
-    return 'https://calendly.com/ganeshkarayi-berkeley/30min?hide_gdpr_banner=1' +
-      '&background_color=' + (dark ? '1a1c1f' : 'f9f4e9') +
-      '&text_color=' + (dark ? 'e3e5e8' : '2b3a47') +
-      '&primary_color=' + acc;
+  let closing=false;
+  async function close(){
+    if(!sheet.open||closing)return;
+    closing=true;
+    // closing mid-open (a quick Esc) snaps the open animation to its end first
+    if(busy)sheet.getAnimations({subtree:true}).forEach(a=>a.finish());
+    if(!reduce()&&from&&from.isConnected){busy=true;try{await flip(from,-1);}catch(e){}busy=false;}
+    sheet.close();closing=false;
   }
+  sheet.addEventListener('close',()=>{if(from)from.focus({preventScroll:true});});
+  sheet.addEventListener('cancel',e=>{e.preventDefault();close();});   // Esc
+  sheet.addEventListener('click',e=>{if(e.target===sheet)close();});   // click outside
+  sheet.querySelector('.sheet-x').addEventListener('click',close);
+  grid.addEventListener('click',e=>{const c=e.target.closest('[data-job]');if(c)open(c.dataset.job,c);});
+  document.querySelectorAll('[data-open]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();open(a.dataset.open,a);}));
+})();
 
-  openCalendly() {
-    if (window.Calendly) window.Calendly.initPopupWidget({ url: this.calendlyUrl() });
-    else window.open('https://calendly.com/ganeshkarayi-berkeley/30min', '_blank');
+/* github: contribution grid + recent public repos, from tools/build_github.py */
+(function(){
+  const G=window.GITHUB;if(!G||!G.days.length)return;
+  document.getElementById('github').hidden=false;
+  const days=G.days,counts=days.map(d=>d[1]),nz=counts.filter(c=>c>0).sort((a,b)=>a-b);
+  const q=f=>nz[Math.min(nz.length-1,Math.floor(nz.length*f))]||1;
+  const cut=[q(.25),q(.5),q(.75)];
+  const lvl=c=>c===0?0:c<=cut[0]?1:c<=cut[1]?2:c<=cut[2]?3:4;
+  const op=[0,.3,.55,.8,1];
+  // weeks start on Sunday, like GitHub's own grid
+  const first=new Date(days[0][0]+'T12:00:00'),pad=first.getDay(),C=11,Gp=2,L=26,T=16;
+  let cells='',months='',lastMonth=-1;
+  days.forEach(([d,c],i)=>{
+    const k=i+pad,col=Math.floor(k/7),row=k%7,x=L+col*(C+Gp),y=T+row*(C+Gp),dt=new Date(d+'T12:00:00');
+    const fill=c?`fill="var(--amber)" fill-opacity="${op[lvl(c)]}"`:'fill="var(--line)"';
+    const label=dt.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    cells+=`<rect x="${x}" y="${y}" width="${C}" height="${C}" rx="2" ${fill}><title>${c||'No'} contribution${c===1?'':'s'} on ${label}</title></rect>`;
+    if(row===0||i===0){const m=dt.getMonth();if(m!==lastMonth&&dt.getDate()<=7){months+=`<text x="${x}" y="10">${dt.toLocaleDateString('en-US',{month:'short'}).toLowerCase()}</text>`;lastMonth=m;}}
+  });
+  const cols=Math.ceil((days.length+pad)/7),W=L+cols*(C+Gp),H=T+7*(C+Gp);
+  const dl=['','mon','','wed','','fri',''].map((t,r)=>t?`<text x="0" y="${T+r*(C+Gp)+9}">${t}</text>`:'').join('');
+  const box=document.getElementById('ghGrid');
+  box.innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${G.total} GitHub contributions in the last year">${months}${dl}${cells}</svg>`;
+  box.scrollLeft=box.scrollWidth; // phones start on the most recent months
+
+  // stats
+  let best=0,run=0;counts.forEach(c=>{run=c?run+1:0;best=Math.max(best,run);});
+  const byMonth={};days.forEach(([d,c])=>{const k=d.slice(0,7);byMonth[k]=(byMonth[k]||0)+c;});
+  const top=Object.entries(byMonth).sort((a,b)=>b[1]-a[1])[0];
+  const topLabel=new Date(top[0]+'-15').toLocaleDateString('en-US',{month:'short',year:'numeric'}).toLowerCase();
+  const st=(v,l)=>`<div><b>${v}</b><span>${l}</span></div>`;
+  document.getElementById('ghStats').innerHTML=st(G.total,'contributions, last year')+st(nz.length,'active days')+st(best+' days','longest streak')+st(topLabel,'busiest month');
+  document.getElementById('ghNote').textContent=G.private?`${G.private} of these were in private repos`:'';
+
+  // recent public repos that aren't already featured above
+  const featured=new Set([...document.querySelectorAll('.proj .links a')].map(a=>a.href.split('/').pop().toLowerCase()));
+  const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  document.getElementById('ghRepos').innerHTML=G.repos.filter(r=>r.desc&&!featured.has(r.name.toLowerCase())).slice(0,4).map(r=>
+    `<a class="repo" href="${r.url}" target="_blank" rel="noopener"><b>${esc(r.name)}</b><p>${esc(r.desc)}</p><span class="mono">${esc(r.lang||'')} · ${new Date(r.pushed+'T12:00:00').toLocaleDateString('en-US',{month:'short',year:'numeric'}).toLowerCase()}</span></a>`).join('');
+})();
+
+/* photo carousel: every hike photo from the Garmin data, sunrise shot first */
+(function(){
+  const track=document.getElementById('ctrack');if(!track)return;
+  const box=track.parentElement,prev=box.querySelector('.prev'),next=box.querySelector('.next');
+  const first=track.querySelector('img').getAttribute('src');
+  const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+  const fmt=iso=>new Date(iso).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}).toLowerCase();
+  ((window.OUTDOORS||{}).hikes||[]).forEach(h=>(h.photos||[]).forEach(src=>{
+    if(src===first)return;
+    track.insertAdjacentHTML('beforeend',`<figure class="photo"><img src="${esc(src)}" alt="Photo from ${esc(h.title)}" loading="lazy">
+      <figcaption class="tnum"><span>${esc(h.title.toLowerCase())} · ${esc(h.place.replace(/, CA$/,'').toLowerCase())}</span><span>${fmt(h.start)}</span></figcaption></figure>`);
+  }));
+  const n=track.children.length;
+  if(n<2){prev.hidden=next.hidden=true;return;}
+  // endless loop: [copy of last, 1..n, copy of first]; landing on a copy jumps to its twin
+  const head=track.children[n-1].cloneNode(true),tail=track.children[0].cloneNode(true);
+  [head,tail].forEach(c=>{c.setAttribute('aria-hidden','true');c.querySelectorAll('img').forEach(i=>i.loading='eager');});
+  track.prepend(head);track.append(tail);
+  let w=track.clientWidth,target=null,clear=0;
+  const at=()=>Math.round(track.scrollLeft/w);
+  const jump=i=>{track.style.scrollBehavior='auto';track.scrollLeft=i*w;track.style.scrollBehavior='';};
+  // `target` is where we're headed, so quick repeat clicks don't re-read a half-finished scroll
+  const settle=()=>{target=null;const i=at();if(i===0)jump(n);else if(i===n+1)jump(1);};
+  const go=d=>{target=Math.max(0,Math.min(n+1,(target??at())+d));
+    track.scrollTo({left:target*w});clearTimeout(clear);clear=setTimeout(settle,900);};
+  if('onscrollend' in window)track.addEventListener('scrollend',settle);
+  else{let t=0;track.addEventListener('scroll',()=>{clearTimeout(t);t=setTimeout(settle,160);},{passive:true});}
+  prev.addEventListener('click',()=>go(-1));
+  next.addEventListener('click',()=>go(1));
+  track.addEventListener('keydown',e=>{if(e.key==='ArrowRight'){e.preventDefault();go(1);}if(e.key==='ArrowLeft'){e.preventDefault();go(-1);}});
+  addEventListener('resize',()=>{const i=Math.round(track.scrollLeft/w);w=track.clientWidth;jump(i);});
+  jump(1);
+})();
+
+/* outside: recent hikes with a tiny route trace from the real GPS track */
+(function(){
+  const acts=((window.OUTDOORS||{}).hikes||[]).filter(h=>h.track).slice(0,3); // newest mapped hikes, Garmin's elevation
+  function trace(track){
+    const S=56,P=5,la=track.map(t=>t[0]),lo=track.map(t=>t[1]);
+    const la0=Math.min(...la),la1=Math.max(...la),lo0=Math.min(...lo),lo1=Math.max(...lo);
+    const k=Math.cos((la0+la1)/2*Math.PI/180),sx=(lo1-lo0)*k||1e-6,sy=(la1-la0)||1e-6;
+    const sc=(S-2*P)/Math.max(sx,sy),ox=(S-sx*sc)/2,oy=(S-sy*sc)/2;
+    const d=track.map((t,i)=>(i?'L':'M')+(ox+(t[1]-lo0)*k*sc).toFixed(1)+' '+(S-oy-(t[0]-la0)*sc).toFixed(1)).join(' ');
+    return `<svg viewBox="0 0 ${S} ${S}" aria-hidden="true"><rect x=".5" y=".5" width="${S-1}" height="${S-1}" rx="4" fill="none" stroke="var(--line)"/><path d="${d}" fill="none" stroke="var(--amber)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
   }
-
-  syncBody() {
-    const el = this.state.dark ? null : document.documentElement;
-    if (el) {
-      el.style.setProperty('--bg', 'oklch(96.5% 0.016 85)');
-      el.style.setProperty('--fg', 'oklch(29% 0.03 245)');
-    } else {
-      document.documentElement.style.removeProperty('--bg');
-      document.documentElement.style.removeProperty('--fg');
-    }
-  }
-
-  setPage(p) { this.setState({ page: p }); }
-
-  toggle() {
-    const dark = !this.state.dark;
-    this.setState({ dark });
-    try { localStorage.setItem('gk-theme', dark ? 'dark' : 'light'); } catch (e) {}
-  }
-
-  expData() {
-    return [
-        { company: 'Shepherd Ventures', location: 'San Diego, CA',
-          context: 'Quantitative research on portfolios built to hold up through market crashes. Promoted twice in 2026.',
-          roles: [
-            { title: 'Research Fellow', dates: 'Oct 2026 – Present', bullets: [
-              'Build the research infrastructure behind the crash-resilience model: a cached parameter-sweep engine, a config-driven toolkit, and an automated parity check against the original research code',
-              'Audit results for look-ahead bias and data errors, and write the replication guides teammates use to verify the work independently',
-            ] },
-            { title: 'Senior Quantitative Analyst', dates: 'Apr 2026 – Oct 2026', bullets: [
-              'Built stress-testing and portfolio-construction models for crash scenarios using clustering, mean-variance optimization, and volatility forecasting',
-              'Designed a market regime detection system that separates noise alarms from real corrections, and co-led the internal AI research team',
-            ] },
-            { title: 'Quantitative Analyst', dates: 'Jan 2026 – Apr 2026', bullets: [
-              'Traced corporate actions (splits and spin-offs) that were distorting backtest results and corrected the price data',
-            ] },
-          ],
-          tech: 'Python · K-Means · mean-variance optimization · GARCH · Holt smoothing · backtesting' },
-        { company: 'IPick.AI', location: 'Cupertino, CA',
-          context: 'AI and finance tooling for an equity research platform, delivered through Open Project.',
-          roles: [
-            { title: 'AI Engineer', dates: 'Jan 2026 – Present', bullets: [
-              'Coordinate three ML workstreams (26 engineers) building stock recommendation, portfolio analysis, and reinforcement learning systems',
-              'Designed a multi-repo architecture of versioned Python packages with shared typed contracts, plus a test-driven onboarding system (75 autograded tests) that has new engineers shipping in their first sprint',
-              'Led a team of 14 to ship a live equity knowledge graph of thousands of public companies, classifying relationships from 8,000+ SEC filings with FinBERT and the Claude API',
-            ] },
-          ],
-          tech: 'Python · Flask · PostgreSQL · Docker · AWS · FinBERT · Claude API · D3.js' },
-        { company: 'LG NOVA', location: 'Remote',
-          context: 'Ticket-based engineering on Atlas, an AI document-analysis and company-data platform.',
-          roles: [
-            { title: 'Software Engineer', dates: 'Aug 2026 – Present', bullets: [
-              'Root-caused silent data loss from a 500-row cap in a Flask/PostgreSQL endpoint and shipped keyset pagination',
-              'Expanded search coverage of PitchBook financial fields by 233%, verified by a 38-test suite',
-              'Restored PowerPoint uploads to the AI document pipeline, adding PDF conversion as a fallback',
-            ] },
-          ],
-          tech: 'Python · Flask · PostgreSQL · React · TypeScript · GitLab' },
-        { company: 'Rapid Reviews\\Infectious Diseases', location: 'Berkeley, CA',
-          context: 'Data team for an open peer-review journal of infectious-disease preprints.',
-          roles: [
-            { title: 'Data Science Researcher', dates: 'Aug 2026 – Present', bullets: [
-              'Building automation that keeps every active preprint stocked with AI-suggested reviewers, replacing a manual process',
-              'Building alerts that report why a data issue fired, and investigating automatic conflict-of-interest rejections',
-            ] },
-          ],
-          tech: 'Python · automation · data pipelines' },
-        { company: 'Open Project', location: 'Berkeley, CA',
-          context: "Berkeley's largest tech club (300+ members), shipping software for real clients every semester.",
-          roles: [
-            { title: 'VP of Projects', dates: 'May 2026 – Present', bullets: [
-              'Direct 40+ project managers across 15+ client projects, from cold outreach and client sourcing through delivery',
-              'Interviewed and selected 50+ PM candidates',
-            ] },
-            { title: 'Project Manager', dates: 'Aug 2025 – May 2026', bullets: [
-              'Led the Nexus client project end to end, from scoping with the client to shipping',
-            ] },
-          ],
-          tech: 'project management · client delivery · recruiting' },
-        { company: 'UC Berkeley EECS', location: 'Berkeley, CA',
-          context: 'CS 61B (Data Structures), a 1,100-student course, and its summer lab version CS 61BL.',
-          roles: [
-            { title: 'Course Staff', dates: 'Jan 2026 – Aug 2026', bullets: [
-              'Co-taught weekly discussion sections and ran daily labs for 20 students, debugging Java in real time',
-              'Delivered a midterm review to about 100 students',
-            ] },
-          ],
-          tech: 'Java · data structures · algorithms · teaching' },
-        { company: 'DealPrint', location: 'Berkeley, CA',
-          context: 'Self-directed research: an end-to-end valuation tool for small-business acquisitions.',
-          roles: [
-            { title: 'Data Science Research Intern', dates: 'Aug 2025 – Jan 2026', bullets: [
-              'Collected 50,000 M&A transactions spanning 40 years with a custom Chrome extension',
-              'Built a KNN comparables engine weighted by industry, geography, and deal type, feeding a regression model (0.25 MAPE on held-out deals)',
-              'Shipped it as an interactive Streamlit dashboard',
-            ] },
-          ],
-          tech: 'Python · pandas · scikit-learn · Streamlit · Plotly' },
-      ];
-  }
-
-  focusRole(slug) {
-    this.setState({ page: 'experience', focus: slug });
-    requestAnimationFrame(() => {
-      const el = document.getElementById(slug);
-      if (!el) return;
-      const y = el.getBoundingClientRect().top + window.pageYOffset - 90;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-    });
-    clearTimeout(this._ft);
-    this._ft = setTimeout(() => this.setState({ focus: null }), 2200);
-  }
-
-  renderVals() {
-    const accent = this.props.accentColor || null;
-    const dark = this.state.dark;
-    const t = dark
-      ? { bg: '#1a1c1f', fg: '#e3e5e8', muted: '#8d949c', line: '#2b2e33', card: '#212429' }
-      : { bg: 'oklch(96.5% 0.016 85)', fg: 'oklch(29% 0.03 245)', muted: 'oklch(48% 0.028 245)', line: 'oklch(88% 0.014 85)', card: 'oklch(93% 0.015 85)' };
-    // Each mode has its own accent; a tweaked value is reused, darkened for the light ground.
-    const m = accent && /oklch\(\s*([\d.]+)%?\s+([\d.]+)\s+([\d.]+)/.exec(accent);
-    const acc = accent
-      ? (dark ? accent : (m ? 'oklch(48% ' + m[2] + ' ' + m[3] + ')' : accent))
-      : (dark ? 'oklch(74% 0.06 235)' : 'oklch(48% 0.06 245)');
-
-    const page = this.state.page;
-    const pages = [['home','Home'],['experience','Experience'],['projects','Projects'],['coursework','Coursework']];
-
-    return {
-      themeVars: {
-        '--bg': t.bg, '--fg': t.fg, '--muted': t.muted, '--line': t.line,
-        '--card': t.card, '--accent': acc,
-      },
-      // On the home page, pin the whole layout to the viewport height (nav +
-      // main + footer as flex rows) so the idle game fills whatever room is
-      // left instead of trailing off below a scroll. Other pages keep normal
-      // document flow/scrolling since their content can run long.
-      pageWrapperStyle: page === 'home'
-        ? 'height:100vh; height:100dvh; display:flex; flex-direction:column; overflow-y:auto; background:var(--bg); color:var(--fg); font-family:\'Work Sans\',sans-serif; transition:background 0.25s, color 0.25s;'
-        : 'min-height:100vh; background:var(--bg); color:var(--fg); font-family:\'Work Sans\',sans-serif; transition:background 0.25s, color 0.25s;',
-      themeIcon: dark ? '☀' : '☾',
-      toggleTheme: () => this.toggle(),
-      showCurrently: this.props.showCurrently ?? true,
-      goHome: () => this.setPage('home'),
-      openCalendly: () => this.openCalendly(),
-      navItems: pages.map(([id, label]) => ({
-        label,
-        go: () => this.setPage(id),
-        style: {
-          cursor: 'pointer', fontSize: '14px', padding: '6px 12px',
-          color: page === id ? acc : t.muted,
-          borderBottom: page === id ? '1px solid ' + acc : '1px solid transparent',
-        }
-      })),
-      isHome: page === 'home',
-      isExperience: page === 'experience',
-      isProjects: page === 'projects',
-      isCoursework: page === 'coursework',
-      currently: [
-        { role: 'Research Fellow', org: 'Shepherd Ventures, crash-resilient portfolio research', since: 'since Oct 2026', go: () => this.focusRole('role-shepherd-ventures') },
-        { role: 'AI Engineer', org: 'IPick.AI, three ML workstreams', since: 'since Jan 2026', go: () => this.focusRole('role-ipick-ai') },
-        { role: 'Software Engineer', org: 'LG NOVA, Atlas platform', since: 'since Aug 2026', go: () => this.focusRole('role-lg-nova') },
-        { role: 'VP of Projects', org: "Open Project, Berkeley's largest tech club", since: 'since May 2026', go: () => this.focusRole('role-open-project') },
-      ],
-      experiences: this.expData().map((j) => ({
-        ...j,
-        roles: j.roles.map((r, i) => ({ ...r, rail: i === 0 ? 'var(--accent)' : 'var(--line)' })),
-        slug: 'role-' + j.company.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-        glow: this.state.focus === 'role-' + j.company.toLowerCase().replace(/[^a-z0-9]+/g, '-')
-          ? 'color-mix(in oklch, var(--accent) 12%, transparent)' : 'transparent',
-      })),
-      projectGroups: [
-        { title: 'Quant and data', blurb: 'Statistics and modeling, built from the estimator up.', items: [
-          { name: 'Solar Panel Market Quantile Analysis', meta: '2026',
-            desc: 'Self-sourced and cleaned a 332,000-row California solar interconnection dataset. Implemented Minimum Distance Estimation for quantile regression from scratch, following the asymptotic theory, and cross-validated it against statsmodels. Found nonlinear cost dynamics across system tiers and a steep price premium at the 90th percentile.',
-            tags: ['Python', 'statsmodels', 'quantile regression', 'econometrics'] },
-          { name: 'Pairs Trading Backtester', meta: '2025',
-            desc: 'A statistical pairs-trading engine on WMT/TGT: rolling 60-day OLS hedge ratios to avoid look-ahead bias, z-score mean-reversion signals, and modeled transaction costs.',
-            tags: ['Python', 'pandas', 'statsmodels', 'yfinance'] },
-          { name: 'Spam Email Classifier', meta: '2026',
-            desc: 'Logistic regression classifier reaching 99.4% accuracy on a held-out test set, with a custom feature-selection method based on words common in spam and absent from ham.',
-            tags: ['Python', 'scikit-learn', 'logistic regression'] },
-        ] },
-        { title: 'Software', blurb: 'Things that run, render, or get played.', items: [
-          { name: 'Eco Sim', meta: 'Team project, 2025',
-            desc: 'Full-stack agent-based simulation of 100K+ households, firms, and government agents with emergent pricing, production, and labor behavior. Real-time React dashboard with live GDP graphs and policy sliders.',
-            tags: ['Python', 'FastAPI', 'React', 'SQLite'] },
-          { name: 'Build Your Own World', meta: '2025',
-            desc: 'Procedurally generated 2D dungeon game with seeded randomization, BFS-based dynamic lighting that recalculates only on state change, and save/load through deterministic keystroke replay.',
-            tags: ['Java', 'BFS', 'procedural generation'] },
-          { name: 'This website', meta: '2026',
-            desc: 'My corner of the internet, with a small tower-defense idle game hiding on the home page. Go click a triangle.',
-            tags: ['JavaScript', 'canvas'] },
-        ] },
-      ],
-      courseGroups: [
-        { subject: 'Math', courses: 'Multivariable Calculus (MATH 53) · Linear Algebra & Differential Equations (MATH 54) · Discrete Math (MATH 55) · Real Analysis (MATH 104)', inProgress: 'Abstract Algebra (MATH 113)' },
-        { subject: 'Probability & Statistics', courses: 'Probability & Random Processes (EECS 126) · Econometrics (ECON 141) · Econometrics: Advanced Methods (ECON 143)', inProgress: null },
-        { subject: 'Computer Science & ML', courses: 'Structure and Interpretation of Computer Programs (CS 61A) · Data Structures & Algorithms (CS 61B) · Intro to AI (CS 188)', inProgress: 'Intro to Machine Learning (CS 189)' },
-        { subject: 'Data Science', courses: 'Foundations of Data Science (DATA 8) · Principles & Techniques of Data Science (DATA 100) · Human Contexts & Ethics of Data (DATA 104)', inProgress: null },
-        { subject: 'Economics & Finance', courses: 'Intro to Economics (ECON 2) · Intro to Quant Finance (IEOR 198) · Wall Street / Main Street (HISTORY 133B)', inProgress: null },
-      ],
-    };
-  }
-}
-
+  document.getElementById('hikes').innerHTML=acts.map(a=>`
+    <div class="hike">${trace(a.track)}
+      <div><b>${a.title}</b><span class="where">${a.place}</span></div>
+      <div class="nums tnum">${a.miles.toFixed(2)} mi<br><span class="gain">+${a.gainFt.toLocaleString()} ft</span></div>
+    </div>`).join('');
+})();
+/* sticky header: solid once scrolled */
+(function(){
+  const bar=document.querySelector('.top');
+  const on=()=>bar.classList.toggle('scrolled',scrollY>24);
+  addEventListener('scroll',on,{passive:true});on();
+})();
 </script>
 </body>
 </html>

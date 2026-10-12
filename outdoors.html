@@ -1,401 +1,405 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Outdoors — Ganesh Karayi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Outside · Ganesh Karayi</title>
+<meta name="description" content="Hikes and runs, straight from my watch.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=DM+Mono:wght@400;500&display=swap">
 <style>
-  :root { --bg:#1a1c1f; --fg:#e3e5e8; --muted:#8d949c; --line:#2b2e33; --card:#212429; --accent:oklch(74% 0.06 235); }
-  :root[data-theme="light"] { --bg:oklch(96.5% 0.016 85); --fg:oklch(29% 0.03 245); --muted:oklch(48% 0.028 245);
-                              --line:oklch(88% 0.014 85); --card:oklch(93% 0.015 85); --accent:oklch(48% 0.06 245); }
-  * { box-sizing: border-box; }
-  body { margin:0; background:var(--bg); color:var(--fg); font-family:'Work Sans',sans-serif; -webkit-font-smoothing:antialiased; }
-  html.gk-custom-cursor, html.gk-custom-cursor * { cursor: none !important; }
-  #gkCursor {
-    position: fixed; top: 0; left: 0; width: 22px; height: 22px; border-radius: 50%;
-    border: 1.5px solid var(--accent); box-sizing: border-box;
-    pointer-events: none; z-index: 9999; opacity: 0;
-    transform: translate(-50%, -50%);
-    transition: width 0.18s ease, height 0.18s ease, background-color 0.18s ease, border-color 0.18s ease, opacity 0.2s ease;
+/* Companion to index.html. Hikes get maps; runs get stats only (they start from home). */
+:root{
+  --bg:#0F2A33; --bg-2:#0B222A; --fg:#ECE6D9; --muted:#93A9AE;
+  --line:rgba(236,230,217,.14); --grid:rgba(236,230,217,.07);
+  --amber:#F2A541; --amber-ink:#F2A541; --hr:#E98A6E; --low:#4A5A62;
+  --display:"Bricolage Grotesque","Arial Narrow",system-ui,sans-serif;
+  --body:"Newsreader",Georgia,serif;
+  --mono:"DM Mono",ui-monospace,Menlo,monospace;
+  --gutter:clamp(16px,4vw,48px);
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#EEF0EC; --bg-2:#E3E7E2; --fg:#10262E; --muted:#56696E;
+    --line:rgba(16,38,46,.14); --grid:rgba(16,38,46,.08);
+    --amber-ink:#A35F06; --hr:#BF4B2C; --low:#AEBCC0; color-scheme:light;
   }
-  #gkCursor.gk-active { opacity: 1; }
-  #gkCursor.gk-hover { width: 36px; height: 36px; background: var(--accent); border-color: transparent; }
-  a { color:inherit; text-decoration:none; }
-  a:hover { color:var(--accent); }
-  .serif { font-family:'Montserrat',sans-serif; font-weight:600; letter-spacing:-0.015em; }
-  nav { position:sticky; top:0; z-index:500; display:flex; align-items:center; justify-content:space-between;
-        flex-wrap:wrap; gap:16px; padding:18px 40px; background:var(--bg); border-bottom:1px solid var(--line); }
-  .navlinks { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
-  .navlinks a { font-size:14px; padding:6px 12px; color:var(--muted); border-bottom:1px solid transparent;
-                transition:background 0.25s ease, color 0.25s ease; }
-  .navlinks a:hover { background:color-mix(in oklch, var(--accent) 14%, transparent); color:var(--fg); }
-  .navlinks a.active { color:var(--accent); border-bottom-color:var(--accent); }
-  #themeBtn { cursor:pointer; margin-left:8px; width:30px; height:30px; display:flex; align-items:center;
-              justify-content:center; border:1px solid var(--line); border-radius:50%; font-size:13px; color:var(--muted);
-              transition:background 0.25s ease, color 0.25s ease; }
-  #themeBtn:hover { background:color-mix(in oklch, var(--accent) 14%, transparent); color:var(--fg); }
-  nav > a.serif { padding:2px 8px; margin:0 -8px; transition:background 0.25s ease; }
-  nav > a.serif:hover { background:color-mix(in oklch, var(--accent) 14%, transparent); color:var(--fg); }
-  main { max-width:940px; margin:0 auto; padding:64px 40px 100px; }
-  .entry { padding:44px 0; border-top:1px solid var(--line); }
-  .route { margin:22px 0 6px; text-align:center; }
-  .route svg { display:inline-block; background:var(--card); border:1px solid var(--line); max-width:100%; }
-  .elev { margin:0 0 4px; }
-  .elev svg { display:block; width:100%; height:auto; }
-  .elev { max-width:900px; margin:0 auto 4px; }
-  .caption { font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); }
-  .stats { display:flex; flex-wrap:wrap; gap:0 40px; margin-top:4px; }
-  .stats div { padding:12px 0; }
-  .sval { font-size:19px; font-family:'Montserrat',sans-serif; font-weight:600; letter-spacing:-0.015em; }
-  .slab { font-family:'Montserrat',sans-serif; font-weight:600; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-top:3px; }
-  .photos { columns:2; column-gap:10px; margin-top:18px; }
-  .photos img { width:100%; height:auto; display:block; background:var(--card); margin:0 0 10px; break-inside:avoid;
-                cursor:zoom-in; transition:opacity 0.25s ease; }
-  .photos img:hover { opacity:0.82; }
-  #lb { position:fixed; inset:0; z-index:900; display:none; align-items:center; justify-content:center;
-        padding:5vh 5vw; background:color-mix(in oklch, var(--bg) 72%, transparent);
-        backdrop-filter:blur(18px) saturate(0.9); -webkit-backdrop-filter:blur(18px) saturate(0.9);
-        opacity:0; transition:opacity 0.28s ease; cursor:zoom-out; }
-  #lb.on { display:flex; opacity:1; }
-  #lb img { max-width:100%; max-height:90vh; object-fit:contain; display:block;
-            box-shadow:0 30px 80px rgba(0,0,0,0.5); transform:scale(0.97);
-            transition:transform 0.28s ease; }
-  #lb.on img { transform:scale(1); }
-  #lbClose { position:absolute; top:22px; right:26px; font-size:26px; line-height:1; color:var(--muted); cursor:pointer; }
-  #lbClose:hover { color:var(--fg); }
-  footer { text-align:center; padding:30px; font-size:12px; color:var(--muted); border-top:1px solid var(--line); }
-  @media (max-width:640px) {
-    nav, main { padding-left:22px; padding-right:22px; }
-    main { padding-top:44px; }
+}
+:root[data-theme="light"]{
+  --bg:#EEF0EC; --bg-2:#E3E7E2; --fg:#10262E; --muted:#56696E;
+  --line:rgba(16,38,46,.14); --grid:rgba(16,38,46,.08);
+  --amber-ink:#A35F06; --hr:#BF4B2C; --low:#AEBCC0; color-scheme:light;
+}
+/* squircles: continuous-curve corners where the browser supports corner-shape,
+   with a slightly larger radius to match; plain rounded corners elsewhere */
+:root{--r-sm:12px;--r-md:18px;--r-lg:24px;--press:scale(.97);--fill:color-mix(in srgb,var(--fg) 8%,transparent);--fill-2:color-mix(in srgb,var(--fg) 13%,transparent)}
+@supports (corner-shape: squircle){:root{--r-sm:18px;--r-md:28px;--r-lg:38px}}
+.tabs,.seg,.tab,.route,.photos a,.run summary{corner-shape:squircle}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:19px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:2px}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:var(--gutter)}
+.mono{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.tnum{font-variant-numeric:tabular-nums}
+h1,h2,h3{font-family:var(--display);font-weight:700;letter-spacing:-.02em;line-height:1;margin:0;text-wrap:balance}
+p{margin:0}
 
-    .photos { columns:1; }
-  }
+/* top bar */
+/* header stays on screen; it picks up a solid backdrop once the page scrolls */
+.top{position:fixed;inset:0 0 auto 0;z-index:20;border-bottom:1px solid transparent;transition:background-color .3s ease,border-color .3s ease,backdrop-filter .3s ease}
+.top.scrolled{background:color-mix(in srgb,var(--bg) 84%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom-color:var(--line)}
+.top .wrap{display:flex;justify-content:space-between;align-items:center;padding-block:22px;gap:16px;transition:padding .3s ease}
+.top.scrolled .wrap{padding-block:12px}
+section[id],.job,.run{scroll-margin-top:72px}
+.top nav{display:flex;gap:clamp(12px,2.4vw,26px);align-items:center}
+.top nav a,.theme{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:var(--muted)}
+.top nav a:hover,.theme:hover{color:var(--amber-ink)}
+.top nav a.on{color:var(--amber-ink)}
+.theme{background:none;border:1px solid var(--line);border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:.8rem;letter-spacing:0}
+.mark{font-family:var(--display);font-weight:800;font-size:1.05rem;text-decoration:none;letter-spacing:-.02em}
+.mark span{color:var(--amber-ink)}
+
+/* header */
+header.page{padding-block:calc(76px + clamp(40px,7vw,80px)) clamp(20px,3vw,32px)}
+header.page h1{font-size:clamp(3rem,10vw,7rem);font-weight:800;letter-spacing:-.05em;line-height:.9}
+header.page h1 span{color:var(--amber)}
+
+/* tabs */
+/* segmented control, with a thumb that slides to the selected tab */
+.tabs{position:relative;display:inline-flex;padding:4px;margin-top:clamp(24px,4vw,40px);background:var(--fill);border-radius:var(--r-sm)}
+.seg{position:absolute;top:4px;bottom:4px;left:0;border-radius:calc(var(--r-sm) - 4px);background:var(--bg);box-shadow:0 1px 2px rgba(0,0,0,.18),0 4px 14px rgba(0,0,0,.14);
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),width .35s cubic-bezier(.2,.8,.2,1)}
+.tab{position:relative;z-index:1;font-family:var(--display);font-weight:650;font-size:1.05rem;letter-spacing:-.01em;background:none;border:0;color:var(--muted);padding:9px 22px;cursor:pointer;border-radius:calc(var(--r-sm) - 4px);transition:color .25s,transform .15s}
+.tab:active{transform:var(--press)}
+.tab small{font-family:var(--mono);font-size:.68rem;font-weight:400;margin-left:6px}
+.tab[aria-selected="true"]{color:var(--fg)}
+.panel{padding-block:clamp(28px,4vw,44px) 0}
+.panel[hidden]{display:none}
+
+/* shared stat blocks */
+.stats{display:flex;flex-wrap:wrap;gap:6px clamp(20px,3.5vw,40px)}
+.stat b{display:block;font-family:var(--display);font-weight:650;font-size:clamp(1.15rem,2.2vw,1.45rem);letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.2}
+.stat span{font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.big .stat b{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:750}
+svg text{font-family:var(--mono);font-size:10px;fill:var(--muted)}
+
+/* hikes */
+.hike{padding-block:clamp(28px,4vw,40px);border-top:1px solid var(--line)}
+.hike:first-child{border-top:0;padding-top:0}
+.hike .when{color:var(--amber-ink)}
+.hike h2{font-size:clamp(1.6rem,3.6vw,2.3rem);font-weight:650;margin-top:8px}
+.hike .where{color:var(--muted);font-size:1rem;margin-top:4px}
+.hike .viz{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.4fr);gap:clamp(16px,3vw,32px);align-items:end;margin-top:22px}
+.route{background:var(--bg-2);box-shadow:inset 0 0 0 1px var(--line);border-radius:var(--r-md);overflow:hidden}
+.route svg{display:block;width:100%;height:auto}
+.prof svg{display:block;width:100%;height:auto}
+.legend{display:flex;gap:16px;margin-bottom:6px}
+.legend i{display:inline-block;width:14px;height:2px;vertical-align:middle;margin-right:6px}
+.hike .stats{margin-top:22px}
+.photos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:22px}
+.photos a{display:block;aspect-ratio:4/3;overflow:hidden;border-radius:var(--r-md);background:var(--bg-2);transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+.photos a:hover{transform:translateY(-2px)}
+.photos a:active{transform:var(--press)}
+.photos img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .2s}
+.photos a:hover img{opacity:.85}
+.hike.small{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 24px;align-items:end}
+.hike.small h2{font-size:clamp(1.25rem,2.6vw,1.6rem)}
+.hike.small .stats{margin-top:0}
+
+/* runs */
+.overview{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(20px,4vw,48px);margin-top:clamp(28px,4vw,44px)}
+.chart h3{font-size:1.15rem;font-weight:650;margin-bottom:4px}
+.chart p{font-size:.95rem;color:var(--muted);margin-bottom:10px;line-height:1.4}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.dot{cursor:default}
+.dot:hover{stroke:var(--fg);stroke-width:2}
+
+.runs{margin-top:clamp(36px,5vw,56px);border-top:1px solid var(--fg)}
+.run{border-bottom:1px solid var(--line)}
+.runs{--cols:8rem minmax(0,1fr) 5.5rem 6rem 5.5rem 1.4rem}
+.run summary{list-style:none;display:grid;grid-template-columns:var(--cols);gap:12px;align-items:baseline;padding:14px 12px;margin:2px -12px;border-radius:var(--r-sm);cursor:pointer;transition:background-color .2s}
+.run summary:hover,.run[open] summary{background:var(--fill)}
+.run summary::-webkit-details-marker{display:none}
+.run summary:hover .wk{color:var(--amber-ink)}
+.run .d{font-family:var(--mono);font-size:.74rem;color:var(--muted)}
+.run .wk{font-family:var(--display);font-weight:600;font-size:1.05rem;letter-spacing:-.01em}
+.run .n{font-family:var(--mono);font-size:.8rem;text-align:right;font-variant-numeric:tabular-nums}
+.run .n.hr{color:var(--hr)}
+.run .plus{font-family:var(--mono);color:var(--amber-ink);justify-self:end;transition:transform .25s}
+.run[open] .plus{transform:rotate(45deg)}
+.runs .head{display:grid;grid-template-columns:var(--cols);gap:12px;padding:10px 12px;margin:0 -12px;border-bottom:1px solid var(--line)}
+.runs .head span:nth-child(n+3){text-align:right}
+.detail{padding:4px 0 26px 0;display:flex;flex-direction:column;gap:22px}
+.groups{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.group h4{margin:0 0 8px;font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;font-weight:500;color:var(--amber-ink)}
+.group dl{margin:0;display:grid;grid-template-columns:auto auto;gap:4px 12px;font-size:.95rem}
+.group dt{color:var(--muted)}
+.group dd{margin:0;text-align:right;font-family:var(--mono);font-size:.82rem;font-variant-numeric:tabular-nums;align-self:center}
+.vs{font-size:.92rem;color:var(--muted);font-style:italic}
+.vs b{font-style:normal;font-weight:600;color:var(--fg)}
+
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-block:24px;border-top:1px solid var(--line);margin-top:clamp(56px,8vw,96px)}
+
+@media (max-width:860px){
+  .hike .viz,.overview{grid-template-columns:minmax(0,1fr)}
+  .groups{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:560px){
+  body{font-size:17.5px}
+  .runs{--cols:6.4rem minmax(0,1fr) 4.4rem 4.8rem 1.2rem}
+  .run summary,.runs .head{gap:8px}
+  .run .n.hr,.runs .head .hrh{display:none}
+  .hike.small{grid-template-columns:minmax(0,1fr)}
+  .photos{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+/* theme switch: a circle grows from the toggle (View Transitions), else a color fade */
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+.theme-fade,.theme-fade *{transition:background-color .45s ease,color .45s ease,border-color .45s ease,fill .45s ease,stroke .45s ease!important}
 </style>
 </head>
 <body>
-<nav>
-  <a href="index.html" class="serif" style="font-size:19px;">Ganesh Karayi</a>
-  <div class="navlinks">
-    <a href="index.html#home">Home</a>
-    <a href="index.html#experience">Experience</a>
-    <a href="index.html#projects">Projects</a>
-    <a href="index.html#coursework">Coursework</a>
-    <a href="index.html#outdoors" class="active">Outdoors</a>
-    <div id="themeBtn" title="Toggle theme">☀</div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="mark" href="index.html">gk<span>.</span></a>
+    <nav aria-label="Site">
+      <a href="index.html#work">work</a>
+      <a href="index.html#projects">projects</a>
+      <a href="outdoors.html" class="on">outside</a>
+      <button class="theme" id="themeBtn" type="button" aria-label="Toggle light and dark">◐</button>
+    </nav>
   </div>
-</nav>
+</header>
 
-<main>
-  <h1 class="serif" style="font-size:34px; margin:0 0 12px;">Outdoors</h1>
-  <p style="font-size:16px; line-height:1.7; font-weight:300; color:var(--muted); max-width:520px; margin:0;">
-    Check it out to some of the cool hikes I've been doing recently. If you have any recommendations, I'd love to hear them!
-  </p>
+<main class="wrap">
+  <header class="page">
+    <p class="mono">straight from my watch</p>
+    <h1>outside<span>.</span></h1>
+  </header>
 
-  <div id="feed" style="margin-top:52px;"></div>
+  <div class="tabs" role="tablist" aria-label="Activity type">
+    <span class="seg" aria-hidden="true"></span>
+    <button class="tab" role="tab" id="tab-hikes" aria-controls="panel-hikes" aria-selected="true">hikes <small id="nHikes"></small></button>
+    <button class="tab" role="tab" id="tab-runs" aria-controls="panel-runs" aria-selected="false">runs <small id="nRuns"></small></button>
+  </div>
+
+  <section class="panel" id="panel-hikes" role="tabpanel" aria-labelledby="tab-hikes"></section>
+  <section class="panel" id="panel-runs" role="tabpanel" aria-labelledby="tab-runs" hidden></section>
 </main>
 
-<div id="lb"><div id="lbClose">×</div><img alt=""></div>
+<footer>
+  <div class="wrap mono">
+    <span>© 2026 ganesh karayi</span>
+    <span id="built"></span>
+  </div>
+</footer>
 
-<footer>© 2026 Ganesh Karayi</footer>
-
+<script src="outdoors-data.js"></script>
 <script>
-(function () {
-  var root = document.documentElement;
-  function apply(dark) {
-    if (dark) root.removeAttribute('data-theme');
-    else root.setAttribute('data-theme', 'light');
-    var b = document.getElementById('themeBtn');
-    if (b) b.textContent = dark ? '☀' : '☾';
-  }
-  var dark = false;
-  try {
-    var saved = localStorage.getItem('gk-theme');
-    if (saved === 'dark') dark = true;
-    else if (saved === 'light') dark = false;
-    else dark = !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
-  } catch (e) {}
-  apply(dark);
-  document.addEventListener('DOMContentLoaded', function () {
-    apply(dark);
-    document.getElementById('themeBtn').addEventListener('click', function () {
-      dark = !dark;
-      try { localStorage.setItem('gk-theme', dark ? 'dark' : 'light'); } catch (e) {}
-      apply(dark);
+const O=window.OUTDOORS||{hikes:[],runs:[]};
+
+/* theme */
+(function(){
+  const root=document.documentElement;
+  try{const s=localStorage.getItem('gk-theme');if(s==='light'||s==='dark')root.dataset.theme=s;}catch(e){}
+  function setTheme(next,btn){
+    const apply=()=>{root.dataset.theme=next;};
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches){apply();return;}
+    if(!document.startViewTransition){root.classList.add('theme-fade');apply();setTimeout(()=>root.classList.remove('theme-fade'),500);return;}
+    const r=btn.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2;
+    const end=Math.hypot(Math.max(x,innerWidth-x),Math.max(y,innerHeight-y));
+    document.startViewTransition(apply).ready.then(()=>{
+      root.animate({clipPath:[`circle(0px at ${x}px ${y}px)`,`circle(${end}px at ${x}px ${y}px)`]},
+        {duration:600,easing:'cubic-bezier(.4,0,.2,1)',pseudoElement:'::view-transition-new(root)'});
     });
-  });
-
-  // A thin ring that trails the pointer and fills solid over anything
-  // clickable. Fine-pointer devices only; a JS failure just leaves the
-  // native cursor alone since the class is only added once this runs.
-  function initCustomCursor() {
-    if (document.getElementById('gkCursor')) return;
-    try {
-      if (window.matchMedia && !window.matchMedia('(pointer: fine)').matches) return;
-    } catch (e) { return; }
-
-    var ring = document.createElement('div');
-    ring.id = 'gkCursor';
-    document.body.appendChild(ring);
-    root.classList.add('gk-custom-cursor');
-
-    var hovering = false;
-
-    function isInteractive(el) {
-      // Walk inline styles directly, not getComputedStyle — the global
-      // `cursor: none !important` rule that hides the native cursor would
-      // otherwise mask every element's real (pre-override) cursor value.
-      while (el && el.nodeType === 1) {
-        if (el.tagName === 'A' && el.hasAttribute('href')) return true;
-        if (el.style && el.style.cursor === 'pointer') return true;
-        el = el.parentElement;
-      }
-      return false;
-    }
-
-    document.addEventListener('mousemove', function (e) {
-      ring.style.transform = 'translate(' + e.clientX + 'px, ' + e.clientY + 'px) translate(-50%, -50%)';
-      ring.classList.add('gk-active');
-      var h = isInteractive(e.target);
-      if (h !== hovering) { hovering = h; ring.classList.toggle('gk-hover', h); }
-    }, { passive: true });
-
-    root.addEventListener('mouseleave', function () { ring.classList.remove('gk-active'); });
-    root.addEventListener('mouseenter', function () { ring.classList.add('gk-active'); });
   }
-  document.addEventListener('DOMContentLoaded', initCustomCursor);
+  document.getElementById('themeBtn').addEventListener('click',e=>{
+    const cur=root.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+    const next=cur==='dark'?'light':'dark';
+    setTheme(next,e.currentTarget);
+    try{localStorage.setItem('gk-theme',next);}catch(e){}
+  });
 })();
-</script>
-<script src="activities.js"></script>
-<script>
-(function () {
-  var acts = window.ACTIVITIES || [];
 
-  // Lightbox: click any photo to see it full-size over a blurred page.
-  var lb = document.getElementById('lb'), lbImg = lb.querySelector('img');
-  function open(src, alt) { lbImg.src = src; lbImg.alt = alt || ''; lb.classList.add('on'); document.body.style.overflow = 'hidden'; }
-  function close() { lb.classList.remove('on'); document.body.style.overflow = ''; setTimeout(function () { if (!lb.classList.contains('on')) lbImg.src = ''; }, 300); }
-  lb.addEventListener('click', close);
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
-  document.addEventListener('click', function (e) {
-    var t = e.target;
-    if (t.tagName === 'IMG' && t.closest('.photos')) open(t.src, t.alt);
-  });
+/* formatting */
+const pace=s=>s?Math.floor(s/60)+':'+String(Math.round(s%60)).padStart(2,'0'):'–';
+const dur=s=>{if(!s)return'–';const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return h?`${h}h ${m}m`:`${m}:${String(x).padStart(2,'0')}`;};
+const n0=v=>v==null?'–':Math.round(v).toLocaleString();
+const day=iso=>new Date(iso).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+const dayLong=iso=>new Date(iso).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 
-  // Route trace, projected equirectangular and drawn with a graticule,
-  // north arrow and scale bar so the geography reads.
-  function ramp(t) {
-    // cool low ground → warm high ground
-    var c0 = [74, 80, 88], c1 = [147, 182, 207];
-    return 'rgb(' + c0.map(function (v, i) { return Math.round(v + (c1[i] - v) * t); }).join(',') + ')';
+/* tabs, with #runs / #hikes deep links */
+(function(){
+  const tabs=[...document.querySelectorAll('.tab')];
+  const seg=document.querySelector('.seg');
+  function place(){const t=tabs.find(x=>x.getAttribute('aria-selected')==='true');if(t){seg.style.width=t.offsetWidth+'px';seg.style.transform=`translateX(${t.offsetLeft}px)`;}}
+  function show(id){tabs.forEach(t=>{const on=t.getAttribute('aria-controls')===id;t.setAttribute('aria-selected',on);document.getElementById(t.getAttribute('aria-controls')).hidden=!on;});place();}
+  addEventListener('resize',place);if(document.fonts)document.fonts.ready.then(place);place();
+  tabs.forEach(t=>t.addEventListener('click',()=>{const id=t.getAttribute('aria-controls');show(id);history.replaceState(null,'','#'+id.replace('panel-',''));}));
+  window.showTab=show;
+})();
+
+/* ---------- hikes ---------- */
+function ramp(t){const a=[74,80,88],b=[242,165,65];return'rgb('+a.map((v,i)=>Math.round(v+(b[i]-v)*t)).join(',')+')';}
+
+function routeSVG(h){
+  const tr=h.track,prof=h.profile,W=360,H=300,P=22;
+  const la=tr.map(t=>t[0]),lo=tr.map(t=>t[1]);
+  const la0=Math.min(...la),la1=Math.max(...la),lo0=Math.min(...lo),lo1=Math.max(...lo);
+  const k=Math.cos((la0+la1)/2*Math.PI/180),sx=(lo1-lo0)*k||1e-6,sy=(la1-la0)||1e-6;
+  const s=Math.min((W-2*P)/sx,(H-2*P)/sy),ox=(W-sx*s)/2,oy=(H-sy*s)/2;
+  const X=v=>ox+(v-lo0)*k*s,Y=v=>H-oy-(v-la0)*s;
+  const pts=tr.map(t=>[X(t[1]),Y(t[0])]);
+  // tint each segment by elevation, sampled from the profile at the same fraction of the route
+  const ft=prof.ft.filter(v=>v!=null),e0=Math.min(...ft),e1=Math.max(...ft);
+  const eleAt=f=>{const i=Math.min(prof.ft.length-1,Math.round(f*(prof.ft.length-1)));return prof.ft[i]??e0;};
+  let seg='';
+  for(let i=1;i<pts.length;i++){const f=i/(pts.length-1),t=(eleAt(f)-e0)/((e1-e0)||1);
+    seg+=`<line x1="${pts[i-1][0].toFixed(1)}" y1="${pts[i-1][1].toFixed(1)}" x2="${pts[i][0].toFixed(1)}" y2="${pts[i][1].toFixed(1)}" stroke="${ramp(t)}"/>`;}
+  const d=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+  // scale bar
+  const pxPerMi=1609.34/(111320/s);let mi=.1;[.1,.25,.5,1,2].forEach(m=>{if(m*pxPerMi<W*.35)mi=m;});
+  const bw=mi*pxPerMi,a=pts[0];
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Route map of ${esc(h.title)}">
+    <path d="${d}" fill="none" stroke="var(--amber)" stroke-opacity=".12" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>
+    <g stroke-width="2.6" stroke-linecap="round">${seg}</g>
+    <circle cx="${a[0].toFixed(1)}" cy="${a[1].toFixed(1)}" r="5" fill="var(--bg)" stroke="var(--fg)" stroke-width="2"/>
+    <g transform="translate(${W-18},20)" fill="var(--muted)" stroke="var(--muted)"><line x1="0" y1="10" x2="0" y2="-6" stroke-width="1.2"/><path d="M0 -11 L4 -3 L-4 -3 Z" stroke="none"/><text x="0" y="22" text-anchor="middle" stroke="none">N</text></g>
+    <g stroke="var(--muted)" stroke-width="1.3"><line x1="14" y1="${H-22}" x2="${(14+bw).toFixed(1)}" y2="${H-22}"/><line x1="14" y1="${H-26}" x2="14" y2="${H-18}"/><line x1="${(14+bw).toFixed(1)}" y1="${H-26}" x2="${(14+bw).toFixed(1)}" y2="${H-18}"/></g>
+    <text x="14" y="${H-8}">${mi} mi</text>
+  </svg>`;
+}
+
+// elevation area + heart-rate line against miles
+function profileSVG(p,opt={}){
+  const W=640,H=opt.h||180,L=44,R=opt.right?40:12,T=12,B=24;
+  const xs=p.mi,tot=xs[xs.length-1]||1,X=v=>L+v/tot*(W-L-R);
+  const ft=p.ft.map(v=>v??null),fv=ft.filter(v=>v!=null);
+  const f0=Math.min(...fv),f1=Math.max(...fv),fr=(f1-f0)||1,Yf=v=>H-B-(v-f0)/fr*(H-T-B)*.92;
+  let out='';
+  // grid + left axis (feet)
+  [0,.5,1].forEach(q=>{const v=f0+fr*q,y=Yf(v);out+=`<line x1="${L}" x2="${W-R}" y1="${y.toFixed(1)}" y2="${y.toFixed(1)}" stroke="var(--grid)"/><text x="${L-6}" y="${(y+3.5).toFixed(1)}" text-anchor="end">${Math.round(v).toLocaleString()}</text>`;});
+  const step=tot>8?2:tot>3?1:.5;
+  for(let m=step;m<tot;m+=step)out+=`<text x="${X(m).toFixed(1)}" y="${H-6}" text-anchor="middle">${m}</text>`;
+  out+=`<text x="${W-R}" y="${H-6}" text-anchor="end">${tot.toFixed(1)} mi</text><text x="${L-6}" y="${H-6}" text-anchor="end">ft</text>`;
+  const pts=xs.map((x,i)=>ft[i]==null?null:[X(x),Yf(ft[i])]).filter(Boolean);
+  const line=pts.map((q,i)=>(i?'L':'M')+q[0].toFixed(1)+' '+q[1].toFixed(1)).join(' ');
+  out+=`<path d="${line} L${pts[pts.length-1][0].toFixed(1)} ${H-B} L${pts[0][0].toFixed(1)} ${H-B} Z" fill="var(--muted)" fill-opacity=".16"/><path d="${line}" fill="none" stroke="var(--muted)" stroke-opacity=".7" stroke-width="1.4"/>`;
+  // second series on its own scale: heart rate, or pace for runs
+  const series=opt.series||'hr',vals=p[series]||[],sv=vals.filter(v=>v!=null);
+  if(sv.length>10){
+    let lo=Math.min(...sv),hi=Math.max(...sv);
+    if(series==='pace'){const s=[...sv].sort((a,b)=>a-b);lo=s[Math.floor(s.length*.03)];hi=s[Math.floor(s.length*.97)];}
+    const r=(hi-lo)||1,inv=series==='pace';
+    const Ys=v=>{const c=Math.max(lo,Math.min(hi,v));const f=(c-lo)/r;return T+(inv?f:1-f)*(H-T-B);};
+    // break the line wherever a sample is missing
+    let d='',pen=false;
+    xs.forEach((x,i)=>{if(vals[i]==null){pen=false;return;}d+=(pen?'L':'M')+X(x).toFixed(1)+' '+Ys(vals[i]).toFixed(1)+' ';pen=true;});
+    const col=series==='hr'?'var(--hr)':'var(--amber)';
+    out+=`<path d="${d}" fill="none" stroke="${col}" stroke-width="1.5" stroke-linejoin="round"/>`;
+    if(opt.right){const fmt=series==='pace'?pace:v=>Math.round(v);
+      out+=`<text x="${W-R+6}" y="${(Ys(hi)+3.5).toFixed(1)}" fill="${col}" style="fill:${col}">${fmt(hi)}</text><text x="${W-R+6}" y="${(Ys(lo)+3.5).toFixed(1)}" style="fill:${col}">${fmt(lo)}</text>`;}
   }
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Elevation and ${series==='hr'?'heart rate':'pace'} by distance">${out}</svg>`;
+}
 
-  function routeSVG(track, eles) {
-    var P = 30;
-    var lats = track.map(function (t) { return t[0]; });
-    var lons = track.map(function (t) { return t[1]; });
-    var la0 = Math.min.apply(null, lats), la1 = Math.max.apply(null, lats);
-    var lo0 = Math.min.apply(null, lons), lo1 = Math.max.apply(null, lons);
-    var k = Math.cos((la0 + la1) / 2 * Math.PI / 180);
-    var spanX = (lo1 - lo0) * k || 1e-6, spanY = (la1 - la0) || 1e-6;
-    var ar = Math.max(0.32, Math.min(2.2, spanX / spanY));
-    var H = 430, W = Math.round((H - 2 * P) * ar) + 2 * P;
-    var s = Math.min((W - 2 * P) / spanX, (H - 2 * P) / spanY);
-    var ox = (W - spanX * s) / 2, oy = (H - spanY * s) / 2;
-    var X = function (lon) { return ox + (lon - lo0) * k * s; };
-    var Y = function (lat) { return H - oy - (lat - la0) * s; };
+function stat(v,l){return `<div class="stat"><b>${v}</b><span>${l}</span></div>`;}
 
-    // Graticule: pick a degree step giving 3-6 lines across the shorter span.
-    var steps = [0.002, 0.005, 0.01, 0.02, 0.05, 0.1];
-    var target = Math.max(la1 - la0, lo1 - lo0) / 4, gs = steps[0];
-    for (var i = 0; i < steps.length; i++) if (steps[i] <= target) gs = steps[i];
-    var g = '', lab = '';
-    for (var la = Math.ceil(la0 / gs) * gs; la <= la1; la += gs) {
-      var y = Y(la).toFixed(1);
-      g += '<line x1="0" y1="' + y + '" x2="' + W + '" y2="' + y + '"/>';
-      lab += '<text x="5" y="' + (+y - 4).toFixed(1) + '">' + la.toFixed(3) + '°N</text>';
-    }
-    var lonLabs = [];
-    for (var lo = Math.ceil(lo0 / gs) * gs; lo <= lo1; lo += gs) {
-      var x = X(lo).toFixed(1);
-      g += '<line x1="' + x + '" y1="0" x2="' + x + '" y2="' + H + '"/>';
-      lonLabs.push({ x: +x + 4, t: Math.abs(lo).toFixed(3) + '°W' });
-    }
+(function(){
+  const box=document.getElementById('panel-hikes');
+  box.innerHTML=O.hikes.map(h=>{
+    const s=stat(h.miles.toFixed(2)+' mi','distance')+stat(dur(h.movingS),'moving')+stat('+'+n0(h.gainFt)+' ft','gain')+stat(n0(h.maxFt)+' ft','high point')+(h.avgHR?stat(n0(h.avgHR)+' / '+n0(h.maxHR),'avg / max hr'):'');
+    if(!h.track) return `<article class="hike small"><div><p class="mono when">${dayLong(h.start)}</p><h2>${esc(h.title)}</h2><p class="where">${esc(h.place)}</p></div><div class="stats">${s}</div></article>`;
+    return `<article class="hike">
+      <p class="mono when">${dayLong(h.start)}</p><h2>${esc(h.title)}</h2><p class="where">${esc(h.place)}</p>
+      <div class="viz"><div class="route">${routeSVG(h)}</div>
+        <div class="prof"><div class="legend mono"><span><i style="background:var(--muted)"></i>elevation</span><span><i style="background:var(--hr)"></i>heart rate</span></div>${profileSVG(h.profile,{right:true})}</div></div>
+      <div class="stats">${s}</div>
+      ${h.photos.length?`<div class="photos">${h.photos.map(p=>`<a href="${p}" target="_blank" rel="noopener"><img src="${p}" alt="${esc(h.title)}" loading="lazy"></a>`).join('')}</div>`:''}
+    </article>`;
+  }).join('');
+})();
 
-    var pts = track.map(function (t) { return [X(t[1]).toFixed(1), Y(t[0]).toFixed(1)]; });
-    var d = pts.map(function (p, i) { return (i ? 'L' : 'M') + p[0] + ' ' + p[1]; }).join(' ');
-    var a0 = pts[0], aN = pts[pts.length - 1];
+/* ---------- runs ---------- */
+(function(){
+  const R=O.runs,box=document.getElementById('panel-runs');
+  if(!R.length){box.innerHTML='<p>No runs yet.</p>';return;}
+  const road=R.filter(r=>!r.track&&r.avgPace&&r.avgHR);
+  const miles=R.reduce((a,r)=>a+r.miles,0),secsAll=road.reduce((a,r)=>a+r.movingS,0),miRoad=road.reduce((a,r)=>a+r.miles,0);
+  const avgPace=secsAll/miRoad,avgHR=road.reduce((a,r)=>a+r.avgHR*r.movingS,0)/secsAll;
+  const longest=R.reduce((a,r)=>r.miles>a.miles?r:a,R[0]),first=R[R.length-1];
 
-    // Each segment tinted by its elevation, so the trace doubles as a relief map.
-    var eLo = Math.min.apply(null, eles), eHi = Math.max.apply(null, eles);
-    var eRng = (eHi - eLo) || 1, seg = '';
-    for (var q = 1; q < pts.length; q++) {
-      var t = (((eles[q] + eles[q - 1]) / 2) - eLo) / eRng;
-      seg += '<line x1="' + pts[q - 1][0] + '" y1="' + pts[q - 1][1] + '" x2="' + pts[q][0] +
-        '" y2="' + pts[q][1] + '" stroke="' + ramp(t) + '"/>';
-    }
+  // monthly mileage
+  const months={};R.forEach(r=>{const k=r.date.slice(0,7);months[k]=(months[k]||0)+r.miles;});
+  const keys=Object.keys(months).sort(),mx=Math.max(...Object.values(months));
+  const bw=560/keys.length,CH=200;
+  const bars=keys.map((k,i)=>{const h=months[k]/mx*(CH-40),x=40+i*bw;const lab=new Date(k+'-15').toLocaleDateString('en-US',{month:'short'}).toLowerCase();
+    return `<rect x="${(x+bw*.18).toFixed(1)}" y="${(CH-20-h).toFixed(1)}" width="${(bw*.64).toFixed(1)}" height="${h.toFixed(1)}" rx="2" fill="var(--amber)" fill-opacity="${i===keys.length-1?.45:.9}"><title>${lab}: ${months[k].toFixed(1)} mi</title></rect>
+      <text x="${(x+bw/2).toFixed(1)}" y="${(CH-26-h).toFixed(1)}" text-anchor="middle" style="fill:var(--fg)">${months[k].toFixed(1)}</text><text x="${(x+bw/2).toFixed(1)}" y="${CH-2}" text-anchor="middle">${lab}</text>`;}).join('');
 
-    // Legend for the elevation ramp.
-    var gw = 84, gx = W - 12 - gw, gy = H - 58;
-    var stops = '';
-    for (var r = 0; r <= 6; r++) stops += '<stop offset="' + (r / 6 * 100) + '%" stop-color="' + ramp(r / 6) + '"/>';
-    var legend = '<defs><linearGradient id="ramp' + Math.round(W + H + eHi) + '">' + stops + '</linearGradient></defs>' +
-      '<rect x="' + gx + '" y="' + gy + '" width="' + gw + '" height="6" fill="url(#ramp' + Math.round(W + H + eHi) + ')"/>' +
-      '<g fill="var(--muted)" font-family="Work Sans, sans-serif" font-size="9.5">' +
-        '<text x="' + gx + '" y="' + (gy + 18) + '">' + Math.round(eLo * 3.28084).toLocaleString() + '</text>' +
-        '<text x="' + (gx + gw) + '" y="' + (gy + 18) + '" text-anchor="end">' +
-          Math.round(eHi * 3.28084).toLocaleString() + ' ft</text></g>';
+  // pace vs heart rate: up and to the left is fitter
+  const hrs=road.map(r=>r.avgHR),ps=road.map(r=>r.avgPace);
+  const h0=Math.min(...hrs)-5,h1=Math.max(...hrs)+5,p0=Math.min(...ps)-20,p1=Math.max(...ps)+20;
+  const SX=v=>40+(v-h0)/(h1-h0)*560,SY=v=>14+(v-p0)/(p1-p0)*164;
+  const t0=new Date(first.start).getTime(),tN=new Date(R[0].start).getTime();
+  let ax='';[0,.5,1].forEach(q=>{const v=p0+(p1-p0)*q;ax+=`<line x1="40" x2="600" y1="${SY(v).toFixed(1)}" y2="${SY(v).toFixed(1)}" stroke="var(--grid)"/><text x="34" y="${(SY(v)+3.5).toFixed(1)}" text-anchor="end">${pace(v)}</text>`;});
+  for(let v=Math.ceil(h0/10)*10;v<=h1;v+=10)ax+=`<text x="${SX(v).toFixed(1)}" y="198" text-anchor="middle">${v}</text>`;
+  const dots=road.slice().reverse().map(r=>{const f=(new Date(r.start).getTime()-t0)/((tN-t0)||1);
+    return `<circle class="dot" cx="${SX(r.avgHR).toFixed(1)}" cy="${SY(r.avgPace).toFixed(1)}" r="${(3+r.miles*.9).toFixed(1)}" fill="${ramp(f)}" fill-opacity=".85"><title>${day(r.start)} · ${r.miles} mi · ${pace(r.avgPace)}/mi at ${r.avgHR} bpm</title></circle>`;}).join('');
 
-    // Scale bar: nice round mile figure under a quarter of the frame width.
-    var pxPerMile = 1609.34 / (111320 / s);
-    var miles = [0.1, 0.25, 0.5, 1, 2, 5], mi = miles[0];
-    for (var j = 0; j < miles.length; j++) if (miles[j] * pxPerMile < (W - 2 * P) * 0.4) mi = miles[j];
-    var barW = (mi * pxPerMile).toFixed(1), bx = 12, by = H - 26;
+  const row=r=>{
+    const dp=r.avgPace&&!r.track?r.avgPace-avgPace:null,dh=r.avgHR?r.avgHR-avgHR:null;
+    const vs=dp!=null?`<p class="vs">${Math.abs(dp)<5?'right at':'<b>'+pace(Math.abs(dp))+(dp<0?' faster':' slower')+'</b> than'} my average pace${dh!=null?`, heart rate <b>${Math.abs(Math.round(dh))} bpm ${dh<0?'lower':'higher'}</b>`:''}.</p>`:'';
+    const g=(t,items)=>{const rows=items.filter(x=>x[1]!=null&&x[1]!=='–');return rows.length?`<div class="group"><h4>${t}</h4><dl>${rows.map(x=>`<dt>${x[0]}</dt><dd>${x[1]}</dd>`).join('')}</dl></div>`:'';};
+    const u=(v,s)=>v==null?null:v+s;
+    return `<details class="run" id="run-${r.start.replace(/[^0-9]/g,'').slice(0,12)}">
+      <summary><span class="d">${day(r.start)}</span><span class="wk">${esc(r.workout)}</span><span class="n">${r.miles.toFixed(2)} mi</span><span class="n">${r.track?'track':pace(r.avgPace)+'/mi'}</span><span class="n hr">${r.avgHR?n0(r.avgHR)+' bpm':'–'}</span><span class="plus" aria-hidden="true">+</span></summary>
+      <div class="detail">
+        ${vs}
+        ${r.profile?`<div class="prof"><div class="legend mono"><span><i style="background:var(--muted)"></i>elevation</span><span><i style="background:var(--amber)"></i>pace</span></div>${profileSVG(r.profile,{series:'pace',right:true,h:150})}${profileSVG(r.profile,{series:'hr',right:true,h:120})}</div>`:''}
+        <div class="groups">
+          ${g('pace',[['average',r.avgPace&&pace(r.avgPace)+'/mi'],['best',r.bestPace&&pace(r.bestPace)+'/mi'],['grade-adjusted',r.gap&&pace(r.gap)+'/mi'],['moving time',dur(r.movingS)],['laps',r.laps]])}
+          ${g('effort',[['avg hr',u(r.avgHR,' bpm')],['max hr',u(r.maxHR,' bpm')],['aerobic te',r.aerobicTE],['calories',r.calories&&n0(r.calories)]])}
+          ${g('form',[['cadence',u(r.avgCad,' spm')],['stride',u(r.strideM,' m')],['ground contact',u(r.gctMs,' ms')],['vert. oscillation',u(r.vertOscCm,' cm')],['vert. ratio',u(r.vertRatio,'%')]])}
+          ${g('power & course',[['avg power',u(r.avgPower,' W')],['max power',u(r.maxPower,' W')],['climb',r.gainFt!=null?'+'+n0(r.gainFt)+' ft':null],['temp',r.tempF&&r.tempF[1]!=null?Math.round(r.tempF[0])+'–'+Math.round(r.tempF[1])+'°F':null]])}
+        </div>
+      </div></details>`;
+  };
 
-    // START label: flip to the left of the dot when it would run past the frame.
-    var flip = +a0[0] + 10 + 40 > W;
-    var lx = flip ? (+a0[0] - 10).toFixed(1) : (+a0[0] + 10).toFixed(1);
-    var lanchor = flip ? 'end' : 'start';
-    var ly = Math.max(14, Math.min(H - 8, +a0[1] + 4)).toFixed(1);
+  box.innerHTML=`
+    <div class="stats big">${stat(miles.toFixed(1),'miles since '+new Date(first.start).toLocaleDateString('en-US',{month:'short'}).toLowerCase())+stat(R.length,'runs')+stat(longest.miles.toFixed(1)+' mi','longest')+stat(pace(avgPace)+'/mi','avg pace')+stat(Math.round(avgHR)+' bpm','avg hr')}</div>
+    <div class="overview">
+      <div class="chart"><h3>miles by month</h3><p>Building toward the Berkeley Half on Nov 15.</p><svg viewBox="0 0 610 200">${bars}</svg></div>
+      <div class="chart"><h3>pace vs heart rate</h3><p>Each dot is a run, sized by distance, amber for recent. Up and to the left means faster for the same effort.</p><svg viewBox="0 0 610 200">${ax}${dots}<text x="40" y="198" text-anchor="start">bpm →</text><text x="600" y="8" text-anchor="end">faster ↑</text></svg></div>
+    </div>
+    <div class="runs">
+      <div class="head mono"><span>date</span><span>workout</span><span>dist</span><span>pace</span><span class="hrh">hr</span><span></span></div>
+      ${R.map(row).join('')}
+    </div>`;
+})();
 
-    // North arrow goes to whichever top corner the start dot is not in.
-    var nx = (+a0[0] > W / 2 && +a0[1] < 80) ? 26 : W - 26;
+/* deep links: #runs, #hikes, or #run-YYYYMMDDHHMM opens that run */
+(function(){
+  const h=location.hash.slice(1);
+  if(h==='runs'||h.startsWith('run-'))window.showTab('panel-runs');
+  if(h.startsWith('run-')){const d=document.getElementById(h);if(d){d.open=true;requestAnimationFrame(()=>d.scrollIntoView({block:'start'}));}}
+})();
 
-    // Bottom band is shared with the scale bar; drop any degree label that would land under it.
-    var barEnd = bx + +barW + 44;
-    lonLabs.forEach(function (L) {
-      if (L.x + 44 < barEnd && L.x > bx - 44) return;
-      lab += '<text x="' + L.x.toFixed(1) + '" y="' + (H - 6) + '">' + L.t + '</text>';
-    });
-
-    return '<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg">' +
-      '<g stroke="var(--fg)" stroke-opacity="0.07" stroke-width="1">' + g + '</g>' +
-      '<g fill="var(--muted)" font-family="Work Sans, sans-serif" font-size="9.5" opacity="0.75">' + lab + '</g>' +
-      '<path d="' + d + '" fill="none" stroke="var(--accent)" stroke-opacity="0.13" stroke-width="10" stroke-linejoin="round" stroke-linecap="round"/>' +
-      '<g stroke-width="3" stroke-linecap="round">' + seg + '</g>' +
-      legend +
-      '<circle cx="' + a0[0] + '" cy="' + a0[1] + '" r="5.5" fill="var(--bg)" stroke="var(--fg)" stroke-width="2"/>' +
-      '<circle cx="' + aN[0] + '" cy="' + aN[1] + '" r="4" fill="var(--accent)"/>' +
-      '<g fill="var(--fg)" font-family="Work Sans, sans-serif" font-size="10" letter-spacing="0.08em">' +
-        '<text x="' + lx + '" y="' + ly + '" text-anchor="' + lanchor + '">START</text></g>' +
-      '<g transform="translate(' + nx + ',26)" stroke="var(--muted)" fill="var(--muted)">' +
-        '<line x1="0" y1="11" x2="0" y2="-8" stroke-width="1.2"/>' +
-        '<path d="M0 -13 L4 -5 L-4 -5 Z" stroke="none"/>' +
-        '<text x="0" y="24" text-anchor="middle" font-family="Work Sans, sans-serif" font-size="9.5" stroke="none">N</text></g>' +
-      '<g stroke="var(--muted)" fill="var(--muted)">' +
-        '<line x1="' + bx + '" y1="' + by + '" x2="' + (bx + +barW) + '" y2="' + by + '" stroke-width="1.4"/>' +
-        '<line x1="' + bx + '" y1="' + (by - 4) + '" x2="' + bx + '" y2="' + (by + 4) + '" stroke-width="1.4"/>' +
-        '<line x1="' + (bx + +barW) + '" y1="' + (by - 4) + '" x2="' + (bx + +barW) + '" y2="' + (by + 4) + '" stroke-width="1.4"/>' +
-        '<text x="' + bx + '" y="' + (by + 16) + '" font-family="Work Sans, sans-serif" font-size="9.5" stroke="none">' +
-          mi + (mi === 1 ? ' mile' : ' mi') + '</text></g>' +
-      '</svg>';
-  }
-
-  // Elevation profile against distance travelled, tinted with the same ramp.
-  function elevSVG(eles, track) {
-    var W = 900, H = 120, PL = 46, PR = 14, PT = 16, PB = 26;
-    var lo = Math.min.apply(null, eles), hi = Math.max.apply(null, eles);
-    var rng = (hi - lo) || 1;
-
-    // cumulative distance so the x axis is miles, not sample index
-    var cum = [0], R = 6371000;
-    for (var i = 1; i < track.length; i++) {
-      var dLa = (track[i][0] - track[i-1][0]) * Math.PI / 180;
-      var dLo = (track[i][1] - track[i-1][1]) * Math.PI / 180;
-      var A = Math.sin(dLa/2) * Math.sin(dLa/2) + Math.cos(track[i-1][0] * Math.PI/180) *
-        Math.cos(track[i][0] * Math.PI/180) * Math.sin(dLo/2) * Math.sin(dLo/2);
-      cum.push(cum[i-1] + 2 * R * Math.asin(Math.sqrt(A)) / 1609.34);
-    }
-    var total = cum[cum.length - 1] || 1;
-    var X = function (i) { return PL + cum[i] / total * (W - PL - PR); };
-    var Y = function (v) { return H - PB - (v - lo) / rng * (H - PT - PB); };
-
-    var pts = eles.map(function (v, i) { return [X(i).toFixed(1), Y(v).toFixed(1)]; });
-    var d = pts.map(function (p, i) { return (i ? 'L' : 'M') + p[0] + ' ' + p[1]; }).join(' ');
-
-    var stops = '';
-    for (var r = 0; r <= 6; r++) stops += '<stop offset="' + (r / 6 * 100) + '%" stop-color="' + ramp(r / 6) + '"/>';
-    var gid = 'ev' + Math.round(hi * 100 + eles.length);
-
-    // horizontal elevation gridlines at three levels
-    var grid = '', glab = '';
-    [0, 0.5, 1].forEach(function (f) {
-      var v = lo + rng * f, y = Y(v).toFixed(1);
-      grid += '<line x1="' + PL + '" y1="' + y + '" x2="' + (W - PR) + '" y2="' + y + '"/>';
-      glab += '<text x="' + (PL - 6) + '" y="' + (+y + 3.5).toFixed(1) + '" text-anchor="end">' +
-        Math.round(v * 3.28084).toLocaleString() + '</text>';
-    });
-
-    // mile ticks along the bottom
-    var ticks = '', stepMi = total > 8 ? 2 : (total > 3 ? 1 : 0.5);
-    for (var mi = stepMi; mi < total; mi += stepMi) {
-      var xi = PL + mi / total * (W - PL - PR);
-      ticks += '<line x1="' + xi.toFixed(1) + '" y1="' + (H - PB) + '" x2="' + xi.toFixed(1) + '" y2="' + (H - PB + 4) + '"/>';
-      glab += '<text x="' + xi.toFixed(1) + '" y="' + (H - PB + 16) + '" text-anchor="middle">' + mi + '</text>';
-    }
-    glab += '<text x="' + (W - PR) + '" y="' + (H - PB + 16) + '" text-anchor="end">' + total.toFixed(1) + ' mi</text>';
-    glab += '<text x="' + (PL - 6) + '" y="' + (H - PB + 16) + '" text-anchor="end">ft</text>';
-
-    var pk = eles.indexOf(hi);
-    return '<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">' +
-      '<defs><linearGradient id="' + gid + '" x1="0" y1="1" x2="0" y2="0">' + stops + '</linearGradient></defs>' +
-      '<g stroke="var(--fg)" stroke-opacity="0.08" stroke-width="1">' + grid + ticks + '</g>' +
-      '<path d="' + d + ' L' + (W - PR) + ' ' + (H - PB) + ' L' + PL + ' ' + (H - PB) + ' Z" fill="url(#' + gid + ')" fill-opacity="0.28"/>' +
-      '<path d="' + d + '" fill="none" stroke="var(--accent)" stroke-opacity="0.85" stroke-width="1.8"/>' +
-      '<circle cx="' + X(pk).toFixed(1) + '" cy="' + Y(hi).toFixed(1) + '" r="3.2" fill="var(--accent)"/>' +
-      '<g fill="var(--muted)" font-family="Work Sans, sans-serif" font-size="9.5">' + glab + '</g>' +
-      '</svg>';
-  }
-
-  function geoLine(a) {
-    var lats = a.track.map(function (t) { return t[0]; });
-    var lons = a.track.map(function (t) { return t[1]; });
-    var lo = Math.min.apply(null, a.eles), hi = Math.max.apply(null, a.eles);
-    var f = function (n) { return n.toFixed(3); };
-    return 'GPS track · ' + a.track.length + ' points · ' +
-      f(Math.min.apply(null, lats)) + '–' + f(Math.max.apply(null, lats)) + '°N, ' +
-      f(Math.abs(Math.max.apply(null, lons))) + '–' + f(Math.abs(Math.min.apply(null, lons))) + '°W · ' +
-      Math.round(lo * 3.28084).toLocaleString() + '–' + Math.round(hi * 3.28084).toLocaleString() + ' ft';
-  }
-
-  function fmtDur(m) {
-    var h = Math.floor(m / 60), mm = m % 60;
-    return h ? h + 'h ' + mm + 'm' : mm + 'm';
-  }
-  function fmtDate(iso) {
-    return new Date(iso).toLocaleDateString('en-US',
-      { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
-  }
-
-  // Feed
-  var feed = document.getElementById('feed');
-  acts.forEach(function (a, i) {
-    var el = document.createElement('div');
-    el.className = 'entry';
-    var stats = [
-      [a.miles.toFixed(2) + ' mi', 'distance'],
-      [fmtDur(a.mins), 'moving time'],
-      [a.gainFt.toLocaleString() + ' ft', 'elevation gain'],
-      [a.type, 'activity']
-    ];
-    el.innerHTML =
-      '<div style="font-size:12px; letter-spacing:0.13em; text-transform:uppercase; color:var(--accent); margin-bottom:8px;">' +
-        fmtDate(a.start) + '</div>' +
-      '<div class="serif" style="font-size:24px; margin-bottom:4px;">' + a.title + '</div>' +
-      '<div style="font-size:14px; color:var(--muted);">' + a.place + '</div>' +
-      '<div class="route">' + routeSVG(a.track, a.eles) + '</div>' +
-      '<div class="elev">' + elevSVG(a.eles, a.track) + '</div>' +
-      '<div class="caption">' + geoLine(a) + '</div>' +
-      '<div class="stats">' + stats.map(function (s) {
-        return '<div><div class="sval">' + s[0] + '</div><div class="slab">' + s[1] + '</div></div>';
-      }).join('') + '</div>' +
-      (a.photos.length ? '<div class="photos">' + a.photos.map(function (p) {
-        return '<img src="' + p + '" alt="' + a.title + '" loading="lazy">';
-      }).join('') + '</div>' : '');
-    feed.appendChild(el);
-
-  });
+/* header copy from the data */
+(function(){
+  document.getElementById('nHikes').textContent=O.hikes.length;
+  document.getElementById('nRuns').textContent=O.runs.length;
+  document.getElementById('built').textContent='synced from garmin · '+(O.built||'');
+})();
+/* sticky header: solid once scrolled */
+(function(){
+  const bar=document.querySelector('.top');
+  const on=()=>bar.classList.toggle('scrolled',scrollY>24);
+  addEventListener('scroll',on,{passive:true});on();
 })();
 </script>
 </body>
