@@ -147,6 +147,21 @@ section[id],.job,.run{scroll-margin-top:72px}
 /* outside */
 .outside{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(24px,4vw,48px);align-items:start}
 .photo{position:relative;margin:0;border-radius:6px;overflow:hidden;aspect-ratio:4/3}
+/* photo carousel: native horizontal scroll with snap, so swipe and trackpads just work */
+.carousel{position:relative;border-radius:6px;overflow:hidden}
+.ctrack{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;overscroll-behavior-x:contain}
+.ctrack::-webkit-scrollbar{display:none}
+.ctrack:focus-visible{outline:2px solid var(--amber);outline-offset:-2px}
+.ctrack .photo{flex:0 0 100%;scroll-snap-align:start;border-radius:0}
+.cbtn{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:1px solid rgba(244,239,228,.35);
+  background:rgba(8,24,30,.5);color:#F4EFE4;font-size:1rem;cursor:pointer;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;transition:opacity .2s,background-color .2s}
+.cbtn:hover{background:rgba(8,24,30,.75)}
+.carousel:hover .cbtn,.cbtn:focus-visible{opacity:1}
+.cbtn.prev{left:12px}.cbtn.next{right:12px}
+.cbtn[disabled]{opacity:0!important;pointer-events:none}
+.ccount{position:absolute;top:12px;right:12px;font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;color:#F4EFE4;background:rgba(8,24,30,.5);padding:4px 8px;border-radius:3px;pointer-events:none}
+@media (hover:none){.cbtn{opacity:.85;width:34px;height:34px}}
+@media (prefers-reduced-motion: reduce){.ctrack{scroll-behavior:auto}}
 .photo img{width:100%;height:100%;object-fit:cover;display:block}
 .photo figcaption{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:#F4EFE4;background:linear-gradient(transparent,rgba(8,24,30,.78))}
 .hikes{border-top:1px solid var(--line)}
@@ -286,10 +301,17 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
         <h2>i go uphill on purpose.</h2>
       </div>
       <div class="outside">
-        <figure class="photo">
-          <img src="../assets/tahoe-sunrise-s.jpg" alt="Sitting on a granite summit at sunrise above Lake Tahoe" loading="lazy">
-          <figcaption class="tnum"><span>rubicon peak · el dorado county</span><span>aug 24, 2026 · sunrise</span></figcaption>
-        </figure>
+        <div class="carousel" aria-roledescription="carousel" aria-label="Photos from my hikes">
+          <div class="ctrack" id="ctrack" tabindex="0" aria-label="Use the arrow keys to move between photos">
+            <figure class="photo">
+              <img src="../assets/tahoe-sunrise-s.jpg" alt="Sitting on a granite summit at sunrise above Lake Tahoe">
+              <figcaption class="tnum"><span>rubicon peak · el dorado county</span><span>aug 24, 2026 · sunrise</span></figcaption>
+            </figure>
+          </div>
+          <button class="cbtn prev" type="button" aria-label="Previous photo" disabled>←</button>
+          <button class="cbtn next" type="button" aria-label="Next photo">→</button>
+          <span class="ccount tnum" id="ccount" aria-live="polite"></span>
+        </div>
         <div>
           <p class="mono" style="margin-bottom:10px">recent, from my watch</p>
           <div class="hikes" id="hikes"></div>
@@ -504,6 +526,36 @@ const JOBS=[
   const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
   document.getElementById('ghRepos').innerHTML=G.repos.filter(r=>r.desc&&!featured.has(r.name.toLowerCase())).slice(0,4).map(r=>
     `<a class="repo" href="${r.url}" target="_blank" rel="noopener"><b>${esc(r.name)}</b><p>${esc(r.desc)}</p><span class="mono">${esc(r.lang||'')} · ${new Date(r.pushed+'T12:00:00').toLocaleDateString('en-US',{month:'short',year:'numeric'}).toLowerCase()}</span></a>`).join('');
+})();
+
+/* photo carousel: every hike photo from the Garmin data, sunrise shot first */
+(function(){
+  const track=document.getElementById('ctrack');if(!track)return;
+  const box=track.parentElement,prev=box.querySelector('.prev'),next=box.querySelector('.next'),count=document.getElementById('ccount');
+  const first=track.querySelector('img').getAttribute('src').replace('../','');
+  const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+  const fmt=iso=>new Date(iso).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}).toLowerCase();
+  ((window.OUTDOORS||{}).hikes||[]).forEach(h=>(h.photos||[]).forEach(src=>{
+    if(src===first)return;
+    track.insertAdjacentHTML('beforeend',`<figure class="photo"><img src="../${esc(src)}" alt="Photo from ${esc(h.title)}" loading="lazy">
+      <figcaption class="tnum"><span>${esc(h.title.toLowerCase())} · ${esc(h.place.replace(/, CA$/,'').toLowerCase())}</span><span>${fmt(h.start)}</span></figcaption></figure>`);
+  }));
+  const slides=track.children.length;
+  if(slides<2){prev.hidden=next.hidden=true;return;}
+  // `target` is the slide we're heading to, so quick repeat clicks don't re-read a half-finished scroll
+  let target=null,clear=0;
+  const at=()=>Math.round(track.scrollLeft/track.clientWidth);
+  const sync=()=>{const i=target??at();count.textContent=(i+1)+' / '+slides;prev.disabled=i===0;next.disabled=i===slides-1;};
+  const settle=()=>{target=null;sync();};
+  const go=d=>{target=Math.max(0,Math.min(slides-1,(target??at())+d));sync();
+    track.scrollTo({left:target*track.clientWidth});clearTimeout(clear);clear=setTimeout(settle,900);};
+  track.addEventListener('scrollend',settle);
+  prev.addEventListener('click',()=>go(-1));
+  next.addEventListener('click',()=>go(1));
+  track.addEventListener('keydown',e=>{if(e.key==='ArrowRight'){e.preventDefault();go(1);}if(e.key==='ArrowLeft'){e.preventDefault();go(-1);}});
+  track.addEventListener('scroll',()=>requestAnimationFrame(sync),{passive:true});
+  addEventListener('resize',sync);
+  sync();
 })();
 
 /* outside: recent hikes with a tiny route trace from the real GPS track */
