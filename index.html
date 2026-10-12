@@ -138,6 +138,9 @@ section[id],.job,.run{scroll-margin-top:72px}
 .shot{position:relative;margin:0;aspect-ratio:16/10;border:1px dashed var(--line);border-radius:var(--r-md);background:var(--bg-2);overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;padding:16px}
 /* drop a 1600x1000 image at the src path and it covers the placeholder; missing files remove themselves */
 .shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.shot.chart{display:block;border-style:solid;padding:12px 14px 10px;text-align:left}
+.shot.chart svg{display:block;width:100%;height:100%;overflow:visible}
+.shot.chart text{font-family:var(--mono);font-size:9.5px;fill:var(--muted)}
 .shot .file{font-family:var(--mono);font-size:.62rem;color:var(--amber-ink);letter-spacing:.02em;text-transform:none}
 .proj h3{font-size:1.3rem;font-weight:650;letter-spacing:-.02em}
 .proj p{font-size:1rem;color:var(--muted);line-height:1.5}
@@ -287,7 +290,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
       </div>
       <div class="projects">
         <article class="proj">
-          <figure class="shot mono"><span>screenshot: quantile fit across price tiers</span><span class="file">assets/projects/solar-quantile.png · 1600×1000</span><img src="assets/projects/solar-quantile.png" alt="Quantile regression fits across solar system price tiers" loading="lazy" onerror="this.remove()"></figure>
+          <figure class="shot chart" data-chart="solar" role="img" aria-label="Battery storage price premium by quantile: MDE estimate with 95% band, QuantReg and OLS"></figure>
           <p class="mono">2026 · python, statsmodels</p>
           <h3>Solar quantile analysis</h3>
           <p>Cleaned a 332,000-row California solar dataset and implemented Minimum Distance Estimation for quantile regression following the asymptotic theory, checked against statsmodels. The expensive tail prices nothing like the median.</p>
@@ -301,7 +304,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
           <div class="links"><a href="https://github.com/Yonatan-Herrera/Ecosim" target="_blank" rel="noopener">view code ↗</a></div>
         </article>
         <article class="proj">
-          <figure class="shot mono"><span>screenshot: spread z-score with entry and exit bands</span><span class="file">assets/projects/pairs-zscore.png · 1600×1000</span><img src="assets/projects/pairs-zscore.png" alt="WMT/TGT spread z-score with entry and exit bands" loading="lazy" onerror="this.remove()"></figure>
+          <figure class="shot chart" data-chart="pairs" role="img" aria-label="WMT/TGT spread z-score from 2020 to 2023 with plus and minus 1.2 trade thresholds"></figure>
           <p class="mono">2025 · python, pandas, statsmodels</p>
           <h3>Pairs trading backtester</h3>
           <p>A statistical pairs engine on WMT/TGT: rolling 60-day OLS hedge ratios so nothing peeks ahead, z-score mean-reversion signals, and modeled transaction costs.</p>
@@ -375,6 +378,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
 
 <script src="outdoors-data.js"></script>
 <script src="github-data.js"></script>
+<script src="projects-data.js"></script>
 <script>
 /* theme: follow the system until toggled, then remember */
 (function(){
@@ -524,6 +528,59 @@ const JOBS=[
   sheet.querySelector('.sheet-x').addEventListener('click',close);
   grid.addEventListener('click',e=>{const c=e.target.closest('[data-job]');if(c)open(c.dataset.job,c);});
   document.querySelectorAll('[data-open]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();open(a.dataset.open,a);}));
+})();
+
+/* project charts: redrawn in the site's palette from tools/build_project_charts.py */
+(function(){
+  const C=window.PROJECT_CHARTS;if(!C)return;
+  const W=400,H=232,L=34,R=10,T=26,B=22;
+  const f=(v,d=1)=>v.toFixed(d);
+
+  // solar: storage premium by quantile, MDE with its 95% band vs QuantReg and OLS
+  const sol=document.querySelector('[data-chart="solar"]');
+  if(sol&&C.solar){
+    const d=C.solar,q=d.quantiles,lo=d.mde.map((m,i)=>m-1.96*d.mdeSE[i]),hi=d.mde.map((m,i)=>m+1.96*d.mdeSE[i]);
+    const y0=Math.floor(Math.min(...lo,...d.quantreg)*2)/2,y1=Math.ceil(Math.max(...hi,...d.quantreg)*2)/2;
+    const X=v=>L+(v-q[0])/(q[q.length-1]-q[0])*(W-L-R),Y=v=>T+(y1-v)/(y1-y0)*(H-T-B);
+    const line=a=>a.map((v,i)=>(i?'L':'M')+f(X(q[i]))+' '+f(Y(v))).join(' ');
+    let g='';
+    for(let v=y0;v<=y1+1e-9;v+=.5)g+=`<line x1="${L}" x2="${W-R}" y1="${f(Y(v))}" y2="${f(Y(v))}" stroke="var(--line)"/><text x="${L-6}" y="${f(Y(v)+3)}" text-anchor="end">${v.toFixed(1)}</text>`;
+    q.forEach(v=>g+=`<text x="${f(X(v))}" y="${H-6}" text-anchor="middle">q${String(v).replace('0.','.')}</text>`);
+    const band=line(hi)+' '+lo.map((v,i)=>[i,v]).reverse().map(([i,v])=>'L'+f(X(q[i]))+' '+f(Y(v))).join(' ')+' Z';
+    sol.innerHTML=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${g}
+      <path d="${band}" fill="var(--amber)" fill-opacity=".16"/>
+      <line x1="${L}" x2="${W-R}" y1="${f(Y(d.ols))}" y2="${f(Y(d.ols))}" stroke="var(--fg)" stroke-opacity=".55" stroke-dasharray="2 3"/>
+      <text x="${W-R}" y="${f(Y(d.ols)-4)}" text-anchor="end">ols ${d.ols}</text>
+      <path d="${line(d.quantreg)}" fill="none" stroke="var(--muted)" stroke-width="1.6" stroke-dasharray="5 4"/>
+      <path d="${line(d.mde)}" fill="none" stroke="var(--amber)" stroke-width="2.2"/>
+      ${d.mde.map((v,i)=>`<circle cx="${f(X(q[i]))}" cy="${f(Y(v))}" r="3" fill="var(--amber)"/>`).join('')}
+      <g transform="translate(${L},10)"><line x1="0" x2="14" y1="0" y2="0" stroke="var(--amber)" stroke-width="2.2"/><text x="18" y="3">mde + 95% ci</text>
+        <line x1="104" x2="118" y1="0" y2="0" stroke="var(--muted)" stroke-width="1.6" stroke-dasharray="5 4"/><text x="122" y="3">quantreg</text>
+        <text x="${W-L-R}" y="3" text-anchor="end">$/W premium, 21 kWh+</text></g>
+    </svg>`;
+  }
+
+  // pairs: the trading signal only, highlighted where it crosses the entry threshold
+  const pr=document.querySelector('[data-chart="pairs"]');
+  if(pr&&C.pairs){
+    const d=C.pairs,z=d.z,n=z.length,th=d.threshold,zmax=Math.ceil(Math.max(...z.map(Math.abs)));
+    const X=i=>L+i/(n-1)*(W-L-R),Y=v=>T+(zmax-v)/(2*zmax)*(H-T-B);
+    const path=z.map((v,i)=>(i?'L':'M')+f(X(i))+' '+f(Y(v))).join(' ');
+    let g='';
+    [-zmax,-2,0,2,zmax].forEach(v=>g+=`<text x="${L-6}" y="${f(Y(v)+3)}" text-anchor="end">${v>0?'+':''}${v}</text>`);
+    let last='';d.dates.forEach((dt,i)=>{const yr=dt.slice(0,4);if(yr!==last&&dt.slice(5,7)<='01'){g+=`<text x="${f(X(i))}" y="${H-6}" text-anchor="middle">${yr}</text><line x1="${f(X(i))}" x2="${f(X(i))}" y1="${T}" y2="${H-B}" stroke="var(--line)"/>`;}last=yr;});
+    const id='zc'+Math.random().toString(36).slice(2,7);
+    pr.innerHTML=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">
+      <defs><clipPath id="${id}"><rect x="${L}" y="${T-6}" width="${W-L-R}" height="${f(Y(th)-T+6)}"/><rect x="${L}" y="${f(Y(-th))}" width="${W-L-R}" height="${f(H-B-Y(-th)+6)}"/></clipPath></defs>
+      ${g}
+      <rect x="${L}" y="${f(Y(th))}" width="${W-L-R}" height="${f(Y(-th)-Y(th))}" fill="var(--fg)" fill-opacity=".04"/>
+      <line x1="${L}" x2="${W-R}" y1="${f(Y(0))}" y2="${f(Y(0))}" stroke="var(--fg)" stroke-opacity=".35"/>
+      ${[th,-th].map(v=>`<line x1="${L}" x2="${W-R}" y1="${f(Y(v))}" y2="${f(Y(v))}" stroke="var(--amber)" stroke-opacity=".7" stroke-dasharray="4 3"/>`).join('')}
+      <path d="${path}" fill="none" stroke="var(--muted)" stroke-width="1" stroke-linejoin="round"/>
+      <path d="${path}" fill="none" stroke="var(--amber)" stroke-width="1.3" stroke-linejoin="round" clip-path="url(#${id})"/>
+      <g transform="translate(${L},10)"><text x="0" y="3">wmt/tgt spread z-score</text><text x="${W-L-R}" y="3" text-anchor="end">trades fire beyond ±${th}</text></g>
+    </svg>`;
+  }
 })();
 
 /* github: contribution grid + recent public repos, from tools/build_github.py */
