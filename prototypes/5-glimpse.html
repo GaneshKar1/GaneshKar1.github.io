@@ -35,6 +35,11 @@
   --amber-ink:#A35F06; --live:#23855C; color-scheme:light;
 }
 
+/* squircles: continuous-curve corners where the browser supports corner-shape,
+   with a slightly larger radius to match; plain rounded corners elsewhere */
+:root{--r-sm:12px;--r-md:18px;--r-lg:24px;--press:scale(.97);--fill:color-mix(in srgb,var(--fg) 8%,transparent);--fill-2:color-mix(in srgb,var(--fg) 13%,transparent)}
+@supports (corner-shape: squircle){:root{--r-sm:18px;--r-md:28px;--r-lg:38px}}
+.btn,.card,.sheet,.repo,.shot,.carousel,.chip,.now .row,.sheet-x,.proj .links a{corner-shape:squircle}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:19px;line-height:1.55;-webkit-font-smoothing:antialiased}
@@ -73,12 +78,17 @@ section[id],.job,.run{scroll-margin-top:72px}
 .lede{font-style:italic;font-size:clamp(1.15rem,2.1vw,1.4rem);line-height:1.45;max-width:34ch;margin-top:clamp(20px,3vw,30px)}
 .lede em{font-style:normal;font-family:var(--display);font-weight:600;color:var(--amber-ink)}
 .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
-.btn{font-family:var(--mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;padding:12px 16px;border-radius:4px;border:1px solid var(--amber);background:var(--amber);color:#0F2A33;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
-.btn.ghost{background:transparent;color:var(--fg);border-color:var(--line)}
-.btn.ghost:hover{border-color:var(--amber)}
+.btn{font-family:var(--display);font-size:.98rem;font-weight:600;letter-spacing:-.01em;padding:12px 20px;border-radius:var(--r-sm);border:0;background:var(--amber);color:#0F2A33;text-decoration:none;display:inline-flex;align-items:center;gap:8px;cursor:pointer;transition:transform .15s ease,filter .2s ease,background-color .2s ease}
+.btn:hover{filter:brightness(1.07)}
+.btn:active{transform:var(--press)}
+.btn.ghost{background:var(--fill);color:var(--fg)}
+.btn.ghost:hover{background:var(--fill-2);filter:none}
 
 .now{margin-top:clamp(36px,5vw,56px);border-top:1px solid var(--line)}
-.now .row{display:grid;grid-template-columns:14px minmax(0,1fr) minmax(0,1.5fr) auto;gap:14px;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--line);text-decoration:none}
+.now .row{display:grid;grid-template-columns:14px minmax(0,1fr) minmax(0,1.5fr) auto;gap:14px;align-items:baseline;padding:12px 14px;margin:0 -14px;border-radius:var(--r-sm);text-decoration:none;transition:background-color .2s ease,transform .15s ease}
+.now a.row{cursor:pointer}
+.now a.row:hover{background:var(--fill)}
+.now a.row:active{transform:scale(.99)}
 .now .row:hover .role{color:var(--amber-ink)}
 .now .head{padding:10px 0}
 .live{width:7px;height:7px;border-radius:50%;background:var(--live);align-self:center}
@@ -86,29 +96,46 @@ section[id],.job,.run{scroll-margin-top:72px}
 .org{color:var(--muted);font-size:1rem}
 .since{font-family:var(--mono);font-size:.72rem;color:var(--muted);text-align:right}
 
-/* work */
-.ledger{border-top:1px solid var(--fg)}
-.job{border-bottom:1px solid var(--line)}
-.job summary{list-style:none;display:grid;grid-template-columns:8em minmax(0,1fr) minmax(0,1.2fr) 1.5em;gap:20px;align-items:baseline;padding:20px 0;cursor:pointer}
-.job summary::-webkit-details-marker{display:none}
-.job .when{font-family:var(--mono);font-size:.74rem;color:var(--muted)}
-.job .co{font-family:var(--display);font-size:clamp(1.2rem,2.3vw,1.5rem);font-weight:650;letter-spacing:-.02em;line-height:1.1}
-.job .co small{display:block;font-family:var(--body);font-weight:400;font-size:.62em;letter-spacing:0;color:var(--muted);margin-top:6px;font-style:italic}
-.job .one{font-size:1rem;color:var(--muted);line-height:1.45}
-.job .plus{font-family:var(--mono);color:var(--amber-ink);transition:transform .25s;justify-self:end}
-.job.is-open .plus{transform:rotate(45deg)}
-.job .detail.anim{overflow:hidden}
-.job summary:hover .co{color:var(--amber-ink)}
-.job .detail{display:grid;grid-template-columns:8em minmax(0,1fr);gap:20px;padding:0 0 26px}
-.job .detail > div{grid-column:2;display:flex;flex-direction:column;gap:16px;max-width:66ch}
-.job h4{margin:0;font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;font-weight:500;color:var(--amber-ink)}
-.job ul{margin:6px 0 0;padding-left:1.1em;display:flex;flex-direction:column;gap:6px;font-size:1rem}
-.job .tech{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+/* work: squircle cards that zoom open into a sheet */
+.jobs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.card{all:unset;box-sizing:border-box;position:relative;display:flex;flex-direction:column;gap:8px;padding:22px;min-height:220px;border-radius:var(--r-md);background:var(--bg-2);color:var(--fg);
+  box-shadow:inset 0 0 0 1px var(--line);cursor:pointer;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease,background-color .25s ease}
+.card:hover{transform:translateY(-3px);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--amber) 45%,transparent),0 14px 34px rgba(0,0,0,.22)}
+.card:active{transform:var(--press)}
+.card:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+.card.wide{grid-column:span 2}
+.card .c-when{display:flex;align-items:center;gap:8px}
+.card .c-co{display:block;font-family:var(--display);font-weight:700;font-size:clamp(1.3rem,2.2vw,1.6rem);letter-spacing:-.025em;line-height:1.05;margin-top:6px}
+.card.wide .c-co{font-size:clamp(1.7rem,3.2vw,2.3rem)}
+.card .c-role{display:block;font-family:var(--mono);font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--amber-ink)}
+.card .c-one{display:block;font-family:var(--body);font-size:1rem;color:var(--muted);line-height:1.45;flex:1}
+.card .c-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:6px}
+.card .c-tech{font-family:var(--mono);font-size:.66rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .c-plus{flex:none;width:30px;height:30px;border-radius:50%;background:var(--fill);display:grid;place-items:center;font-family:var(--mono);color:var(--amber-ink);transition:background-color .2s,color .2s,transform .25s}
+.card:hover .c-plus{background:var(--amber);color:#0F2A33;transform:rotate(90deg)}
+.card.resume{background:transparent;justify-content:flex-end;text-decoration:none}
+.card.resume .c-co{font-size:clamp(1.3rem,2.2vw,1.6rem)}
+
+.sheet{border:0;padding:0;margin:auto;background:var(--bg-2);color:var(--fg);border-radius:var(--r-lg);width:min(760px,calc(100vw - 24px));max-height:min(88vh,920px);
+  box-shadow:0 40px 100px rgba(0,0,0,.5),inset 0 0 0 1px var(--line);overflow:hidden;transform-origin:top left}
+.sheet::backdrop{background:rgba(4,14,18,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.sheet .in{max-height:min(88vh,920px);overflow:auto;padding:clamp(24px,4vw,40px);display:flex;flex-direction:column;gap:22px}
+.sheet h3{font-size:clamp(1.9rem,4vw,2.8rem);font-weight:750;letter-spacing:-.035em;padding-right:44px}
+.sheet .s-sub{font-style:italic;color:var(--muted);margin-top:6px}
+.sheet .s-role h4{margin:0 0 8px;font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;font-weight:500;color:var(--amber-ink)}
+.sheet ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:8px;font-size:1.02rem}
+.sheet .chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-family:var(--mono);font-size:.7rem;padding:6px 10px;border-radius:var(--r-sm);background:var(--fill);color:var(--fg)}
+.sheet-x{position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:50%;border:0;background:var(--fill);color:var(--fg);font-size:1rem;cursor:pointer;display:grid;place-items:center;transition:background-color .2s,transform .15s;z-index:2}
+.sheet-x:hover{background:var(--fill-2)}
+.sheet-x:active{transform:var(--press)}
+@media (max-width:860px){.jobs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.jobs{grid-template-columns:minmax(0,1fr)}.card.wide{grid-column:auto}.card{min-height:0}}
 
 /* projects */
 .projects{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2.5vw,28px)}
 .proj{display:flex;flex-direction:column;gap:12px}
-.shot{position:relative;margin:0;aspect-ratio:16/10;border:1px dashed var(--line);border-radius:6px;background:var(--bg-2);overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;padding:16px}
+.shot{position:relative;margin:0;aspect-ratio:16/10;border:1px dashed var(--line);border-radius:var(--r-md);background:var(--bg-2);overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;padding:16px}
 /* drop a 1600x1000 image at the src path and it covers the placeholder; missing files remove themselves */
 .shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .shot .file{font-family:var(--mono);font-size:.62rem;color:var(--amber-ink);letter-spacing:.02em;text-transform:none}
@@ -116,8 +143,9 @@ section[id],.job,.run{scroll-margin-top:72px}
 .proj p{font-size:1rem;color:var(--muted);line-height:1.5}
 .proj p.mono{font-size:.68rem}
 .proj .links{display:flex;gap:16px;margin-top:auto}
-.proj .links a{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px}
-.proj .links a:hover{color:var(--amber-ink);border-color:var(--amber)}
+.proj .links a{font-family:var(--display);font-weight:600;font-size:.9rem;text-decoration:none;padding:8px 14px;border-radius:var(--r-sm);background:var(--fill);transition:background-color .2s,transform .15s}
+.proj .links a:hover{background:var(--fill-2);color:var(--amber-ink)}
+.proj .links a:active{transform:var(--press)}
 .more{margin-top:28px}
 
 /* github activity */
@@ -136,8 +164,9 @@ section[id],.job,.run{scroll-margin-top:72px}
 .gh-legend{display:flex;align-items:center;gap:4px}
 .gh-legend i{width:10px;height:10px;border-radius:2px;display:inline-block}
 .repos{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:24px}
-.repo{border:1px solid var(--line);border-radius:6px;padding:14px;text-decoration:none;display:flex;flex-direction:column;gap:6px}
-.repo:hover{border-color:var(--amber)}
+.repo{background:var(--bg-2);box-shadow:inset 0 0 0 1px var(--line);border-radius:var(--r-md);padding:16px;text-decoration:none;display:flex;flex-direction:column;gap:6px;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s}
+.repo:hover{transform:translateY(-2px);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--amber) 45%,transparent),0 10px 26px rgba(0,0,0,.2)}
+.repo:active{transform:var(--press)}
 .repo b{font-family:var(--display);font-weight:600;font-size:1rem;letter-spacing:-.01em}
 .repo p{font-size:.92rem;color:var(--muted);line-height:1.4;flex:1}
 @media (max-width:860px){.repos{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -148,7 +177,7 @@ section[id],.job,.run{scroll-margin-top:72px}
 .outside{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(24px,4vw,48px);align-items:start}
 .photo{position:relative;margin:0;border-radius:6px;overflow:hidden;aspect-ratio:4/3}
 /* photo carousel: native horizontal scroll with snap, so swipe and trackpads just work */
-.carousel{position:relative;border-radius:6px;overflow:hidden}
+.carousel{position:relative;border-radius:var(--r-lg);overflow:hidden}
 .ctrack{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;overscroll-behavior-x:contain}
 .ctrack::-webkit-scrollbar{display:none}
 .ctrack:focus-visible{outline:2px solid var(--amber);outline-offset:-2px}
@@ -190,10 +219,6 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
 @media (max-width:860px){
   .outside{grid-template-columns:minmax(0,1fr)}
   .projects{grid-template-columns:minmax(0,1fr)}
-  .job summary{grid-template-columns:minmax(0,1fr) 1.5em;grid-template-areas:"w w" "c p" "o o";gap:6px 14px}
-  .job .when{grid-area:w} .job .co{grid-area:c} .job .one{grid-area:o} .job .plus{grid-area:p}
-  .job .detail{grid-template-columns:minmax(0,1fr)}
-  .job .detail > div{grid-column:1}
 }
 @media (max-width:560px){
   body{font-size:17.5px}
@@ -251,7 +276,8 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
         <p class="mono">work</p>
         <h2>where the hours go.</h2>
       </div>
-      <div class="ledger" id="ledger"></div>
+      <div class="jobs" id="jobs"></div>
+      <dialog class="sheet" id="sheet" aria-labelledby="sheetTitle"><button class="sheet-x" type="button" aria-label="Close">✕</button><div class="in" id="sheetBody"></div></dialog>
     </div>
   </section>
 
@@ -267,21 +293,21 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
           <p class="mono">2026 · python, statsmodels</p>
           <h3>Solar quantile analysis</h3>
           <p>Cleaned a 332,000-row California solar dataset and implemented Minimum Distance Estimation for quantile regression following the asymptotic theory, checked against statsmodels. The expensive tail prices nothing like the median.</p>
-          <div class="links"><a href="https://github.com/GaneshKar1/Solar-Pannel-Quantile-Analysis" target="_blank" rel="noopener">code</a></div>
+          <div class="links"><a href="https://github.com/GaneshKar1/Solar-Pannel-Quantile-Analysis" target="_blank" rel="noopener">view code ↗</a></div>
         </article>
         <article class="proj">
           <figure class="shot mono"><span>screenshot: live gdp dashboard + policy sliders</span><span class="file">assets/projects/ecosim-dashboard.png · 1600×1000</span><img src="../assets/projects/ecosim-dashboard.png" alt="Eco Sim dashboard with live GDP chart and policy sliders" loading="lazy" onerror="this.remove()"></figure>
           <p class="mono">2025 · python, fastapi, react · team</p>
           <h3>Eco Sim</h3>
           <p>An agent-based economy of 100K+ households, firms and a government, with emergent pricing, production and labor, and a live dashboard where you move policy sliders and watch GDP respond.</p>
-          <div class="links"><a href="https://github.com/GaneshKar1/Ecosim" target="_blank" rel="noopener">code</a></div>
+          <div class="links"><a href="https://github.com/GaneshKar1/Ecosim" target="_blank" rel="noopener">view code ↗</a></div>
         </article>
         <article class="proj">
           <figure class="shot mono"><span>screenshot: spread z-score with entry and exit bands</span><span class="file">assets/projects/pairs-zscore.png · 1600×1000</span><img src="../assets/projects/pairs-zscore.png" alt="WMT/TGT spread z-score with entry and exit bands" loading="lazy" onerror="this.remove()"></figure>
           <p class="mono">2025 · python, pandas, statsmodels</p>
           <h3>Pairs trading backtester</h3>
           <p>A statistical pairs engine on WMT/TGT: rolling 60-day OLS hedge ratios so nothing peeks ahead, z-score mean-reversion signals, and modeled transaction costs.</p>
-          <div class="links"><a href="https://github.com/GaneshKar1/Trading-Strat" target="_blank" rel="noopener">code</a></div>
+          <div class="links"><a href="https://github.com/GaneshKar1/Trading-Strat" target="_blank" rel="noopener">view code ↗</a></div>
         </article>
       </div>
       <div class="gh" id="github" hidden>
@@ -452,39 +478,55 @@ const JOBS=[
   tech:'java · data structures · algorithms · teaching'}
 ];
 (function(){
-  const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
-  document.getElementById('ledger').innerHTML=JOBS.map(j=>`
-  <details class="job" id="job-${j.id}"${j.open?' open':''}>
-    <summary><span class="when tnum">${j.when}</span><span class="co">${esc(j.co)}<small>${esc(j.sub)}</small></span><span class="one">${esc(j.one)}</span><span class="plus" aria-hidden="true">+</span></summary>
-    <div class="detail"><div>${j.roles.map(r=>`<div><h4>${esc(r.t)} · ${r.d}</h4><ul>${r.b.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`).join('')}<p class="tech">${j.tech}</p></div></div>
-  </details>`).join('');
-  // animate open/close: height + fade on the detail block
+  const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  const grid=document.getElementById('jobs'),sheet=document.getElementById('sheet'),body=document.getElementById('sheetBody');
   const reduce=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function setOpen(d,open){
-    const body=d.querySelector('.detail');
-    d.classList.toggle('is-open',open);
-    if(d._anim){d._anim.cancel();d._anim=null;}
-    if(reduce()){d.open=open;return;}
-    const from=d.open?body.offsetHeight:0;
-    d.open=true;
-    const to=open?body.offsetHeight:0;
-    body.classList.add('anim');
-    // padding has to collapse too, or a "closed" block still shows its bottom padding
-    const pad=getComputedStyle(body).paddingBottom,f=x=>x?{height:x+'px',paddingBottom:pad,opacity:1}:{height:'0px',paddingBottom:'0px',opacity:0};
-    const a=body.animate([f(from),f(to)],
-      {duration:open?340:240,easing:open?'cubic-bezier(.2,.7,.2,1)':'cubic-bezier(.4,0,1,1)'});
-    d._anim=a;
-    a.onfinish=()=>{body.classList.remove('anim');d._anim=null;if(!open)d.open=false;};
+  grid.innerHTML=JOBS.map((j,i)=>{
+    const live=/now/.test(j.when),tech=j.tech.split(' · ').slice(0,3).join(' · ');
+    const role=j.roles[0].t+(j.roles.length>1?` · +${j.roles.length-1} earlier`:'');
+    return `<button class="card${i===0?' wide':''}" type="button" data-job="${j.id}" aria-haspopup="dialog">
+      <span class="c-when mono tnum">${live?'<i class="live"></i>':''}${j.when}</span>
+      <span class="c-co">${esc(j.co)}</span><span class="c-role">${esc(role)}</span>
+      <span class="c-one">${esc(j.one)}</span>
+      <span class="c-foot"><span class="c-tech">${esc(tech)}</span><span class="c-plus" aria-hidden="true">+</span></span></button>`;
+  }).join('')+`<a class="card resume" href="../assets/Ganesh_Karayi_Resume.pdf"><span class="mono">the full version</span><span class="c-co">resume ↗</span></a>`;
+
+  // the sheet zooms out of whatever was clicked (a card, or a "right now" row), and back into it on close
+  let from=null,busy=false;
+  function flip(el,dir){
+    const a=el.getBoundingClientRect(),b=sheet.getBoundingClientRect();
+    const t=`translate(${a.left-b.left}px,${a.top-b.top}px) scale(${a.width/b.width},${a.height/b.height})`;
+    const opts={duration:dir>0?460:320,easing:dir>0?'cubic-bezier(.2,.8,.2,1)':'cubic-bezier(.4,0,.6,1)'};
+    body.animate(dir>0?[{opacity:0},{opacity:0,offset:.35},{opacity:1}]:[{opacity:1},{opacity:0,offset:.5},{opacity:0}],opts);
+    sheet.animate({opacity:dir>0?[0,1]:[1,0]},{...opts,pseudoElement:'::backdrop'});
+    const frames=[{transform:t,opacity:.6},{transform:'none',opacity:1}];
+    return sheet.animate(dir>0?frames:frames.reverse(),opts).finished;
   }
-  document.querySelectorAll('.job').forEach(d=>{
-    if(d.open)d.classList.add('is-open');
-    d.querySelector('summary').addEventListener('click',e=>{e.preventDefault();setOpen(d,!d.classList.contains('is-open'));});
-  });
-  document.querySelectorAll('[data-open]').forEach(a=>a.addEventListener('click',e=>{
-    const d=document.getElementById('job-'+a.dataset.open);if(!d)return;
-    e.preventDefault();if(!d.classList.contains('is-open'))setOpen(d,true);
-    d.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
-  }));
+  function open(id,el){
+    const j=JOBS.find(x=>x.id===id);if(!j||busy)return;
+    from=el;
+    body.innerHTML=`<div><p class="mono tnum">${j.when}</p><h3 id="sheetTitle" style="margin-top:10px">${esc(j.co)}</h3><p class="s-sub">${esc(j.sub)}</p></div>
+      <p>${esc(j.one)}</p>
+      ${j.roles.map(r=>`<div class="s-role"><h4>${esc(r.t)} · ${r.d}</h4><ul>${r.b.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`).join('')}
+      <div class="chips">${j.tech.split(' · ').map(t=>`<span class="chip">${esc(t)}</span>`).join('')}</div>`;
+    sheet.showModal();body.scrollTop=0;
+    if(!reduce()&&el){busy=true;flip(el,1).catch(()=>{}).finally(()=>busy=false);}
+  }
+  let closing=false;
+  async function close(){
+    if(!sheet.open||closing)return;
+    closing=true;
+    // closing mid-open (a quick Esc) snaps the open animation to its end first
+    if(busy)sheet.getAnimations({subtree:true}).forEach(a=>a.finish());
+    if(!reduce()&&from&&from.isConnected){busy=true;try{await flip(from,-1);}catch(e){}busy=false;}
+    sheet.close();closing=false;
+  }
+  sheet.addEventListener('close',()=>{if(from)from.focus({preventScroll:true});});
+  sheet.addEventListener('cancel',e=>{e.preventDefault();close();});   // Esc
+  sheet.addEventListener('click',e=>{if(e.target===sheet)close();});   // click outside
+  sheet.querySelector('.sheet-x').addEventListener('click',close);
+  grid.addEventListener('click',e=>{const c=e.target.closest('[data-job]');if(c)open(c.dataset.job,c);});
+  document.querySelectorAll('[data-open]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();open(a.dataset.open,a);}));
 })();
 
 /* github: contribution grid + recent public repos, from tools/build_github.py */
