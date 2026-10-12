@@ -92,7 +92,8 @@ section{padding-block:clamp(64px,10vw,120px) 0}
 .job .co small{display:block;font-family:var(--body);font-weight:400;font-size:.62em;letter-spacing:0;color:var(--muted);margin-top:6px;font-style:italic}
 .job .one{font-size:1rem;color:var(--muted);line-height:1.45}
 .job .plus{font-family:var(--mono);color:var(--amber-ink);transition:transform .25s;justify-self:end}
-.job[open] .plus{transform:rotate(45deg)}
+.job.is-open .plus{transform:rotate(45deg)}
+.job .detail.anim{overflow:hidden}
 .job summary:hover .co{color:var(--amber-ink)}
 .job .detail{display:grid;grid-template-columns:8em minmax(0,1fr);gap:20px;padding:0 0 26px}
 .job .detail > div{grid-column:2;display:flex;flex-direction:column;gap:16px;max-width:66ch}
@@ -182,6 +183,9 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
   .now .head{display:none}
   .top nav a.opt{display:none}
 }
+/* theme switch: a circle grows from the toggle (View Transitions), else a color fade */
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+.theme-fade,.theme-fade *{transition:background-color .45s ease,color .45s ease,border-color .45s ease,fill .45s ease,stroke .45s ease!important}
 @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{transition:none!important} }
 </style>
 </head>
@@ -326,10 +330,21 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
 (function(){
   const root=document.documentElement;
   try{const s=localStorage.getItem('gk-theme');if(s==='light'||s==='dark')root.dataset.theme=s;}catch(e){}
-  document.getElementById('themeBtn').addEventListener('click',()=>{
+  function setTheme(next,btn){
+    const apply=()=>{root.dataset.theme=next;};
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches){apply();return;}
+    if(!document.startViewTransition){root.classList.add('theme-fade');apply();setTimeout(()=>root.classList.remove('theme-fade'),500);return;}
+    const r=btn.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2;
+    const end=Math.hypot(Math.max(x,innerWidth-x),Math.max(y,innerHeight-y));
+    document.startViewTransition(apply).ready.then(()=>{
+      root.animate({clipPath:[`circle(0px at ${x}px ${y}px)`,`circle(${end}px at ${x}px ${y}px)`]},
+        {duration:600,easing:'cubic-bezier(.4,0,.2,1)',pseudoElement:'::view-transition-new(root)'});
+    });
+  }
+  document.getElementById('themeBtn').addEventListener('click',e=>{
     const cur=root.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
     const next=cur==='dark'?'light':'dark';
-    root.dataset.theme=next;
+    setTheme(next,e.currentTarget);
     try{localStorage.setItem('gk-theme',next);}catch(e){}
   });
 })();
@@ -416,9 +431,31 @@ const JOBS=[
     <summary><span class="when tnum">${j.when}</span><span class="co">${esc(j.co)}<small>${esc(j.sub)}</small></span><span class="one">${esc(j.one)}</span><span class="plus" aria-hidden="true">+</span></summary>
     <div class="detail"><div>${j.roles.map(r=>`<div><h4>${esc(r.t)} · ${r.d}</h4><ul>${r.b.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`).join('')}<p class="tech">${j.tech}</p></div></div>
   </details>`).join('');
+  // animate open/close: height + fade on the detail block
+  const reduce=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function setOpen(d,open){
+    const body=d.querySelector('.detail');
+    d.classList.toggle('is-open',open);
+    if(d._anim){d._anim.cancel();d._anim=null;}
+    if(reduce()){d.open=open;return;}
+    const from=d.open?body.offsetHeight:0;
+    d.open=true;
+    const to=open?body.offsetHeight:0;
+    body.classList.add('anim');
+    // padding has to collapse too, or a "closed" block still shows its bottom padding
+    const pad=getComputedStyle(body).paddingBottom,f=x=>x?{height:x+'px',paddingBottom:pad,opacity:1}:{height:'0px',paddingBottom:'0px',opacity:0};
+    const a=body.animate([f(from),f(to)],
+      {duration:open?340:240,easing:open?'cubic-bezier(.2,.7,.2,1)':'cubic-bezier(.4,0,1,1)'});
+    d._anim=a;
+    a.onfinish=()=>{body.classList.remove('anim');d._anim=null;if(!open)d.open=false;};
+  }
+  document.querySelectorAll('.job').forEach(d=>{
+    if(d.open)d.classList.add('is-open');
+    d.querySelector('summary').addEventListener('click',e=>{e.preventDefault();setOpen(d,!d.classList.contains('is-open'));});
+  });
   document.querySelectorAll('[data-open]').forEach(a=>a.addEventListener('click',e=>{
     const d=document.getElementById('job-'+a.dataset.open);if(!d)return;
-    e.preventDefault();d.open=true;
+    e.preventDefault();if(!d.classList.contains('is-open'))setOpen(d,true);
     d.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
   }));
 })();
